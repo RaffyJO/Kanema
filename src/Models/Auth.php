@@ -77,6 +77,8 @@ function authorize(String $username, String $hash_password): bool
 
             if (hash_equals($arr->password, $hash_password)) {
                 $_SESSION['username'] = $arr->username;
+                $_SESSION['user_role'] = $arr->role;
+                $_SESSION['user_id'] = $arr->_id;
 
                 http_response_code(200);
                 echo json_encode(array('username' => $arr->username, 'login_state' => true));

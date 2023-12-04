@@ -106,7 +106,7 @@ if (!isset($TPL)) {
         <!-- end header -->
         <!-- order list -->
         <div class="px-5 py-4 mt-5 overflow-y-auto h-64">
-            <div class="flex flex-row justify-between items-center mb-4">
+            <!-- <div class="flex flex-row justify-between items-center mb-4">
                 <div class="flex flex-row items-center w-2/5">
                     <img src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" class="w-10 h-10 object-cover rounded-md" alt="">
                     <span class="ml-4 font-semibold text-sm">Indomie</span>
@@ -129,7 +129,7 @@ if (!isset($TPL)) {
                 <div class="font-semibold text-sm w-16 text-center">
                     Rp. 3000
                 </div>
-            </div>
+            </div> -->
         </div>
         <!-- end order list -->
         <!-- totalItems -->
@@ -179,9 +179,7 @@ if (!isset($TPL)) {
 
                 result.data.forEach(content => {
                     allItem += `
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <div>
-                            <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+                            <div class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full">
                                 <a href="#">
                                     <img class="rounded-t-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" />
                                 </a>
@@ -191,13 +189,11 @@ if (!isset($TPL)) {
                                     </a>
                                     <p class="mb-3 text-xl font-bold">Rp. ${content.price}</p>
                                 </div>
-                            </div>
-                        </div>`
+                            </div>`
 
                     if (content.category === 'food') {
-                        foodsItems += `<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <div>
-                            <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+                        foodsItems += `
+                            <div class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full">
                                 <a href="#">
                                     <img class="rounded-t-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" />
                                 </a>
@@ -207,14 +203,12 @@ if (!isset($TPL)) {
                                     </a>
                                     <p class="mb-3 text-xl font-bold">Rp. ${content.price}</p>
                                 </div>
-                            </div>
-                        </div>`
+                            </div>`
                     }
 
                     if (content.category === 'drink') {
-                        drinkItems += `<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <div>
-                            <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+                        drinkItems += `
+                            <div class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full">
                                 <a href="#">
                                     <img class="rounded-t-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" />
                                 </a>
@@ -224,15 +218,14 @@ if (!isset($TPL)) {
                                     </a>
                                     <p class="mb-3 text-xl font-bold">Rp. ${content.price}</p>
                                 </div>
-                            </div>
-                        </div>`
+                            </div>`
                     }
 
                 });
 
-                let allitem = `<div class="p-4 rounded-lg" id="allItems" role="tabpanel" aria-labelledby="allItems-tab"> ${allItem} </div>`
-                let foods = `<div class="p-4 rounded-lg" id="food" role="tabpanel" aria-labelledby="food-tab"> ${foodItems} </div>`
-                let drinks = `<div class="hidden p-4 rounded-lg" id="drink" role="tabpanel" aria-labelledby="drink-tab"> ${drinkItems} </div>`
+                let allitem = `<div class="p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="allItems" role="tabpanel" aria-labelledby="allItems-tab"> ${allItem} </div>`
+                let foods = `<div class="hidden p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="food" role="tabpanel" aria-labelledby="food-tab"> ${foodItems} </div>`
+                let drinks = `<div class="hidden p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="drink" role="tabpanel" aria-labelledby="drink-tab"> ${drinkItems} </div>`
 
                 elements += allitem
                 elements += foods
