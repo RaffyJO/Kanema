@@ -19,8 +19,8 @@ if ($requestUri === '/auth') {
     return;
 }
 
-if ($requestUri === '/login_.php'){
-    header('Location: src/Views/Login.php');
+if ($requestUri === '/home'){
+    header('Location: src/Views/Home.php');
     exit;
     return;
 }

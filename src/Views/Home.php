@@ -15,7 +15,7 @@ session_start();
         <tr>
           <th>Username</th>
           <th>Password</th>
-          <th>Last Login</th>
+          <th>Role</th>
           <!-- <th>list_price</th>
           <th>model_year</th>
           <th>brand_name</th>
@@ -49,7 +49,7 @@ session_start();
                     row.appendChild(cell2);
 
                     let cell3 = document.createElement('td');
-                    cell3.textContent = item.last_login;
+                    cell3.textContent = item.role;
                     row.appendChild(cell3);
 
                     // Append the row to the table body
