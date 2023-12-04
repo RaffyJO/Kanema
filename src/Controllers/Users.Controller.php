@@ -27,8 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $connection = getConnection();
 
-    $query = new MongoDB\Driver\Query(array());
-    $cursor = $connection->executeQuery('kanema.users', $query);
+    $collection = $connection->selectCollection('kanema', 'Product');
+    $cursor = $collection->find(['username' => $username]);
 
     $data = array();
 
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         array_push(
             $data,
             array('username' => $key->username, 'password' => $key->password, 'role' => $key->role)
-            
+
         );
     }
 

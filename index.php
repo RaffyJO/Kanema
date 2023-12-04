@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/vendor/autoload.php';
 $envConfig = parse_ini_file('.env');
 
 if ($envConfig) {
@@ -8,5 +9,3 @@ if ($envConfig) {
 }
 
 require 'src/Controllers/Controller.php';
-
-header('Location: /');
