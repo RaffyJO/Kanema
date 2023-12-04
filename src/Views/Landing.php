@@ -4,12 +4,12 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 
-require_once('src/Views/templates/source.php');
+require_once __DIR__ . '/templates/source.php';
 if (!isset($TPL)) {
     $TPL = new source();
     $TPL->title = "Main Page";
     $TPL->bodycontent = __FILE__;
-    include "src/Views/layout/layout.php";
+    include __DIR__ . '/layout/layout.php';
     exit;
 }
 ?>
@@ -17,32 +17,34 @@ if (!isset($TPL)) {
 <table>
     <thead>
         <tr>
-          <th>Username</th>
-          <th>Password</th>
-          <th>Role</th>
-          <!-- <th>list_price</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Role</th>
+            <!-- <th>list_price</th>
           <th>model_year</th>
           <th>brand_name</th>
           <th>category_name</th> -->
         </tr>
     </thead>
     <tbody id="table-content-user">
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
     </tbody>
 
     <script>
         let tbody = document.getElementById('table-content-user');
 
-        fetch('/user-all',{ method: 'GET' })
-        .then(value => value.json())
-        .then(result => {            
-            result.data.forEach(item => {
+        fetch('/user-all', {
+                method: 'GET'
+            })
+            .then(value => value.json())
+            .then(result => {
+                result.data.forEach(item => {
                     let row = document.createElement('tr'); // Create a table row
-                    
+
                     // Create table cells for each property and add data to the row
                     let cell1 = document.createElement('td');
                     cell1.textContent = item.username;
@@ -58,20 +60,22 @@ if (!isset($TPL)) {
 
                     // Append the row to the table body
                     tbody.appendChild(row);
+                })
             })
-        })
-        .catch(error => console.error(error))
-
+            .catch(error => console.error(error))
     </script>
-</table> 
+</table>
 
 <style>
-        table, th, td {
-            border:1px solid black;
-        }
+    table,
+    th,
+    td {
+        border: 1px solid black;
+    }
 
-        table ,tbody {
-            max-height: 50px !important;
-            overflow: auto;
-        }
-    </style>
+    table,
+    tbody {
+        max-height: 50px !important;
+        overflow: auto;
+    }
+</style>

@@ -1,4 +1,7 @@
 <?php
+
+use MongoDB\BSON\ObjectId;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the POST data
     $postData = json_decode(file_get_contents('php://input'), true);
@@ -27,15 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $connection = getConnection();
 
-    $collection = $connection->selectCollection('kanema', 'Product');
-    $cursor = $collection->find(['username' => $username]);
+    $collection = $connection->selectCollection('kanema', 'users');
+    $cursor = $collection->find([]);
 
     $data = array();
 
     foreach ($cursor as $key) {
         array_push(
             $data,
-            array('username' => $key->username, 'password' => $key->password, 'role' => $key->role)
+            array('_id' => strval(new ObjectId($key->_id)), 'username' => $key->username, 'password' => $key->password, 'role' => $key->role)
 
         );
     }
