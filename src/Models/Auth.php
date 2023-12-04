@@ -1,71 +1,65 @@
 <?php
 
-use MongoDB\BSON\Iterator;
-use MongoDB\Driver\Query;
+session_start();
+require 'src/lib/Functions/Connections/DB.php';
+require('src/lib/Functions/URLDetection.php');
+$secretKey = '8uRhAeH89naXfFXKGOEj';
 
-    session_start();
-    require 'src/lib/Functions/Connections/DB.php';
-    require('src/lib/Functions/URLDetection.php');
-    $secretKey = '8uRhAeH89naXfFXKGOEj';
+$is_Form = is_formPost($_SERVER);
 
-    $is_Form = is_formPost($_SERVER);
+if (!$is_Form) {
+    $postData = json_decode(file_get_contents('php://input'), true);
 
-    if (!$is_Form) {
-        $postData = json_decode(file_get_contents('php://input'), true);
-
-        if (!isset($postData)) {
-            http_response_code(400);
-            echo json_encode(array('error' => 'Username or Password are Missing'));
-            return;
-        }
-        if (!isset($postData['username']) && !isset($postData['password'])) {
-            http_response_code(400);
-            echo json_encode(array('error' => 'Username or Password are Missing'));
-            return;
-        }
-        
-        $username = $postData['username'];
-        $hash_password = hash_hmac('sha256', $postData['password'],$secretKey);
-
-        authorize($username,$hash_password);
-        
-        
-    } else {
-        if (!isset($_POST['username']) && !isset($_POST['password'])) {
-            http_response_code(400);
-            echo json_encode(array('error' => 'Username or Password are Missing'));
-            exit;
-        }
-
-        $username = $_POST['username'];
-        $hash_password = hash_hmac('sha256', $_POST['password'],$secretKey);
-
-        $login_state = authorize($username,$hash_password);
-
-        $host = $_SERVER['HTTP_HOST'];
-
-        if ($login_state) {
-            header('Location: /Views/Home.php');
-            exit;
-        } else {
-            // header('Location: /login_.php');
-            // echo "<script>alert('username or Password are Incorrect')</script>";
-            // exit;
-        }
+    if (!isset($postData)) {
+        http_response_code(400);
+        echo json_encode(array('error' => 'Username or Password are Missing'));
+        return;
+    }
+    if (!isset($postData['username']) && !isset($postData['password'])) {
+        http_response_code(400);
+        echo json_encode(array('error' => 'Username or Password are Missing'));
+        return;
     }
 
-function authorize(String $username, String $hash_password) : bool {
+    $username = $postData['username'];
+    $hash_password = hash_hmac('sha256', $postData['password'], $secretKey);
+
+    authorize($username, $hash_password);
+} else {
+    if (!isset($_POST['username']) && !isset($_POST['password'])) {
+        http_response_code(400);
+        echo json_encode(array('error' => 'Username or Password are Missing'));
+        exit;
+    }
+
+    $username = $_POST['username'];
+    $hash_password = hash_hmac('sha256', $_POST['password'], $secretKey);
+
+    $login_state = authorize($username, $hash_password);
+
+    $host = $_SERVER['HTTP_HOST'];
+
+    if ($login_state) {
+        header('Location: /Views/Home.php');
+        exit;
+    } else {
+        // header('Location: /login_.php');
+        // echo "<script>alert('username or Password are Incorrect')</script>";
+        // exit;
+    }
+}
+
+function authorize(String $username, String $hash_password): bool
+{
     try {
         $connection = getConnection();
-        if ($connection == null) die(print_r("Connection is Null",true));
-        
-        $queryOptions = ['username' => $username];
+        if ($connection == null) die(print_r("Connection is Null", true));
 
-        $query = new Query($queryOptions);
-        $cursor = $connection->executeQuery('kanema.users',$query);
+        $collection = $connection->selectCollection('kanema', 'users');
+        $cursor = $collection->find(['username' => $username]);
 
         // var_dump($cursor->toArray());
-        
+
         // foreach($cursor->toArray() as $key => $row) {
         //     var_dump($key); //your expected output
         //     echo $key;
@@ -75,15 +69,15 @@ function authorize(String $username, String $hash_password) : bool {
 
         // return false;
 
-        if ($cursor){
+        if ($cursor) {
             $arr = current($cursor->toArray());
 
             if (!isset($arr)) return false;
             // var_dump(hash_equals($arr->password, $hash_password));
 
-            if (hash_equals($arr->password, $hash_password)){
+            if (hash_equals($arr->password, $hash_password)) {
                 $_SESSION['username'] = $arr->username;
-                
+
                 http_response_code(200);
                 echo json_encode(array('username' => $arr->username, 'login_state' => true));
                 return true;
@@ -92,7 +86,6 @@ function authorize(String $username, String $hash_password) : bool {
                 echo json_encode(array('error' => 'Username or Pasword are Incorrect', 'login_state' => false));
                 return false;
             }
-
         } else {
             http_response_code(200);
             echo json_encode(array('error' => 'Username or Pasword are Incorrect', 'login_state' => false));

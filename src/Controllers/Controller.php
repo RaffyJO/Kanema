@@ -21,7 +21,7 @@ if ($requestUri === '/auth') {
     return;
 }
 
-if ($requestUri === '/home'){
+if ($requestUri === '/home') {
     header('Location: src/Views/Home.php');
     exit;
     return;
@@ -34,5 +34,12 @@ if ($requestUri === '/login') {
 
 if ($requestUri === '/cashier') {
     require 'src/Views/product.php';
+    return;
+}
+
+if ($requestUri === '/products') {
+    require_once('src/Controllers/Products.Controller.php');
+    $controller = new ProductsController();
+    $controller->route();
     return;
 }
