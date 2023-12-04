@@ -4,8 +4,6 @@ use MongoDB\BSON\Iterator;
 use MongoDB\Driver\Query;
 
     session_start();
-    var_dump(getcwd());
-
     require 'src/lib/Functions/Connections/DB.php';
     require('src/lib/Functions/URLDetection.php');
     $secretKey = '8uRhAeH89naXfFXKGOEj';
@@ -50,9 +48,9 @@ use MongoDB\Driver\Query;
             header('Location: /Views/Home.php');
             exit;
         } else {
-            header('Location: /login_.php');
-            echo "<script>alert('username or Password are Incorrect')</script>";
-            exit;
+            // header('Location: /login_.php');
+            // echo "<script>alert('username or Password are Incorrect')</script>";
+            // exit;
         }
     }
 
@@ -61,27 +59,27 @@ function authorize(String $username, String $hash_password) : bool {
         $connection = getConnection();
         if ($connection == null) die(print_r("Connection is Null",true));
         
-        $queryOptions = ['username' => $username, 'password' => $hash_password];
+        $queryOptions = ['username' => $username];
 
         $query = new Query($queryOptions);
         $cursor = $connection->executeQuery('kanema.users',$query);
 
-        var_dump($cursor);
+        // var_dump($cursor->toArray());
         
-        $iterator = new Iterator($cursor);
-        $iterator->rewind();
+        // foreach($cursor->toArray() as $key => $row) {
+        //     var_dump($key); //your expected output
+        //     echo $key;
+        //     var_dump($row); //your expected output
+        //     echo $row;
+        // }
 
-        while ($var = $iterator->current()) {
-            var_dump($var->current());
-            $iterator->next();
-        }
+        // return false;
 
         if ($cursor){
             $arr = current($cursor->toArray());
-            // var_dump(($result));
-            // var_dump($arr);
 
             if (!isset($arr)) return false;
+            // var_dump(hash_equals($arr->password, $hash_password));
 
             if (hash_equals($arr->password, $hash_password)){
                 $_SESSION['username'] = $arr->username;
@@ -103,8 +101,8 @@ function authorize(String $username, String $hash_password) : bool {
     } catch (Exception $th) {
         http_response_code(400);
         echo json_encode(array('error' => $th, 'login_state' => false));
-        throw $th;
-    } finally {
-        sqlsrv_close($connection);
+        var_dump($th);
+        return false;
+        // throw $th;
     }
 }

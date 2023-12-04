@@ -15,9 +15,13 @@ if ($requestUri === '/user-all') {
 }
 
 if ($requestUri === '/auth') {
-
-    // header('Location: Models/login.php');
     require 'src/Models/Auth.php';
+    return;
+}
+
+if ($requestUri === '/login_.php'){
+    header('Location: src/Views/Login.php');
+    exit;
     return;
 }
 
