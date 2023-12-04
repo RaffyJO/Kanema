@@ -3,8 +3,8 @@ use MongoDB\Driver\Manager;
 
 function getConnection() {
     try {
-        $USER = base64_decode(getenv('MONGO_USERNAME'));
-        $PASSWORD = base64_decode(getenv('MONGO_PASSWORD'));
+        $USER = base64_decode(getenv('DB_USERNAME'));
+        $PASSWORD = base64_decode(getenv('DB_PASSWORD'));
         $connectionString = "mongodb+srv://$USER:$PASSWORD@kanema-cluster.1m1asvm.mongodb.net/?retryWrites=true&w=majority";
         
         $manager = new Manager($connectionString);
