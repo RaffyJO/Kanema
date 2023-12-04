@@ -32,7 +32,7 @@ if ($requestUri === '/login') {
 
 if ($requestUri === '/cashier') {
     require 'src/Views/templates/header.php';
-    // require 'src/Views/product.php';
+    require 'src/Views/product.php';
     require 'src/Views/templates/footer.php';
     return;
 }
