@@ -8,3 +8,5 @@ if ($envConfig) {
 }
 
 require 'src/Controllers/Controller.php';
+
+header('Location: /');

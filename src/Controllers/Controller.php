@@ -1,4 +1,6 @@
 <?php
+require_once('src/Views/templates/source.php');
+
 $requestUri = $_SERVER['REQUEST_URI'];
 
 if ($requestUri === '/') {
@@ -27,5 +29,10 @@ if ($requestUri === '/home'){
 
 if ($requestUri === '/login') {
     require 'src/Views/Login.php';
+    return;
+}
+
+if ($requestUri === '/cashier') {
+    require 'src/Views/product.php';
     return;
 }

@@ -1,15 +1,17 @@
 <?php
 session_start();
+
+
+require_once('src/Views/templates/source.php');
+if (!isset($TPL)) {
+    $TPL = new source();
+    $TPL->title = "Main Page";
+    $TPL->bodycontent = __FILE__;
+    include "src/Views/layout/layout.php";
+    exit;
+}
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
 <table>
     <thead>
         <tr>
@@ -71,5 +73,3 @@ session_start();
             overflow: auto;
         }
     </style>
-</body>
-</html>
