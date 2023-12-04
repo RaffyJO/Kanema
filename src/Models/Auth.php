@@ -40,12 +40,12 @@ if (!$is_Form) {
     $host = $_SERVER['HTTP_HOST'];
 
     if ($login_state) {
-        header('Location: /Views/Home.php');
+        header('Location: /home');
         exit;
     } else {
-        // header('Location: /login_.php');
-        // echo "<script>alert('username or Password are Incorrect')</script>";
-        // exit;
+        header('Location: /login');
+        echo "<script>alert('username or Password are Incorrect')</script>";
+        exit;
     }
 }
 

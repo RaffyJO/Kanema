@@ -1,7 +1,7 @@
 <?php
 require_once('src/Views/templates/source.php');
 
-$requestUri = $_SERVER['REQUEST_URI'];
+$requestUri = strtolower($_SERVER['REQUEST_URI']);
 
 if ($requestUri === '/') {
     require 'src/Views/Landing.php';
@@ -22,7 +22,7 @@ if ($requestUri === '/auth') {
 }
 
 if ($requestUri === '/home') {
-    header('Location: src/Views/Home.php');
+    require('src/Views/Home.php');
     exit;
     return;
 }
