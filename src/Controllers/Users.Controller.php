@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     foreach ($cursor as $key) {
         array_push(
             $data,
-            array('username' => $key->username, 'password' => $key->password, 'last_login' => date('r',$key->last_login/1000))
+            array('username' => $key->username, 'password' => $key->password, 'role' => $key->role)
             
         );
     }

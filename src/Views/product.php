@@ -1,6 +1,15 @@
-<div class="p-4 sm:ml-64">
-    <div class="mt-14">
-        <div class="container mx-auto px-5 bg-white">
+<?php
+
+require_once('src/Views/templates/source.php');
+if (!isset($TPL)) {
+    $TPL = new source();
+    $TPL->title = "Product Page";
+    $TPL->bodycontent = __FILE__;
+    include "src/Views/layout/layout.php";
+    exit;
+}
+?>
+
             <div class="flex lg:flex-row flex-col-reverse">
                 <!-- left section -->
                 <div class="w-full lg:w-3/5 min-h-screen">
@@ -142,6 +151,3 @@
             </div>
             <!-- end right section -->
             </div>
-        </div>
-    </div>
-</div>
