@@ -25,7 +25,8 @@ class ProductModel
                 foreach ($cursor as $key) {
                     array_push(
                         $data,
-                        array('name' => $key->name, 'price' => $key->price, 'available' => $key->available)
+                        // array('name' => $key->name, 'price' => $key->price, 'available' => $key->available)
+                        $key
 
                     );
                 }
