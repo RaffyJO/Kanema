@@ -36,3 +36,13 @@ if ($requestUri === '/cashier') {
     require 'src/Views/product.php';
     return;
 }
+
+if ($requestUri === '/history') {
+    require 'src/Views/history.php';
+    return;
+}
+
+if ($requestUri === '/inbox') {
+    require 'src/Views/inbox.php';
+    return;
+}
