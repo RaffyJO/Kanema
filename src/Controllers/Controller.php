@@ -37,6 +37,16 @@ if ($requestUri === '/cashier') {
     return;
 }
 
+if ($requestUri === '/history') {
+    require 'src/Views/history.php';
+    return;
+}
+
+if ($requestUri === '/inbox') {
+    require 'src/Views/inbox.php';
+    return;
+}
+
 if ($requestUri === '/products') {
     require_once('src/Controllers/Products.Controller.php');
     $controller = new ProductsController();

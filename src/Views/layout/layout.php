@@ -29,6 +29,7 @@ require_once(__DIR__ . '/../templates/source.php');
     </div>
   </div>
   <?php include __DIR__ . "/../templates/footer.php" ?>
+<script src="https://cdn.jsdelivr.net/npm/preline@2.0.2/dist/preline.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
 </body>
 
