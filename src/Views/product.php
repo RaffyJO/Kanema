@@ -10,9 +10,9 @@ if (!isset($TPL)) {
 }
 ?>
 
-<div class="flex lg:flex-row flex-col-reverse">
+<div class="flex lg:flex-row flex-col-reverse h-fit pb-5">
     <!-- left section -->
-    <div class="w-full lg:w-3/5 min-h-screen">
+    <div class="w-full lg:w-3/5 h-fit">
         <!-- categories -->
         <div class="mb-4 ">
             <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
@@ -39,63 +39,18 @@ if (!isset($TPL)) {
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>
-            <!-- <div class="hidden p-4 rounded-lg" id="allItems" role="tabpanel" aria-labelledby="allItems-tab">
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    <div>
-                        <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-                            <a href="#">
-                                <img class="rounded-t-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" />
-                            </a>
-                            <div class="p-3 bg-blue-300 rounded-b-lg flex flex-col items-center justify-center">
-                                <a href="#">
-                                    <h5 class="mb-2 text-lg font-normal tracking-tight">Indomie Goreng</h5>
-                                </a>
-                                <p class="mb-3 text-xl font-bold">Rp. 3000</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="allItems" role="tabpanel" aria-labelledby="allItems-tab">
             </div>
-            <div class="hidden p-4 rounded-lg" id="food" role="tabpanel" aria-labelledby="food-tab">
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    <div>
-                        <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-                            <a href="#">
-                                <img class="rounded-t-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" />
-                            </a>
-                            <div class="p-3 bg-blue-300 rounded-b-lg flex flex-col items-center justify-center">
-                                <a href="#">
-                                    <h5 class="mb-2 text-lg font-normal tracking-tight">Nasi Goreng</h5>
-                                </a>
-                                <p class="mb-3 text-xl font-bold">Rp. 3000</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="hidden p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="food" role="tabpanel" aria-labelledby="food-tab">
             </div>
-            <div class="hidden p-4 rounded-lg" id="drink" role="tabpanel" aria-labelledby="drink-tab">
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    <div>
-                        <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-                            <a href="#">
-                                <img class="rounded-t-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" />
-                            </a>
-                            <div class="p-3 bg-blue-300 rounded-b-lg flex flex-col items-center justify-center">
-                                <a href="#">
-                                    <h5 class="mb-2 text-lg font-normal tracking-tight">Coca-cola</h5>
-                                </a>
-                                <p class="mb-3 text-xl font-bold">Rp. 3000</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
+            <div class="hidden p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="drink" role="tabpanel" aria-labelledby="drink-tab">
+            </div>
         </div>
         <!-- end products -->
     </div>
     <!-- end left section -->
     <!-- right section -->
-    <div class="w-full lg:w-2/5 shadow-xl">
+    <div class="w-full lg:w-2/5 shadow-xl h-fit pb-5 rounded-lg">
         <!-- header -->
         <div class="flex flex-row items-center justify-between px-5 mt-5">
             <div class="font-bold text-xl">Current Order</div>
@@ -163,6 +118,14 @@ if (!isset($TPL)) {
 
 <script>
     const productContainer = document.getElementById('default-tab-content');
+    const allitemsContainer = document.getElementById('allItems')
+    const foodsContainer = document.getElementById('food')
+    const drinksContainer = document.getElementById('drink')
+    // <div class="p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="allItems" role="tabpanel" aria-labelledby="allItems-tab">
+    //         </div>
+    //         <div class="hidden p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="food" role="tabpanel" aria-labelledby="food-tab">
+    //         </div>
+    //         <div class="hidden p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="drink" role="tabpanel" aria-labelledby="drink-tab">
 
     if (productContainer) {
         fetch('/products', {
@@ -178,61 +141,49 @@ if (!isset($TPL)) {
                 let drinkItems = ''
 
                 result.data.forEach(content => {
+                    console.table(content)
                     allItem += `
-                            <div class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full">
-                                <a href="#">
+                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full">
                                     <img class="rounded-t-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" />
-                                </a>
                                 <div class="p-3 bg-blue-300 rounded-b-lg flex flex-col items-center justify-center">
-                                    <a href="#">
                                         <h5 class="mb-2 text-lg font-normal tracking-tight">${content.name}</h5>
-                                    </a>
                                     <p class="mb-3 text-xl font-bold">Rp. ${content.price}</p>
                                 </div>
-                            </div>`
+                            </button>`
 
-                    if (content.category === 'food') {
-                        foodsItems += `
-                            <div class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full">
-                                <a href="#">
+                    if (content.category == 'food') {
+                        foodItems += `
+                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full">
                                     <img class="rounded-t-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" />
-                                </a>
                                 <div class="p-3 bg-blue-300 rounded-b-lg flex flex-col items-center justify-center">
-                                    <a href="#">
                                         <h5 class="mb-2 text-lg font-normal tracking-tight">${content.name}</h5>
-                                    </a>
                                     <p class="mb-3 text-xl font-bold">Rp. ${content.price}</p>
                                 </div>
-                            </div>`
+                            </button>`
                     }
 
-                    if (content.category === 'drink') {
+                    if (content.category == 'drink') {
                         drinkItems += `
-                            <div class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full">
-                                <a href="#">
+                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full">
                                     <img class="rounded-t-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" />
-                                </a>
                                 <div class="p-3 bg-blue-300 rounded-b-lg flex flex-col items-center justify-center">
-                                    <a href="#">
                                         <h5 class="mb-2 text-lg font-normal tracking-tight">${content.name}</h5>
-                                    </a>
                                     <p class="mb-3 text-xl font-bold">Rp. ${content.price}</p>
                                 </div>
-                            </div>`
+                            </button>`
                     }
 
                 });
 
-                let allitem = `<div class="p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="allItems" role="tabpanel" aria-labelledby="allItems-tab"> ${allItem} </div>`
-                let foods = `<div class="hidden p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="food" role="tabpanel" aria-labelledby="food-tab"> ${foodItems} </div>`
-                let drinks = `<div class="hidden p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="drink" role="tabpanel" aria-labelledby="drink-tab"> ${drinkItems} </div>`
-
-                elements += allitem
-                elements += foods
-                elements += drinks;
+                let allitem = `${allItem}`
+                let foods = `${foodItems}`
+                let drinks = `${drinkItems}`
 
                 document.getElementById('container-spinner').remove()
-                productContainer.innerHTML += elements;
+                // productContainer.innerHTML += elements;
+                allitemsContainer.innerHTML += allitem
+                foodsContainer.innerHTML += foods
+                drinksContainer.innerHTML += drinks
 
             }).catch(error => console.error(error))
     } else {

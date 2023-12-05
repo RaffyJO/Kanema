@@ -15,6 +15,8 @@ function getConnection()
             // var_dump($client->executeCommand('test', new MongoDB\Driver\Command(['ping' => 1])));
             $client->selectDatabase('admin')->command(['ping' => 1]);
 
+            // var_dump($connectionString);
+
             return $client;
         } catch (MongoDB\Driver\Exception\ConnectionTimeoutException $e) {
             if ($i < 5) {
