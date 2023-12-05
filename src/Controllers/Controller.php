@@ -1,7 +1,7 @@
 <?php
 require_once('src/Views/templates/source.php');
 
-$requestUri = $_SERVER['REQUEST_URI'];
+$requestUri = strtolower($_SERVER['REQUEST_URI']);
 
 if ($requestUri === '/') {
     require 'src/Views/Landing.php';
@@ -21,8 +21,8 @@ if ($requestUri === '/auth') {
     return;
 }
 
-if ($requestUri === '/home'){
-    header('Location: src/Views/Home.php');
+if ($requestUri === '/home') {
+    require('src/Views/Home.php');
     exit;
     return;
 }
@@ -44,5 +44,12 @@ if ($requestUri === '/history') {
 
 if ($requestUri === '/inbox') {
     require 'src/Views/inbox.php';
+    return;
+}
+
+if ($requestUri === '/products') {
+    require_once('src/Controllers/Products.Controller.php');
+    $controller = new ProductsController();
+    $controller->route();
     return;
 }
