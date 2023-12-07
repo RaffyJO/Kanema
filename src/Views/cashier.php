@@ -9,7 +9,6 @@ if (!isset($TPL)) {
     exit;
 }
 ?>
-
 <div class="flex lg:flex-row flex-col-reverse h-fit pb-5">
     <!-- left section -->
     <div class="w-full lg:w-3/5 h-fit">
@@ -50,93 +49,108 @@ if (!isset($TPL)) {
     </div>
     <!-- end left section -->
     <!-- right section -->
-    <div class="w-full lg:w-2/5 shadow-xl h-fit pb-5 rounded-lg">
-        <!-- header -->
-        <div class="flex flex-row items-center justify-between px-5 mt-5">
-            <div class="font-bold text-xl">Current Order</div>
-            <div class="font-semibold">
-                <span class="px-4 py-2 rounded-md bg-red-100 text-red-500">Clear All</span>
-            </div>
-        </div>
-        <!-- end header -->
-        <!-- order list -->
-        <div class="px-5 py-4 mt-5 overflow-y-auto h-64">
-            <!-- <div class="flex flex-row justify-between items-center mb-4">
-                <div class="flex flex-row items-center w-2/5">
-                    <img src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" class="w-10 h-10 object-cover rounded-md" alt="">
-                    <span class="ml-4 font-semibold text-sm">Indomie</span>
-                </div>
-                <div class="w-32 flex justify-center">
-                    <div class="relative flex items-center">
-                        <button type="button" id="decrement-button" data-input-counter-decrement="counter-input" class="flex-shrink-0 bg-red-500 hover:bg-red-700 inline-flex items-center justify-center rounded-md h-5 w-5 focus:ring-gray-100">
-                            <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
-                            </svg>
-                        </button>
-                        <input type="text" id="counter-input" data-input-counter class="flex-shrink-0  border-0 bg-transparent text-sm font-normal focus:outline-none focus:ring-0 max-w-[2.5rem] text-center" placeholder="" value="1" required>
-                        <button type="button" id="increment-button" data-input-counter-increment="counter-input" class="flex-shrink-0 bg-green-500 hover:bg-green-700 inline-flex items-center justify-center rounded-md h-5 w-5 focus:ring-gray-100">
-                            <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-                            </svg>
-                        </button>
+    <div class="flex flex-col lg:w-2/5">
+        <div class="w-full md:w-3/5 mt-3 mb-5">
+            <form class="flex items-center">
+                <label for="simple-search" class="sr-only">Search</label>
+                <div class="relative w-full">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                        </svg>
                     </div>
-                    
-                    <div class="flex flex-row justify-between items-center mb-4">
-                        <div class="flex flex-row items-center w-2/5">
-                            <img src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" class="w-10 h-10 object-cover rounded-md" alt="">
-                            <span class="ml-4 font-semibold text-sm">Indomie</span>
-                        </div>
-                        <div class="w-32 flex justify-center">
-                            <div class="relative flex items-center">
-                                <button type="button" id="decrement-button" data-input-counter-decrement="counter-input" class="flex-shrink-0 bg-red-500 hover:bg-red-700 inline-flex items-center justify-center rounded-md h-5 w-5 focus:ring-gray-100">
-                                    <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
-                                    </svg>
-                                </button>
-                                <input type="text" id="counter-input" data-input-counter class="flex-shrink-0  border-0 bg-transparent text-sm font-normal focus:outline-none focus:ring-0 max-w-[2.5rem] text-center" placeholder="" value="1" required>
-                                <button type="button" id="increment-button" data-input-counter-increment="counter-input" class="flex-shrink-0 bg-green-500 hover:bg-green-700 inline-flex items-center justify-center rounded-md h-5 w-5 focus:ring-gray-100">
-                                    <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="font-semibold text-sm w-16 text-center">
-                            Rp. 3000
-                        </div>
-                    </div>
+                    <input type="text" id="simple-search" class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2  border-gray-600 placeholder-gray-400 text-white" placeholder="Search" required="">
                 </div>
-                <div class="font-semibold text-sm w-16 text-center">
-                    Rp. 3000
-                </div>
-            </div> -->
+            </form>
         </div>
-        <!-- end order list -->
-        <!-- totalItems -->
-        <div class="px-5 mt-5">
-            <div class="py-4 rounded-md shadow-lg">
-                <div class=" px-4 flex justify-between ">
-                    <span class="font-semibold text-sm">Subtotal</span>
-                    <span class="font-bold">Rp. 3000</span>
-                </div>
-                <div class=" px-4 flex justify-between ">
-                    <span class="font-semibold text-sm">Discount</span>
-                    <span class="font-bold">Rp. 0</span>
-                </div>
-                <div class="border-t-2 mt-3 py-2 px-4 flex items-center justify-between">
-                    <span class="font-semibold text-2xl">Total</span>
-                    <span class="font-bold text-2xl">Rp. 3000</span>
+        <div class="w-full shadow-xl h-fit pb-5 rounded-lg">
+            <!-- header -->
+            <div class="flex flex-row items-center justify-between px-5 mt-5">
+                <div class="font-bold text-xl">Current Order</div>
+                <div class="font-semibold">
+                    <button class="px-4 py-2 rounded-md bg-red-100 text-red-500">Clear All</button>
                 </div>
             </div>
+            <!-- end header -->
+            <!-- order list -->
+            <div class="px-5 py-4 mt-5 overflow-y-auto h-64">
+                <!-- <div class="flex flex-row justify-between items-center mb-4">
+            <div class="flex flex-row items-center w-2/5">
+                <img src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" class="w-10 h-10 object-cover rounded-md" alt="">
+                <span class="ml-4 font-semibold text-sm">Indomie</span>
+            </div>
+            <div class="w-32 flex justify-center">
+                <div class="relative flex items-center">
+                    <button type="button" id="decrement-button" data-input-counter-decrement="counter-input" class="flex-shrink-0 bg-red-500 hover:bg-red-700 inline-flex items-center justify-center rounded-md h-5 w-5 focus:ring-gray-100">
+                        <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
+                        </svg>
+                    </button>
+                    <input type="text" id="counter-input" data-input-counter class="flex-shrink-0  border-0 bg-transparent text-sm font-normal focus:outline-none focus:ring-0 max-w-[2.5rem] text-center" placeholder="" value="1" required>
+                    <button type="button" id="increment-button" data-input-counter-increment="counter-input" class="flex-shrink-0 bg-green-500 hover:bg-green-700 inline-flex items-center justify-center rounded-md h-5 w-5 focus:ring-gray-100">
+                        <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="flex flex-row justify-between items-center mb-4">
+                    <div class="flex flex-row items-center w-2/5">
+                        <img src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" class="w-10 h-10 object-cover rounded-md" alt="">
+                        <span class="ml-4 font-semibold text-sm">Indomie</span>
+                    </div>
+                    <div class="w-32 flex justify-center">
+                        <div class="relative flex items-center">
+                            <button type="button" id="decrement-button" data-input-counter-decrement="counter-input" class="flex-shrink-0 bg-red-500 hover:bg-red-700 inline-flex items-center justify-center rounded-md h-5 w-5 focus:ring-gray-100">
+                                <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                                </svg>
+                            </button>
+                            <input type="text" id="counter-input" data-input-counter class="flex-shrink-0  border-0 bg-transparent text-sm font-normal focus:outline-none focus:ring-0 max-w-[2.5rem] text-center" placeholder="" value="1" required>
+                            <button type="button" id="increment-button" data-input-counter-increment="counter-input" class="flex-shrink-0 bg-green-500 hover:bg-green-700 inline-flex items-center justify-center rounded-md h-5 w-5 focus:ring-gray-100">
+                                <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="font-semibold text-sm w-16 text-center">
+                        Rp. 3000
+                    </div>
+                </div>
+            </div>
+            <div class="font-semibold text-sm w-16 text-center">
+                Rp. 3000
+            </div>
+        </div> -->
+            </div>
+            <!-- end order list -->
+            <!-- totalItems -->
+            <div class="px-5 mt-5">
+                <div class="py-4 rounded-md shadow-lg">
+                    <div class=" px-4 flex justify-between ">
+                        <span class="font-semibold text-sm">Subtotal</span>
+                        <span class="font-bold">Rp. 3000</span>
+                    </div>
+                    <div class=" px-4 flex justify-between ">
+                        <span class="font-semibold text-sm">Discount</span>
+                        <span class="font-bold">Rp. 0</span>
+                    </div>
+                    <div class="border-t-2 mt-3 py-2 px-4 flex items-center justify-between">
+                        <span class="font-semibold text-2xl">Total</span>
+                        <span class="font-bold text-2xl">Rp. 3000</span>
+                    </div>
+                </div>
+            </div>
+            <!-- end total -->
+            <!-- button pay-->
+            <div class="px-5 mt-5">
+                <a href="#" class="block px-4 py-4 rounded-md shadow-lg text-center bg-blue-300 text-white font-semibold">
+                    Process
+                </a>
+            </div>
+            <!-- end button pay -->
         </div>
-        <!-- end total -->
-        <!-- button pay-->
-        <div class="px-5 mt-5">
-            <a href="#" class="block px-4 py-4 rounded-md shadow-lg text-center bg-blue-300 text-white font-semibold">
-                Process
-            </a>
-        </div>
-        <!-- end button pay -->
     </div>
     <!-- end right section -->
 </div>
@@ -168,9 +182,11 @@ if (!isset($TPL)) {
                 result.data.forEach(content => {
                     console.table(content)
                     allItem += `
-                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full">
-                                    <img class="rounded-t-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" />
-                                <div class="p-3 bg-blue-300 rounded-b-lg flex flex-col items-center justify-center">
+                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full h-fit">
+                                <div class="h-3/5 w-full">
+                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="" />
+                                </div>
+                                <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
                                         <h5 class="mb-2 text-lg font-normal tracking-tight">${content.name}</h5>
                                     <p class="mb-3 text-xl font-bold">Rp. ${content.price}</p>
                                 </div>
@@ -178,9 +194,11 @@ if (!isset($TPL)) {
 
                     if (content.category == 'food') {
                         foodItems += `
-                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full">
-                                    <img class="rounded-t-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" />
-                                <div class="p-3 bg-blue-300 rounded-b-lg flex flex-col items-center justify-center">
+                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full h-fit">
+                                <div class="h-3/5 w-full">
+                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="" />
+                                </div>
+                                <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
                                         <h5 class="mb-2 text-lg font-normal tracking-tight">${content.name}</h5>
                                     <p class="mb-3 text-xl font-bold">Rp. ${content.price}</p>
                                 </div>
@@ -189,9 +207,11 @@ if (!isset($TPL)) {
 
                     if (content.category == 'drink') {
                         drinkItems += `
-                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full">
-                                    <img class="rounded-t-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" />
-                                <div class="p-3 bg-blue-300 rounded-b-lg flex flex-col items-center justify-center">
+                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full h-fit">
+                                <div class="h-3/5 w-full">
+                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="" />
+                                </div>
+                                <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
                                         <h5 class="mb-2 text-lg font-normal tracking-tight">${content.name}</h5>
                                     <p class="mb-3 text-xl font-bold">Rp. ${content.price}</p>
                                 </div>
