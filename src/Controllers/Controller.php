@@ -4,7 +4,7 @@ require_once('src/Views/templates/source.php');
 $requestUri = strtolower($_SERVER['REQUEST_URI']);
 
 if ($requestUri === '/') {
-    require 'src/Views/Landing.php';
+    require 'src/Views/dashboard.php';
     return;
 }
 if ($requestUri === '/user') {
@@ -33,7 +33,7 @@ if ($requestUri === '/login') {
 }
 
 if ($requestUri === '/cashier') {
-    require 'src/Views/product.php';
+    require 'src/Views/cashier.php';
     return;
 }
 
@@ -48,6 +48,7 @@ if ($requestUri === '/inbox') {
 }
 
 if ($requestUri === '/products') {
+    require 'src/Views/product.php';
     require_once('src/Controllers/Products.Controller.php');
     $controller = new ProductsController();
     $controller->route();
