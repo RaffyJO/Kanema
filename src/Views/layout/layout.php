@@ -22,7 +22,7 @@ require_once(__DIR__ . '/../templates/source.php');
   <?php include __DIR__ . "/../templates/header.php" ?>
   <div class="p-4 sm:ml-64">
     <div class="mt-14">
-      <div class="container mx-auto px-5 bg-white">
+      <div class="container mx-auto bg-white">
         <?php if (isset($TPL->bodycontent)) {
           include $TPL->bodycontent;
         } ?></div>

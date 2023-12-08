@@ -48,9 +48,14 @@ if ($requestUri === '/inbox') {
 }
 
 if ($requestUri === '/products') {
-    require 'src/Views/product.php';
+    // require 'src/Views/product.php';
     require_once('src/Controllers/Products.Controller.php');
     $controller = new ProductsController();
     $controller->route();
+    return;
+}
+
+if ($requestUri === '/product') {
+    require 'src/Views/product.php';
     return;
 }
