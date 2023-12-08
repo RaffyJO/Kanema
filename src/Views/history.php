@@ -2,772 +2,144 @@
 
 require_once('src/Views/templates/source.php');
 if (!isset($TPL)) {
-    $TPL = new source();
-    $TPL->title = "History Page";
-    $TPL->bodycontent = __FILE__;
-    include "src/Views/layout/layout.php";
-    exit;
+  $TPL = new source();
+  $TPL->title = "History Page";
+  $TPL->bodycontent = __FILE__;
+  include "src/Views/layout/layout.php";
+  exit;
 }
 ?>
 
-<!-- Header -->
-<div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 white:border-gray-700">
-  <div>
-    <h2 class="text-xl font-semibold text-gray-800 white:text-gray-200">
-      Invoices
-    </h2>
-  </div>
-</div>
-<!-- End Header -->
-
-<!-- Table Section -->
-<div class="max-w-screen px-4 py-10 sm:px-1 lg:px-1 lg:py-2">
-  <!-- Card -->
-  <div class="flex flex-col">
-    <div class="-m-1.5 overflow-x-auto">
-      <div class="p-1.5 min-w-full inline-block align-middle">
-        <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden white:bg-slate-900 white:border-gray-700">
-
-          <!-- Table -->
-          <table class="min-w-full divide-y divide-gray-200 white:divide-gray-700">
-            <thead class="bg-gray-50 white:bg-slate-900">
-              <tr>
-                <th scope="col" class="px-6 py-3 text-start">
-                  <div class="flex items-center gap-x-2">
-                    <span class="text-xs font-bold uppercase tracking-wide text-gray-800 white:text-gray-200">
-                      Invoice number
-                    </span>
-                    <div class="hs-tooltip">
-                      <div class="hs-tooltip-toggle">
-                        <svg class="flex-shrink-0 w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-                        <span class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm white:bg-slate-700" role="tooltip">
-                          Invoice number related popup
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </th>
-
-                <th scope="col" class="px-6 py-3 text-start">
-                  <div class="flex items-center gap-x-2">
-                    <span class="text-xs font-bold uppercase tracking-wide text-gray-800 white:text-gray-200">
-                      Amount
-                    </span>
-                  </div>
-                </th>
-
-                <th scope="col" class="px-6 py-3 text-start">
-                  <div class="flex items-center gap-x-2">
-                    <span class="text-xs font-bold uppercase tracking-wide text-gray-800 white:text-gray-200">
-                      Items
-                    </span>
-                  </div>
-                </th>
-
-                <th scope="col" class="px-6 py-3 text-start">
-                  <div class="flex items-center gap-x-2">
-                    <span class="text-xs font-bold uppercase tracking-wide text-gray-800 white:text-gray-200">
-                      Date
-                    </span>
-                  </div>
-                </th>
-
-                <th scope="col" class="px-6 py-3 text-start">
-                  <div class="flex items-center gap-x-2">
-                    <span class="text-xs font-bold uppercase tracking-wide text-gray-800 white:text-gray-200">
-                      Time
-                    </span>
-                  </div>
-                </th>
-
-                <th scope="col" class="px-6 py-3 text-end"></th>
-              </tr>
-            </thead>
-
-            <tbody class="divide-y divide-gray-200 white:divide-gray-700">
-              
-              <tr class="bg-white hover:bg-gray-50 white:bg-slate-900 white:hover:bg-slate-800">
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="font-mono text-sm text-blue-600 white:text-blue-500">#ADUQ2189H1-0038</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">Rp100.000</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">2</span>
-                    </span>
-                  </button> 
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">10 Jan 2023</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">10:43:21</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="px-6 py-1.5">
-                      <span class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm white:bg-slate-900 white:hover:bg-slate-800 white:border-gray-700 white:text-gray-400 white:hover:text-white white:focus:ring-offset-gray-800">
-                        <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                          <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z"/>
-                          <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
-                        </svg>
-                        Details
-                      </span>
-                    </span>
-                  </button>
-                </td>
-              </tr>
-
-              <tr class="bg-white hover:bg-gray-50 white:bg-slate-900 white:hover:bg-slate-800">
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="font-mono text-sm text-blue-600 white:text-blue-500">#ADUQ218ADD-0099</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">Rp83.000</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">3</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">06 Jan 2023</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">12:53:26</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="px-6 py-1.5">
-                      <span class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm white:bg-slate-900 white:hover:bg-slate-800 white:border-gray-700 white:text-gray-400 white:hover:text-white white:focus:ring-offset-gray-800">
-                        <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                          <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z"/>
-                          <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
-                        </svg>
-                        Details
-                      </span>
-                    </span>
-                  </button>
-                </td>
-              </tr>
-
-            <tbody class="divide-y divide-gray-200 white:divide-gray-700">
-
-              <tr class="bg-white hover:bg-gray-50 white:bg-slate-900 white:hover:bg-slate-800">
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="font-mono text-sm text-blue-600 white:text-blue-500">#ADUQ2189H1-0038</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">Rp100.000</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">2</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">10 Jan 2023</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">10:43:21</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="px-6 py-1.5">
-                      <span class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm white:bg-slate-900 white:hover:bg-slate-800 white:border-gray-700 white:text-gray-400 white:hover:text-white white:focus:ring-offset-gray-800">
-                        <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                          <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z"/>
-                          <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
-                        </svg>
-                        Details
-                      </span>
-                    </span>
-                  </button>
-                </td>
-              </tr>
-
-              <tr class="bg-white hover:bg-gray-50 white:bg-slate-900 white:hover:bg-slate-800">
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="font-mono text-sm text-blue-600 white:text-blue-500">#ADUQ218ADD-0099</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">Rp83.000</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">3</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">06 Jan 2023</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">12:53:26</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="px-6 py-1.5">
-                      <span class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm white:bg-slate-900 white:hover:bg-slate-800 white:border-gray-700 white:text-gray-400 white:hover:text-white white:focus:ring-offset-gray-800">
-                        <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                          <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z"/>
-                          <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
-                        </svg>
-                        Details
-                      </span>
-                    </span>
-                  </button>
-                </td>
-              </tr>
-
-            <tbody class="divide-y divide-gray-200 white:divide-gray-700">
-
-              <tr class="bg-white hover:bg-gray-50 white:bg-slate-900 white:hover:bg-slate-800">
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="font-mono text-sm text-blue-600 white:text-blue-500">#ADUQ2189H1-0038</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">Rp100.000</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">2</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">10 Jan 2023</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">10:43:21</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="px-6 py-1.5">
-                      <span class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm white:bg-slate-900 white:hover:bg-slate-800 white:border-gray-700 white:text-gray-400 white:hover:text-white white:focus:ring-offset-gray-800">
-                        <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                          <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z"/>
-                          <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
-                        </svg>
-                        Details
-                      </span>
-                    </span>
-                  </button>
-                </td>
-              </tr>
-
-              <tr class="bg-white hover:bg-gray-50 white:bg-slate-900 white:hover:bg-slate-800">
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="font-mono text-sm text-blue-600 white:text-blue-500">#ADUQ218ADD-0099</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">Rp83.000</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">3</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">06 Jan 2023</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">12:53:26</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="px-6 py-1.5">
-                      <span class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm white:bg-slate-900 white:hover:bg-slate-800 white:border-gray-700 white:text-gray-400 white:hover:text-white white:focus:ring-offset-gray-800">
-                        <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                          <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z"/>
-                          <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
-                        </svg>
-                        Details
-                      </span>
-                    </span>
-                  </button>
-                </td>
-              </tr>
-
-            <tbody class="divide-y divide-gray-200 white:divide-gray-700">
-
-              <tr class="bg-white hover:bg-gray-50 white:bg-slate-900 white:hover:bg-slate-800">
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="font-mono text-sm text-blue-600 white:text-blue-500">#ADUQ2189H1-0038</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">Rp100.000</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">2</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">10 Jan 2023</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">10:43:21</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="px-6 py-1.5">
-                      <span class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm white:bg-slate-900 white:hover:bg-slate-800 white:border-gray-700 white:text-gray-400 white:hover:text-white white:focus:ring-offset-gray-800">
-                        <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                          <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z"/>
-                          <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
-                        </svg>
-                        Details
-                      </span>
-                    </span>
-                  </button>
-                </td>
-              </tr>
-
-              <tr class="bg-white hover:bg-gray-50 white:bg-slate-900 white:hover:bg-slate-800">
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="font-mono text-sm text-blue-600 white:text-blue-500">#ADUQ218ADD-0099</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">Rp83.000</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">3</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">06 Jan 2023</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">12:53:26</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="px-6 py-1.5">
-                      <span class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm white:bg-slate-900 white:hover:bg-slate-800 white:border-gray-700 white:text-gray-400 white:hover:text-white white:focus:ring-offset-gray-800">
-                        <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                          <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z"/>
-                          <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
-                        </svg>
-                        Details
-                      </span>
-                    </span>
-                  </button>
-                </td>
-              </tr>
-
-            <tbody class="divide-y divide-gray-200 white:divide-gray-700">
-
-              <tr class="bg-white hover:bg-gray-50 white:bg-slate-900 white:hover:bg-slate-800">
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="font-mono text-sm text-blue-600 white:text-blue-500">#ADUQ2189H1-0038</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">Rp100.000</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">2</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">10 Jan 2023</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">10:43:21</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="px-6 py-1.5">
-                      <span class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm white:bg-slate-900 white:hover:bg-slate-800 white:border-gray-700 white:text-gray-400 white:hover:text-white white:focus:ring-offset-gray-800">
-                        <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                          <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z"/>
-                          <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
-                        </svg>
-                        Details
-                      </span>
-                    </span>
-                  </button>
-                </td>
-              </tr>
-
-              <tr class="bg-white hover:bg-gray-50 white:bg-slate-900 white:hover:bg-slate-800">
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="font-mono text-sm text-blue-600 white:text-blue-500">#ADUQ218ADD-0099</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">Rp83.000</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">3</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">06 Jan 2023</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm text-gray-600 white:text-gray-400">12:53:26</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="px-6 py-1.5">
-                      <span class="py-1 px-2 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm white:bg-slate-900 white:hover:bg-slate-800 white:border-gray-700 white:text-gray-400 white:hover:text-white white:focus:ring-offset-gray-800">
-                        <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                          <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z"/>
-                          <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
-                        </svg>
-                        Details
-                      </span>
-                    </span>
-                  </button>
-                </td>
-              </tr>
-
-            </tbody>
-          </table>
-          <!-- End Table -->
-
-          <!-- Footer -->
-          <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 white:border-gray-700">
-            <div>
-              <p class="text-sm text-gray-600 white:text-gray-400">
-                <span class="font-semibold text-gray-800 white:text-gray-200">10</span> results
-              </p>
-            </div>
-
-            <div>
-              <div class="inline-flex gap-x-2">
-                <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none white:bg-slate-900 white:border-gray-700 white:text-white white:hover:bg-gray-800 white:focus:outline-none white:focus:ring-1 white:focus:ring-gray-600">
-                  <svg class="w-3 h-3" width="16" height="16" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10.506 1.64001L4.85953 7.28646C4.66427 7.48172 4.66427 7.79831 4.85953 7.99357L10.506 13.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  </svg>
-                  Prev
-                </button>
-
-                <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none white:bg-slate-900 white:border-gray-700 white:text-white white:hover:bg-gray-800 white:focus:outline-none white:focus:ring-1 white:focus:ring-gray-600">
-                  Next
-                  <svg class="w-3 h-3" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4.50598 2L10.1524 7.64645C10.3477 7.84171 10.3477 8.15829 10.1524 8.35355L4.50598 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- End Footer -->
+<div class="relative overflow-x-auto sm:rounded-lg">
+  <div class="p-4 bg-white dark:bg-gray-800 flex justify-between items-center">
+    <h1 class="text-xl uppercase font-semibold text-left rtl:text-right text-white bg-gray-800">Invoices</h1>
+    <div>
+      <label for="table-search" class="sr-only">Search</label>
+      <div class="relative mt-1">
+        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+          </svg>
         </div>
+        <input type="text" id="table-search" class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items">
       </div>
     </div>
   </div>
-  <!-- End Card -->
-</div>
-<!-- End Table Section -->
-
-<!-- Modal -->
-<div id="hs-ai-invoice-modal" class="hs-overlay hidden w-full h-full fixed top-0 start-0 z-[60] overflow-x-hidden overflow-y-auto pointer-events-none">
-  <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto">
-    <div class="relative flex flex-col bg-white shadow-lg rounded-xl pointer-events-auto white:bg-gray-800">
-      <div class="relative overflow-hidden min-h-[8rem] bg-gray-900 text-center rounded-t-xl">
-        <!-- Close Button -->
-        <div class="absolute top-2 end-2">
-          <button type="button" class="inline-flex flex-shrink-0 justify-center items-center h-8 w-8 rounded-lg text-gray-500 hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all text-sm white:focus:ring-gray-700 white:focus:ring-offset-gray-800" data-hs-overlay="#hs-ai-invoice-modal">
-            <span class="sr-only">Close</span>
-            <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+  <table class="w-full text-sm text-left rtl:text-right text-gray-400">
+    <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+      <tr>
+        <th scope="col" class="px-6 py-3">
+          invoice Number
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Amount
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Items
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Date
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Cashier
+        </th>
+        <th scope="col" class="px-6 py-3">
+          <span class="sr-only">Edit</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="bg-gray-800 border-gray-700">
+        <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white">
+          #213123
+        </th>
+        <td class="px-6 py-4">
+          Rp. 3000
+        </td>
+        <td class="px-6 py-4">
+          1
+        </td>
+        <td class="px-6 py-4">
+          07/12/2023
+        </td>
+        <td class="px-6 py-4">
+          Ricky
+        </td>
+        <td class="px-6 py-4 text-right">
+          <button type="button" data-modal-target="readProductModal" data-modal-toggle="readProductModal" class="py-2 px-3 flex items-center text-sm font-medium text-center focus:outline-none rounded-lg border focus:z-10 focus:ring-4 focus:ring-gray-700 bg-gray-800 text-gray-400 border-gray-600 hover:text-white hover:bg-gray-700">
+            <svg class="w-4 h-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="20" fill="none" viewBox="0 0 18 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M12 2h4a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4m6 0v3H6V2m6 0a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1M5 5h8m-5 5h5m-8 0h.01M5 14h.01M8 14h5" />
+            </svg>
+            Details
           </button>
-        </div>
-        <!-- End Close Button -->
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-        <!-- SVG Background Element -->
-        <figure class="absolute inset-x-0 bottom-0">
-          <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1920 100.1">
-            <path fill="currentColor" class="fill-white white:fill-gray-800" d="M0,0c0,0,934.4,93.4,1920,0v100.1H0L0,0z"></path>
-          </svg>
-        </figure>
-        <!-- End SVG Background Element -->
+<!-- Read modal -->
+<div id="readProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+  <div class="relative p-4 w-full max-w-xl max-h-full bg-gray-800 rounded-lg">
+    <!-- Body -->
+    <div class="p-4 sm:p-7 overflow-y-auto">
+      <div class="text-center">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+          Invoice
+        </h3>
+        <p class="text-sm text-gray-500">
+          Invoice #213123
+        </p>
       </div>
 
-      <div class="relative z-10 -mt-12">
-        <!-- Icon -->
-        <span class="mx-auto flex justify-center items-center w-[62px] h-[62px] rounded-full border border-gray-200 bg-white text-gray-700 shadow-sm white:bg-gray-800 white:border-gray-700 white:text-gray-400">
-          <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z"/>
-            <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
-          </svg>
-        </span>
-        <!-- End Icon -->
+      <div class="mt-5 sm:mt-10 grid grid-cols-2 sm:grid-cols-3 gap-5">
+        <div>
+          <span class="block text-xs uppercase text-gray-500">Amount paid:</span>
+          <span class="block text-sm font-medium text-gray-800 dark:text-gray-200">$316.8</span>
+        </div>
+        <div>
+          <span class="block text-xs uppercase text-gray-500">Date paid:</span>
+          <span class="block text-sm font-medium text-gray-800 dark:text-gray-200">April 22, 2020</span>
+        </div>
+        <div>
+          <span class="block text-xs uppercase text-gray-500">Cashier</span>
+          <div class="flex items-center gap-x-2">
+            <span class="block text-sm font-medium text-gray-800 dark:text-gray-200">Ricky</span>
+          </div>
+        </div>
       </div>
 
-      <!-- Body -->
-      <div class="p-4 sm:p-7 overflow-y-auto">
-        <div class="text-center">
-          <h3 class="text-lg font-semibold text-gray-800 white:text-gray-200">
-            Invoice from Preline
-          </h3>
-          <p class="text-sm text-gray-500">
-            Invoice #3682303
-          </p>
-        </div>
+      <div class="mt-5 sm:mt-10">
+        <h4 class="text-xs font-semibold uppercase text-gray-800 dark:text-gray-200">Summary</h4>
 
-        <!-- Grid -->
-        <div class="mt-5 sm:mt-10 grid grid-cols-2 sm:grid-cols-3 gap-5">
-          <div>
-            <span class="block text-xs uppercase text-gray-500">Amount paid:</span>
-            <span class="block text-sm font-medium text-gray-800 white:text-gray-200">$316.8</span>
-          </div>
-          <!-- End Col -->
-
-          <div>
-            <span class="block text-xs uppercase text-gray-500">Date paid:</span>
-            <span class="block text-sm font-medium text-gray-800 white:text-gray-200">April 22, 2020</span>
-          </div>
-          <!-- End Col -->
-
-          <div>
-            <span class="block text-xs uppercase text-gray-500">Payment method:</span>
-            <div class="flex items-center gap-x-2">
-              <svg class="w-5 h-5" width="400" height="248" viewBox="0 0 400 248" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g clip-path="url(#clip0)">
-                <path d="M254 220.8H146V26.4H254V220.8Z" fill="#FF5F00"/>
-                <path d="M152.8 123.6C152.8 84.2 171.2 49 200 26.4C178.2 9.2 151.4 0 123.6 0C55.4 0 0 55.4 0 123.6C0 191.8 55.4 247.2 123.6 247.2C151.4 247.2 178.2 238 200 220.8C171.2 198.2 152.8 163 152.8 123.6Z" fill="#EB001B"/>
-                <path d="M400 123.6C400 191.8 344.6 247.2 276.4 247.2C248.6 247.2 221.8 238 200 220.8C228.8 198.2 247.2 163 247.2 123.6C247.2 84.2 228.8 49 200 26.4C221.8 9.2 248.6 0 276.4 0C344.6 0 400 55.4 400 123.6Z" fill="#F79E1B"/>
-                </g>
-                <defs>
-                <clipPath id="clip0">
-                <rect width="400" height="247.2" fill="white"/>
-                </clipPath>
-                </defs>
-              </svg>
-              <span class="block text-sm font-medium text-gray-800 white:text-gray-200">•••• 4242</span>
+        <ul class="mt-3 flex flex-col">
+          <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-gray-700 dark:text-gray-200">
+            <div class="flex items-center justify-between w-full">
+              <span>Indomie</span>
+              <span>1</span>
+              <span>$264.00</span>
             </div>
-          </div>
-          <!-- End Col -->
-        </div>
-        <!-- End Grid -->
-
-        <div class="mt-5 sm:mt-10">
-          <h4 class="text-xs font-semibold uppercase text-gray-800 white:text-gray-200">Summary</h4>
-
-          <ul class="mt-3 flex flex-col">
-            <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg white:border-gray-700 white:text-gray-200">
-              <div class="flex items-center justify-between w-full">
-                <span>Payment to Front</span>
-                <span>$264.00</span>
-              </div>
-            </li>
-            <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg white:border-gray-700 white:text-gray-200">
-              <div class="flex items-center justify-between w-full">
-                <span>Tax fee</span>
-                <span>$52.8</span>
-              </div>
-            </li>
-            <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-semibold bg-gray-50 border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg white:bg-slate-800 white:border-gray-700 white:text-gray-200">
-              <div class="flex items-center justify-between w-full">
-                <span>Amount paid</span>
-                <span>$316.8</span>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Button -->
-        <div class="mt-5 flex justify-end gap-x-2">
-          <a class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm white:bg-gray-800 white:hover:bg-slate-800 white:border-gray-700 white:text-gray-400 white:hover:text-white white:focus:ring-offset-gray-800" href="#">
-            <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-            Invoice PDF
-          </a>
-          <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none white:focus:outline-none white:focus:ring-1 white:focus:ring-gray-600" href="#">
-            <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
-            Print
-          </a>
-        </div>
-        <!-- End Buttons -->
-
-        <div class="mt-5 sm:mt-10">
-          <p class="text-sm text-gray-500">If you have any questions, please contact us at <a class="inline-flex items-center gap-x-1.5 text-blue-600 decoration-2 hover:underline font-medium" href="#">example@site.com</a> or call at <a class="inline-flex items-center gap-x-1.5 text-blue-600 decoration-2 hover:underline font-medium" href="tel:+1898345492">+1 898-34-5492</a></p>
-        </div>
+          </li>
+          <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-semibold bg-gray-50 border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-slate-800 dark:border-gray-700 dark:text-gray-200">
+            <div class="flex items-center justify-between w-full">
+              <span>Amount paid</span>
+              <span>$316.8</span>
+            </div>
+          </li>
+        </ul>
       </div>
-      <!-- End Body -->
+
+      <!-- Button -->
+      <div class="mt-5 flex justify-end gap-x-2">
+        <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+          <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 6 2 18 2 18 9" />
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+            <rect width="12" height="8" x="6" y="14" />
+          </svg>
+          Print
+        </a>
+      </div>
+      <!-- End Buttons -->
     </div>
   </div>
-</div>
-<!-- End Modal -->

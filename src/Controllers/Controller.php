@@ -15,7 +15,7 @@ class Controller
         $requestUri = strtolower($this->server['REQUEST_URI']);
 
         if ($requestUri === '/') {
-            require 'src/Views/Landing.php';
+            require 'src/Views/dashboard.php';
             return;
         }
         if ($requestUri === '/user') {
@@ -43,6 +43,10 @@ class Controller
             exit;
             return;
         }
+        if ($requestUri === '/cashier') {
+            require 'src/Views/cashier.php';
+            return;
+        }
 
         if ($requestUri === '/login') {
             require 'src/Views/Login.php';
@@ -50,7 +54,7 @@ class Controller
         }
 
         if ($requestUri === '/cashier') {
-            require 'src/Views/product.php';
+            require 'src/Views/cashier.php';
             return;
         }
 
@@ -68,6 +72,10 @@ class Controller
             require_once('src/Controllers/Products.Controller.php');
             $controller = new ProductsController();
             $controller->route();
+            return;
+        }
+        if ($requestUri === '/product') {
+            require 'src/Views/product.php';
             return;
         }
     }

@@ -22,15 +22,16 @@ require_once(__DIR__ . '/../templates/source.php');
   <?php include __DIR__ . "/../templates/header.php" ?>
   <div class="p-4 sm:ml-64">
     <div class="mt-14">
-      <div class="container mx-auto px-5 bg-white">
+      <div class="container mx-auto bg-white">
         <?php if (isset($TPL->bodycontent)) {
           include $TPL->bodycontent;
         } ?></div>
     </div>
   </div>
   <?php include __DIR__ . "/../templates/footer.php" ?>
-<script src="https://cdn.jsdelivr.net/npm/preline@2.0.2/dist/preline.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/preline@2.0.2/dist/preline.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </body>
 
 </html>
