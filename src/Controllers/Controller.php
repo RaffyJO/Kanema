@@ -70,7 +70,13 @@ class Controller
 
         if ($requestUri === '/api/products') {
             require_once('src/Controllers/Products.Controller.php');
-            $controller = new ProductsController();
+            $controller = new ProductsController($this->server);
+            $controller->route();
+            return;
+        }
+        if (str_contains($requestUri, '/api/product?')) {
+            require_once('src/Controllers/Products.Controller.php');
+            $controller = new ProductsController($this->server);
             $controller->route();
             return;
         }
