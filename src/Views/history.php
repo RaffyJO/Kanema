@@ -11,17 +11,17 @@ if (!isset($TPL)) {
 ?>
 
 <div class="relative overflow-x-auto sm:rounded-lg">
-  <div class="p-4 bg-white dark:bg-gray-800 flex justify-between items-center">
+  <div class="p-4 bg-gray-800 flex justify-between items-center">
     <h1 class="text-xl uppercase font-semibold text-left rtl:text-right text-white bg-gray-800">Invoices</h1>
     <div>
       <label for="table-search" class="sr-only">Search</label>
       <div class="relative mt-1">
         <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+          <svg class="w-4 h-4 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
           </svg>
         </div>
-        <input type="text" id="table-search" class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items">
+        <input type="text" id="table-search" class="block pt-2 ps-10 text-sm border rounded-lg w-80 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Search for items">
       </div>
     </div>
   </div>
@@ -84,7 +84,7 @@ if (!isset($TPL)) {
     <!-- Body -->
     <div class="p-4 sm:p-7 overflow-y-auto">
       <div class="text-center">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+        <h3 class="text-lg font-semibold text-gray-200">
           Invoice
         </h3>
         <p class="text-sm text-gray-500">
@@ -95,32 +95,32 @@ if (!isset($TPL)) {
       <div class="mt-5 sm:mt-10 grid grid-cols-2 sm:grid-cols-3 gap-5">
         <div>
           <span class="block text-xs uppercase text-gray-500">Amount paid:</span>
-          <span class="block text-sm font-medium text-gray-800 dark:text-gray-200">$316.8</span>
+          <span class="block text-sm font-medium text-gray-200">$316.8</span>
         </div>
         <div>
           <span class="block text-xs uppercase text-gray-500">Date paid:</span>
-          <span class="block text-sm font-medium text-gray-800 dark:text-gray-200">April 22, 2020</span>
+          <span class="block text-sm font-medium text-gray-200">April 22, 2020</span>
         </div>
         <div>
           <span class="block text-xs uppercase text-gray-500">Cashier</span>
           <div class="flex items-center gap-x-2">
-            <span class="block text-sm font-medium text-gray-800 dark:text-gray-200">Ricky</span>
+            <span class="block text-sm font-medium text-gray-200">Ricky</span>
           </div>
         </div>
       </div>
 
       <div class="mt-5 sm:mt-10">
-        <h4 class="text-xs font-semibold uppercase text-gray-800 dark:text-gray-200">Summary</h4>
+        <h4 class="text-xs font-semibold uppercase text-gray-200">Summary</h4>
 
         <ul class="mt-3 flex flex-col">
-          <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-gray-700 dark:text-gray-200">
+          <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm border -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg border-gray-700 text-gray-200">
             <div class="flex items-center justify-between w-full">
               <span>Indomie</span>
               <span>1</span>
               <span>$264.00</span>
             </div>
           </li>
-          <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-semibold bg-gray-50 border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-slate-800 dark:border-gray-700 dark:text-gray-200">
+          <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-semibold border -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg bg-slate-800 border-gray-700 text-gray-200">
             <div class="flex items-center justify-between w-full">
               <span>Amount paid</span>
               <span>$316.8</span>
