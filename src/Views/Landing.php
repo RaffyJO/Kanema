@@ -37,7 +37,7 @@ if (!isset($TPL)) {
     <script>
         let tbody = document.getElementById('table-content-user');
 
-        fetch('/user-all', {
+        fetch('/api/user-all', {
                 method: 'GET'
             })
             .then(value => value.json())

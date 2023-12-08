@@ -275,7 +275,7 @@ if (!isset($TPL)) {
     const drinksContainer = document.getElementById('drink')
 
     if (productContainer) {
-        fetch('/products', {
+        fetch('/api/products', {
                 method: 'GET'
             })
             .then(response => response.json())
