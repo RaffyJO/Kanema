@@ -2,6 +2,9 @@
 
 use MongoDB\BSON\ObjectId;
 
+require('src/lib/Functions/JWT_Utils.php');
+require('src/lib/Functions/ValidateHeaders.php');
+
 class UsersController
 {
     private array $server;
@@ -38,8 +41,13 @@ class UsersController
         }
     }
 
-    function GET(): string
+    function GET()
     {
+        $validation = new ValidateHeaders();
+        $valid = $validation->validate(getallheaders());
+
+        if (!$valid) return;
+
         require 'src/lib/Functions/Connections/DB.php';
         $db = new DB();
         $connection = $db->getConnection();
@@ -58,6 +66,6 @@ class UsersController
         }
 
         http_response_code(200);
-        return json_encode(array('data' => $data));
+        echo json_encode(array('data' => $data));
     }
 }

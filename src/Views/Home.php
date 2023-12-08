@@ -29,14 +29,45 @@ if (!isset($TPL)) {
         </tr>
     </tbody>
 
+    <script type="text/javascript" src="src/lib/Functions/CookieUtils.js"></script>
     <script>
         let tbody = document.getElementById('table-content-user');
+        let headersList = {
+            "Accept": "*/*",
+            "Authorization": `Bearer ${getCookie('Bearer')}`
+        }
 
         fetch('/api/user-all', {
-                method: 'GET'
+                method: 'GET',
+                headers: headersList
             })
             .then(value => value.json())
             .then(result => {
+                if (new Object(result).hasOwnProperty('error')) {
+                    let alertBox = document.getElementById('box-alert');
+                    alertBox.classList.toggle('hidden')
+
+                    const template = `
+<div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 w-fit mt-2 mr-2" role="alert" id="instance-alert">
+    <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+    </svg>
+    <span class="sr-only">Error</span>
+    <div class="ms-3 text-sm font-medium">
+        ${result.error}
+    </div>
+</div>
+                    `
+
+                    alertBox.innerHTML = template
+
+                    setTimeout(() => {
+                        alertBox.classList.toggle('hidden')
+                    }, 5000);
+
+                    return;
+                }
+
                 result.data.forEach(item => {
                     let row = document.createElement('tr'); // Create a table row
 
