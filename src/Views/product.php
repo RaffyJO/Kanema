@@ -317,19 +317,28 @@ if (!isset($TPL)) {
 
                 result.data.forEach(content => {
                     console.table(content);
+                    let badgeBgColor = content.category === 'food' ? 'bg-blue-900 text-blue-300' : (content.category == 'drink' ? 'bg-yellow-900 text-yellow-300' : '');
                     item += `<tr class="border-b border-gray-700">
                     <th scope="row" class="px-4 py-3 font-medium whitespace-nowrap text-white flex items-center h-full">
                         <img src="${content.imgUrl}" class="h-10 w-10 mr-2 rounded-full"/>
                         ${content.name}
                     </th>
                     <td class="px-4 py-3">
-                        <span class="text-xs font-medium px-2 py-0.5 rounded bg-blue-900 text-blue-300">${content.category}</span>
+                        <span class="text-xs font-medium px-2 py-0.5 rounded ${badgeBgColor}">${content.category}</span>
                     </td>
                     <td class="px-4 py-3 text-white">Rp.${content.price}</td>
-                    <td class="px-4 py-3 text-white">${content.stock}</td>
+                    <td class="px-4 py-3 text-white">
+                        <input type="number" value="${content.stock}" min="0" max="100" class="w-10 bg-transparent" />
+                    </td>
                     <td class="px-4 py-3 font-medium whitespace-nowrap text-white">
                         <div class="flex items-center space-x-4">
-                            <button type="button" data-modal-target="updateProductModal-${content._id}" data-modal-toggle="updateProductModal" class="py-2 px-3 flex items-center text-sm font-medium text-center rounded-lg text-white focus:ring-4 focus:outline-none focus:ring-blue-300 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
+                            <button type="button" data-modal-target="updateProductModal-${content._id}" data-modal-toggle="updateProductModal" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700">
+                            <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 1v5h-5M2 19v-5h5m10-4a8 8 0 0 1-14.947 3.97M1 10a8 8 0 0 1 14.947-3.97"/>
+                            </svg>
+                                Update
+                            </button>
+                            <button type="button" data-modal-target="updateProductModal-${content._id}" data-modal-toggle="updateProductModal" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-blue-700 text-blue-400 border-blue-600 hover:text-white hover:bg-blue-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
                                     <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />

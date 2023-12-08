@@ -16,6 +16,15 @@ require_once(__DIR__ . '/../templates/source.php');
   <?php if (isset($TPL->headcontent)) {
     include $TPL->headcontent;
   } ?>
+
+  <!--  -->
+  <style>
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  </style>
 </head>
 
 <body id="body">
