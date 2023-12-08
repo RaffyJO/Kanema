@@ -43,10 +43,6 @@ class Controller
             exit;
             return;
         }
-        if ($requestUri === '/cashier') {
-            require 'src/Views/cashier.php';
-            return;
-        }
 
         if ($requestUri === '/login') {
             require 'src/Views/Login.php';

@@ -58,11 +58,9 @@ if (!isset($TPL)) {
         let hasValue;
 
         hasValue = orderContainer.querySelectorAll('#order')
-        console.log(hasValue)
 
         let isExist;
 
-        // el => isExist = el.getAttribute('value') == id
         if (hasValue.length != 0) {
             const value = hasValue.values()
             const nodesArray = [...value]
@@ -72,16 +70,11 @@ if (!isset($TPL)) {
 
         if (hasValue.length == 0) isExist = false
 
-        // hasValue.forEach(el => console.log(el.getAttribute('value') == id))
-        console.log(isExist)
-
         if (!isExist) {
             orderContainer.innerHTML += template
         } else {
             hasValue.forEach(el => {
                 if (el.getAttribute('value') == id) {
-                    // console.log(el.querySelector('#counter-input'))
-                    console.log(content)
                     el.querySelector('#counter-input').setAttribute('value', content.amount)
                 }
             })
@@ -99,13 +92,13 @@ if (!isset($TPL)) {
                     </div>
                     <div class="w-32 flex justify-center">
                         <div class="relative flex items-center">
-                            <button type="button" id="decrement-button" data-input-counter-decrement="counter-input" class="flex-shrink-0 bg-red-500 hover:bg-red-700 inline-flex items-center justify-center rounded-md h-5 w-5 focus:ring-gray-100">
+                            <button type="button" id="decrement-button" data-input-counter-decrement="counter-input" class="flex-shrink-0 bg-red-500 hover:bg-red-700 inline-flex items-center justify-center rounded-md h-5 w-5 focus:ring-gray-100" onclick="reduce('${id}')">
                                 <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
                                 </svg>
                             </button>
                             <input type="text" id="counter-input" data-input-counter class="flex-shrink-0  border-0 bg-transparent text-sm font-normal focus:outline-none focus:ring-0 max-w-[2.5rem] text-center" placeholder="" value="${amount}" required>
-                            <button type="button" id="increment-button" data-input-counter-increment="counter-input" class="flex-shrink-0 bg-green-500 hover:bg-green-700 inline-flex items-center justify-center rounded-md h-5 w-5 focus:ring-gray-100">
+                            <button type="button" id="increment-button" data-input-counter-increment="counter-input" class="flex-shrink-0 bg-green-500 hover:bg-green-700 inline-flex items-center justify-center rounded-md h-5 w-5 focus:ring-gray-100" onclick="increase('${id}')">
                                 <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
                                 </svg>
@@ -130,13 +123,212 @@ if (!isset($TPL)) {
             amount: 0
         }
 
+        if (orderItemPlan !== null && orderItemPlan.length > 0) {
+            orderItemPlan.forEach(value => {
+                sub += parseIDRToNumber(value.price) * Number.parseInt(value.amount)
+            });
 
-        orderItemPlan.forEach(value => {
-            sub += Number.parseInt(value.price.replace('Rp. ', '')) * Number.parseInt(value.amount)
-        });
+            validateSubmit()
+        }
 
-        subTotal.innerText = sub;
-        total.innerText = sub
+        subTotal.innerText = formatToIDR(sub);
+        total.innerText = formatToIDR(sub)
+
+        validateSubmit()
+    }
+
+    function reduce(id) {
+        let orderContainer = document.querySelector('#order-container')
+        let idx;
+        const INVALID_IDX = -1
+        let isExist = false
+
+        let currentData = {
+            id: null,
+            name: null,
+            price: null,
+            imgUrl: null,
+            amount: 0
+        }
+
+
+        if (orderItemPlan.some(value => value.id.toString() == id.toString())) {
+            idx = orderItemPlan.findIndex(value => value.id == id)
+
+            orderItemPlan[idx].amount--;
+            currentData = orderItemPlan[idx];
+
+            orderItemPlan.splice(idx, 1);
+        }
+
+        if (idx == INVALID_IDX) return;
+
+        let hasValue = orderContainer.querySelectorAll('#order');
+
+        if (hasValue.length != 0) {
+            const value = hasValue.values()
+            const nodesArray = [...value]
+
+            isExist = nodesArray.some(el => isExist = el.getAttribute('value') == id)
+        }
+
+        if (hasValue.length == 0) isExist = false;
+
+        if (isExist) {
+            hasValue.forEach(el => {
+                if (el.getAttribute('value') == id) {
+                    if (0 == currentData.amount) {
+                        orderContainer.removeChild(el)
+                    }
+
+                    if (0 != currentData.amount)
+                        el.querySelector('#counter-input').setAttribute('value', currentData.amount)
+                }
+            })
+        }
+
+        calcPrices()
+    }
+
+    function increase(id) {
+        let orderContainer = document.querySelector('#order-container')
+        let idx;
+        const INVALID_IDX = -1
+        let isExist = false
+
+        let currentData = {
+            id: null,
+            name: null,
+            price: null,
+            imgUrl: null,
+            amount: 0
+        }
+
+
+        if (orderItemPlan.some(value => value.id.toString() == id.toString())) {
+            idx = orderItemPlan.findIndex(value => value.id == id)
+
+            orderItemPlan[idx].amount++;
+            currentData = orderItemPlan[idx];
+        }
+
+        if (idx == INVALID_IDX) return;
+
+        let hasValue = orderContainer.querySelectorAll('#order');
+
+        if (hasValue.length != 0) {
+            const value = hasValue.values()
+            const nodesArray = [...value]
+
+            isExist = nodesArray.some(el => isExist = el.getAttribute('value') == id)
+        }
+
+        if (hasValue.length == 0) isExist = false;
+
+        if (isExist) {
+            hasValue.forEach(el => {
+                if (el.getAttribute('value') == id) {
+                    // if (0 == currentData.amount) {
+                    //     orderContainer.appendChild(el)
+                    // }
+
+                    if (0 != currentData.amount)
+                        el.querySelector('#counter-input').setAttribute('value', currentData.amount)
+                }
+            })
+        }
+
+        calcPrices()
+    }
+
+    function clearOrder() {
+        let orderContainer = document.querySelector('#order-container');
+        let hasValue = orderContainer.querySelectorAll('#order');
+
+        hasValue.forEach(el => {
+            orderContainer.removeChild(el)
+        })
+
+        orderItemPlan = []
+        calcPrices()
+    }
+
+    function validateSubmit() {
+        const submitButton = document.getElementById('submit-btn')
+
+        if (orderItemPlan.length > 0) {
+            submitButton.disabled = false
+        } else {
+            submitButton.disabled = true
+        }
+    }
+
+    function submitOrder() {
+        fetch('/api/auth', {
+                method: 'POST',
+                body: JSON.stringify({
+                    "username": username,
+                    "password": password
+                })
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (new Object(result).hasOwnProperty('error')) {
+                    let alertBox = document.getElementById('box-alert');
+                    alertBox.classList.toggle('hidden')
+
+                    const template = `
+<div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 w-fit mt-2 mr-2" role="alert" id="instance-alert">
+    <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+    </svg>
+    <span class="sr-only">Error</span>
+    <div class="ms-3 text-sm font-medium">
+        ${result.error}
+    </div>
+</div>
+                    `
+
+                    alertBox.innerHTML = template
+
+                    setTimeout(() => {
+                        alertBox.classList.toggle('hidden')
+                    }, 5000);
+
+                    return;
+                }
+
+                let cookieString = `Bearer=${encodeURIComponent(result.token)}; expires=${result.expire_at}; path=/`;
+                document.cookie = cookieString;
+                window.location.href = '/cashier'
+                localStorage.setItem('Bearer', result.token);
+            }).catch(err => console.error(err))
+    }
+
+    function formatToIDR(number) {
+        // Format the number to IDR currency
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR'
+        }).format(number);
+    }
+
+    function parseIDRToNumber(idrString) {
+        // Remove non-numeric characters (including currency symbol 'IDR', 'Rp', and commas)
+        let numericString = idrString.replaceAll(',00', '');
+
+        numericString = numericString.replace('Rp', '');
+        // numericString = idrString.replace(/[^\d.,]/g, '');
+
+        // Replace comma (,) with empty string for proper parsing
+        numericString = numericString.replace(/,/g, '');
+        numericString = numericString.replaceAll('.', '');
+        console.log(numericString)
+
+        // Parse the string to a number
+        let numberValue = Number.parseInt(numericString);
+
+        return isNaN(numberValue) ? 0 : numberValue; // Return 0 if parsing fails
     }
 </script>
 
@@ -190,7 +382,7 @@ if (!isset($TPL)) {
                             <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                         </svg>
                     </div>
-                    <input type="text" id="simple-search" class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2  border-gray-600 placeholder-gray-400 text-white" placeholder="Search" required="">
+                    <input type="text" id="simple-search" class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2  border-gray-600 placeholder-gray-400 text-white text-black" placeholder="Search" required="">
                 </div>
             </form>
         </div>
@@ -199,7 +391,7 @@ if (!isset($TPL)) {
             <div class="flex flex-row items-center justify-between px-5 mt-5">
                 <div class="font-bold text-xl">Current Order</div>
                 <div class="font-semibold">
-                    <button class="px-4 py-2 rounded-md bg-red-100 text-red-500">Clear All</button>
+                    <button class="px-4 py-2 rounded-md bg-red-100 text-red-500" onclick="clearOrder()">Clear All</button>
                 </div>
             </div>
             <!-- end header -->
@@ -243,24 +435,24 @@ if (!isset($TPL)) {
                 <div class="py-4 rounded-md shadow-lg">
                     <div class=" px-4 flex justify-between ">
                         <span class="font-semibold text-sm">Subtotal</span>
-                        <span class="font-bold" id="subtotal">Rp. 0</span>
+                        <span class="font-bold" id="subtotal">Rp 0</span>
                     </div>
                     <div class=" px-4 flex justify-between ">
                         <span class="font-semibold text-sm">Discount</span>
-                        <span class="font-bold" id="discount">Rp. 0</span>
+                        <span class="font-bold" id="discount">Rp 0</span>
                     </div>
                     <div class="border-t-2 mt-3 py-2 px-4 flex items-center justify-between">
                         <span class="font-semibold text-2xl">Total</span>
-                        <span class="font-bold text-2xl" id="total">Rp. 0</span>
+                        <span class="font-bold text-2xl" id="total">Rp 0</span>
                     </div>
                 </div>
             </div>
             <!-- end total -->
             <!-- button pay-->
             <div class="px-5 mt-5">
-                <a href="#" class="block px-4 py-4 rounded-md shadow-lg text-center bg-blue-300 text-white font-semibold">
+                <button href="#" class="block px-4 py-4 rounded-md shadow-lg text-center bg-blue-500 disabled:bg-blue-300 disabled:cursor-not-allowed text-white font-semibold w-full transition-all duration-200 ease-in" disabled onclick="validateSubmit()" id="submit-btn">
                     Process
-                </a>
+                </button>
             </div>
             <!-- end button pay -->
         </div>
@@ -290,38 +482,38 @@ if (!isset($TPL)) {
                 result.data.forEach(content => {
                     // console.table(content)
                     allItem += `
-                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full h-fit" onclick="getItem(this)" id="${content._id}">
+                            <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
                                     <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
                                 </div>
                                 <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
                                     <h5 class="mb-2 text-lg font-normal tracking-tight" id="item-name">${content.name}</h5>
-                                    <p class="mb-3 text-xl font-bold" id="item-price">Rp. ${content.price}</p>
+                                    <p class="mb-3 text-xl font-bold" id="item-price">${formatToIDR(content.price)}</p>
                                 </div>
                             </button>`
 
                     if (content.category == 'food') {
                         foodItems += `
-                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full h-fit" onclick="getItem(this)" id="${content._id}">
+                            <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
                                     <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
                                 </div>
                                 <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
                                     <h5 class="mb-2 text-lg font-normal tracking-tight" id="item-name">${content.name}</h5>
-                                    <p class="mb-3 text-xl font-bold" id="item-price">Rp. ${content.price}</p>
+                                    <p class="mb-3 text-xl font-bold" id="item-price">${formatToIDR(content.price)}</p>
                                 </div>
                             </button>`
                     }
 
                     if (content.category == 'drink') {
                         drinkItems += `
-                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full h-fit" onclick="getItem(this)" id="${content._id}">
+                        <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
                                     <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
                                 </div>
-                                <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col>
+                                <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
                                     <h5 class="mb-2 text-lg font-normal tracking-tight" id="item-name">${content.name}</h5>
-                                    <p class="mb-3 text-xl font-bold" id="item-price">Rp. ${content.price}</p>
+                                    <p class="mb-3 text-xl font-bold" id="item-price">${formatToIDR(content.price)}</p>
                                 </div>
                             </button>`
                     }
