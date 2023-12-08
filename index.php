@@ -9,3 +9,5 @@ if ($envConfig) {
 }
 
 require 'src/Controllers/Controller.php';
+$mainRouter = new Controller($_SERVER);
+$mainRouter->router();

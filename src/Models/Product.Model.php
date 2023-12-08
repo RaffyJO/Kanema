@@ -11,7 +11,8 @@ class ProductModel
     public function getAll(): array
     {
         try {
-            $connection = getConnection();
+            $db = new DB();
+            $connection = $db->getConnection();
             if ($connection == null) die(print_r("Connection is Null", true));
 
             $collection = $connection->selectCollection('kanema', 'Product');
@@ -19,14 +20,19 @@ class ProductModel
 
 
             if ($cursor) {
-                // var_dump($arr);
                 $data = array();
+                //             "_id": 1,
+                //   "name": "Mie Goreng",
+                //   "price": 5000,
+                //   "category": "food",
+                //   "imgUrl": "https://indomie.com.au/wp-content/uploads/2019/05/noodle.png",
+                //   "stock": 10,
+                //   "available": true
 
                 foreach ($cursor as $key) {
                     array_push(
                         $data,
-                        // array('name' => $key->name, 'price' => $key->price, 'available' => $key->available)
-                        $key
+                        array('_id' => strval($key->_id), 'name' => $key->name, 'price' => $key->price, 'category' => $key->category, 'imgUrl' => $key->imgUrl, 'stock' => $key->stock, 'available' => $key->available)
 
                     );
                 }
