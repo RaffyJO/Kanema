@@ -18,20 +18,20 @@ class Controller
             require 'src/Views/dashboard.php';
             return;
         }
-        if ($requestUri === '/user') {
+        if ($requestUri === '/api/user') {
             require 'src/Controllers/Users.Controller.php';
             $controller = new UsersController($this->server);
             $controller->routes();
             return;
         }
-        if ($requestUri === '/user-all') {
+        if ($requestUri === '/api/user-all') {
             require 'src/Controllers/Users.Controller.php';
             $controller = new UsersController($this->server);
             $controller->routes();
             return;
         }
 
-        if ($requestUri === '/auth') {
+        if ($requestUri === '/api/auth') {
             require 'src/Models/Auth.php';
             $controller = new Auth($this->server);
             $controller->exec();
@@ -68,9 +68,15 @@ class Controller
             return;
         }
 
-        if ($requestUri === '/products') {
+        if ($requestUri === '/api/products') {
             require_once('src/Controllers/Products.Controller.php');
-            $controller = new ProductsController();
+            $controller = new ProductsController($this->server);
+            $controller->route();
+            return;
+        }
+        if (str_contains($requestUri, '/api/product?')) {
+            require_once('src/Controllers/Products.Controller.php');
+            $controller = new ProductsController($this->server);
             $controller->route();
             return;
         }

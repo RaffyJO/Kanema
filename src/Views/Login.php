@@ -20,7 +20,7 @@ if (!isset($TPL)) {
             Kantin Polinema
         </p>
 
-        <form action="/auth" method="POST" class="mb-0 mt-6 space-y-4">
+        <form action="/api/auth" method="POST" class="mb-0 mt-6 space-y-4">
             <div class="bg-blue-100 px-4 pt-4 pb-12 sm:px-6 sm:pt-6 sm:pb-14 lg:px-8 lg:pt-8 lg:pb-16 rounded-lg shadow-lg">
                 <div>
                     <label for="email" class="font-bold text-neutral-700">Masukan Username</label>
