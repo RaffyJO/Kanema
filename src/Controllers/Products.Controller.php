@@ -20,17 +20,22 @@ class ProductsController
         // }
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_SERVER['REQUEST_URI'] === '/products') {
-            require('src/Models/Product.Model.php');
-            $model = new ProductModel();
-            $data = $model->getAll();
+            echo $this->products();
+        }
+    }
 
-            if (array_key_exists('error', $data)) {
-                http_response_code(400);
-                echo json_encode($data);
-            } else {
-                http_response_code(200);
-                echo json_encode($data);
-            }
+    private function products(): string
+    {
+        require('src/Models/Product.Model.php');
+        $model = new ProductModel();
+        $data = $model->getAll();
+
+        if (array_key_exists('error', $data)) {
+            http_response_code(400);
+            return json_encode($data);
+        } else {
+            http_response_code(200);
+            return json_encode($data);
         }
     }
 }

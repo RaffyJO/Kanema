@@ -2,47 +2,62 @@
 
 use MongoDB\BSON\ObjectId;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the POST data
-    $postData = json_decode(file_get_contents('php://input'), true);
+class UsersController
+{
+    private array $server;
 
-    // Check if the 'name' parameter exists in the POST data
-    if (isset($postData['name'])) {
-        // Get the 'name' parameter value
-        $name = $postData['name'];
-
-        // Encode the name parameter
-        $encodedName = base64_encode($name);
-
-        // Redirect back to index.html with encoded name as a query parameter
-        header('Location: index.html?encoded_name=' . urlencode($encodedName));
-        exit;
-    } else {
-        // 'name' parameter is missing
-        http_response_code(400); // Bad request
-        echo json_encode(array('error' => 'Parameter "name" is missing.'));
-        exit;
+    public function __construct(array $server)
+    {
+        $this->server = $server;
     }
-}
+    function routes()
+    {
+        if ($this->server['REQUEST_METHOD'] === 'POST') {
+            echo $this->POST();
+            return;
+        }
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    require 'src/lib/Functions/Connections/DB.php';
-
-    $connection = getConnection();
-
-    $collection = $connection->selectCollection('kanema', 'users');
-    $cursor = $collection->find([]);
-
-    $data = array();
-
-    foreach ($cursor as $key) {
-        array_push(
-            $data,
-            array('_id' => strval(new ObjectId($key->_id)), 'username' => $key->username, 'password' => $key->password, 'role' => $key->role)
-
-        );
+        if ($this->server['REQUEST_METHOD'] === 'GET') {
+            echo $this->GET();
+            return;
+        }
     }
 
-    http_response_code(200);
-    echo json_encode(array('data' => $data));
+    function POST(): string
+    {
+        $postData = json_decode(file_get_contents('php://input'), true);
+
+        if (isset($postData['name'])) {
+            $name = $postData['name'];
+            $encodedName = base64_encode($name);
+
+            return json_encode(array('encoded_name' => urlencode($encodedName)));
+        } else {
+            http_response_code(400);
+            return json_encode(array('error' => 'Parameter "name" is missing.'));
+        }
+    }
+
+    function GET(): string
+    {
+        require 'src/lib/Functions/Connections/DB.php';
+        $db = new DB();
+        $connection = $db->getConnection();
+
+        $collection = $connection->selectCollection('kanema', 'users');
+        $cursor = $collection->find([]);
+
+        $data = array();
+
+        foreach ($cursor as $key) {
+            array_push(
+                $data,
+                array('_id' => strval(new ObjectId($key->_id)), 'username' => $key->username, 'password' => $key->password, 'role' => $key->role)
+
+            );
+        }
+
+        http_response_code(200);
+        return json_encode(array('data' => $data));
+    }
 }

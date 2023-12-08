@@ -11,7 +11,8 @@ class ProductModel
     public function getAll(): array
     {
         try {
-            $connection = getConnection();
+            $db = new DB();
+            $connection = $db->getConnection();
             if ($connection == null) die(print_r("Connection is Null", true));
 
             $collection = $connection->selectCollection('kanema', 'Product');

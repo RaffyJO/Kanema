@@ -10,6 +10,32 @@ if (!isset($TPL)) {
 }
 ?>
 
+<script>
+    let orderItemPlan = [];
+
+    function getItem(element) {
+        let content = {
+            id: null,
+            name: null,
+            price: null,
+            imgUrl: null
+        }
+
+        const childNodes = element.childNodes;
+
+        for (let i = 0; i < childNodes.length; i++) {
+            const childNode = childNodes[i];
+            // Perform actions with each child node
+            console.log(childNode);
+        }
+
+        content.id = element.getAttribute('id');
+        content.name = element.getAttribute('id');
+        content.price = element.getAttribute('id');
+        content.imgUrl = element.getAttribute('id');
+    }
+</script>
+
 <div class="flex lg:flex-row flex-col-reverse h-fit pb-5">
     <!-- left section -->
     <div class="w-full lg:w-3/5 h-fit">
@@ -146,11 +172,6 @@ if (!isset($TPL)) {
     const allitemsContainer = document.getElementById('allItems')
     const foodsContainer = document.getElementById('food')
     const drinksContainer = document.getElementById('drink')
-    // <div class="p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="allItems" role="tabpanel" aria-labelledby="allItems-tab">
-    //         </div>
-    //         <div class="hidden p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="food" role="tabpanel" aria-labelledby="food-tab">
-    //         </div>
-    //         <div class="hidden p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="drink" role="tabpanel" aria-labelledby="drink-tab">
 
     if (productContainer) {
         fetch('/products', {
@@ -158,17 +179,13 @@ if (!isset($TPL)) {
             })
             .then(response => response.json())
             .then(result => {
-                let elements = '';
-                // let other = `<div class="p-4 rounded-lg" id="allItems" role="tabpanel" aria-labelledby="allItems-tab"> </div>`
-
                 let allItem = ''
                 let foodItems = ''
                 let drinkItems = ''
 
                 result.data.forEach(content => {
-                    console.table(content)
                     allItem += `
-                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full">
+                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full" onclick="getItem(this)" id="${content._id}">
                                     <img class="rounded-t-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" />
                                 <div class="p-3 bg-blue-300 rounded-b-lg flex flex-col items-center justify-center">
                                         <h5 class="mb-2 text-lg font-normal tracking-tight">${content.name}</h5>
@@ -178,7 +195,7 @@ if (!isset($TPL)) {
 
                     if (content.category == 'food') {
                         foodItems += `
-                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full">
+                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full" onclick="getItem(this)" id="${content._id}">
                                     <img class="rounded-t-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" />
                                 <div class="p-3 bg-blue-300 rounded-b-lg flex flex-col items-center justify-center">
                                         <h5 class="mb-2 text-lg font-normal tracking-tight">${content.name}</h5>
@@ -189,7 +206,7 @@ if (!isset($TPL)) {
 
                     if (content.category == 'drink') {
                         drinkItems += `
-                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full">
+                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full" onclick="getItem(this)" id="${content._id}">
                                     <img class="rounded-t-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" />
                                 <div class="p-3 bg-blue-300 rounded-b-lg flex flex-col items-center justify-center">
                                         <h5 class="mb-2 text-lg font-normal tracking-tight">${content.name}</h5>
@@ -205,7 +222,6 @@ if (!isset($TPL)) {
                 let drinks = `${drinkItems}`
 
                 document.getElementById('container-spinner').remove()
-                // productContainer.innerHTML += elements;
                 allitemsContainer.innerHTML += allitem
                 foodsContainer.innerHTML += foods
                 drinksContainer.innerHTML += drinks
