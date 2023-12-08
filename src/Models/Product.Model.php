@@ -1,4 +1,5 @@
 <?php
+require 'src/../vendor/autoload.php';
 
 if (session_status() != PHP_SESSION_ACTIVE)
     session_start();
@@ -16,7 +17,7 @@ class ProductModel
             if ($connection == null) die(print_r("Connection is Null", true));
 
             $collection = $connection->selectCollection('kanema', 'Product');
-            $cursor = $collection->find(['name' => $itemName]);
+            $cursor = $collection->find(['name' => new MongoDB\BSON\Regex("$itemName", "i")]);
 
 
             if ($cursor) {
