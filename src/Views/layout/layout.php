@@ -18,7 +18,7 @@ require_once(__DIR__ . '/../templates/source.php');
   } ?>
 </head>
 
-<body>
+<body id="body">
   <?php include __DIR__ . "/../templates/header.php" ?>
   <div class="p-4 sm:ml-64">
     <div class="mt-14">
@@ -32,6 +32,23 @@ require_once(__DIR__ . '/../templates/source.php');
   <script src="https://cdn.jsdelivr.net/npm/preline@2.0.2/dist/preline.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  <script>
+    function removeComments(element) {
+      for (let i = element.childNodes.length - 1; i >= 0; i--) {
+        const node = element.childNodes[i];
+
+        if (node.nodeType === Node.COMMENT_NODE) {
+          element.removeChild(node);
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          removeComments(node);
+        }
+      }
+    }
+
+    const parentElement = document.getElementById('body');
+    removeComments(parentElement);
+  </script>
 </body>
 
 </html>

@@ -9,7 +9,138 @@ if (!isset($TPL)) {
     exit;
 }
 ?>
-<div class="flex lg:flex-row flex-col-reverse h-fit pb-5">
+
+<script>
+    let orderItemPlan = [];
+
+    function getItem(element) {
+        let content = {
+            id: null,
+            name: null,
+            price: null,
+            imgUrl: null,
+            amount: 0
+        }
+
+        const itemName = element.querySelector('#item-name');
+        const itemPrice = element.querySelector('#item-price');
+        const itemPicture = element.querySelector('#item-picture');
+
+
+        content.id = element.getAttribute('id');
+        content.name = itemName.innerText
+        content.price = itemPrice.innerText;
+        content.imgUrl = itemPicture.getAttribute('src');
+        content.amount++;
+
+        if (orderItemPlan.some(value => value.id.toString() == content.id.toString())) {
+            const index = orderItemPlan.findIndex(value => value.id == content.id)
+
+            // console.log(index)
+
+            orderItemPlan[index].amount++
+            content = orderItemPlan[index]
+        }
+
+        if (!orderItemPlan.some(value => value.id.toString() == content.id.toString()))
+            orderItemPlan.push(content);
+
+        addOrder(content)
+        content = null
+    }
+
+    function addOrder(content) {
+        let orderContainer = document.querySelector('#order-container')
+        const id = content.id.toString();
+
+
+        const template = orderTemplate(content.id, content.name, content.price, content.amount, content.imgUrl);
+        let hasValue;
+
+        hasValue = orderContainer.querySelectorAll('#order')
+        console.log(hasValue)
+
+        let isExist;
+
+        // el => isExist = el.getAttribute('value') == id
+        if (hasValue.length != 0) {
+            const value = hasValue.values()
+            const nodesArray = [...value]
+
+            isExist = nodesArray.some(el => isExist = el.getAttribute('value') == id)
+        }
+
+        if (hasValue.length == 0) isExist = false
+
+        // hasValue.forEach(el => console.log(el.getAttribute('value') == id))
+        console.log(isExist)
+
+        if (!isExist) {
+            orderContainer.innerHTML += template
+        } else {
+            hasValue.forEach(el => {
+                if (el.getAttribute('value') == id) {
+                    // console.log(el.querySelector('#counter-input'))
+                    console.log(content)
+                    el.querySelector('#counter-input').setAttribute('value', content.amount)
+                }
+            })
+        }
+
+        calcPrices()
+    }
+
+    function orderTemplate(id, name, price, amount, imgUrl) {
+        return `
+        <div class="flex flex-row justify-between items-center mb-4" id="order" value="${id}">
+                    <div class="flex flex-row items-center w-2/5">
+                        <img src="${imgUrl}" class="w-10 h-10 object-cover rounded-md" alt="">
+                        <span class="ml-4 font-semibold text-sm">${name}</span>
+                    </div>
+                    <div class="w-32 flex justify-center">
+                        <div class="relative flex items-center">
+                            <button type="button" id="decrement-button" data-input-counter-decrement="counter-input" class="flex-shrink-0 bg-red-500 hover:bg-red-700 inline-flex items-center justify-center rounded-md h-5 w-5 focus:ring-gray-100">
+                                <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
+                                </svg>
+                            </button>
+                            <input type="text" id="counter-input" data-input-counter class="flex-shrink-0  border-0 bg-transparent text-sm font-normal focus:outline-none focus:ring-0 max-w-[2.5rem] text-center" placeholder="" value="${amount}" required>
+                            <button type="button" id="increment-button" data-input-counter-increment="counter-input" class="flex-shrink-0 bg-green-500 hover:bg-green-700 inline-flex items-center justify-center rounded-md h-5 w-5 focus:ring-gray-100">
+                                <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+        `
+    }
+
+    function calcPrices() {
+        let subTotal = document.getElementById('subtotal')
+        let total = document.getElementById('total')
+
+        let sub = 0;
+
+        let content = {
+            id: null,
+            name: null,
+            price: null,
+            imgUrl: null,
+            amount: 0
+        }
+
+
+        orderItemPlan.forEach(value => {
+            sub += Number.parseInt(value.price.replace('Rp. ', '')) * Number.parseInt(value.amount)
+        });
+
+        subTotal.innerText = sub;
+        total.innerText = sub
+    }
+</script>
+
+<div class="flex lg:flex-row flex-col-reverse h-fit pb-5" id="main-container">
     <!-- left section -->
     <div class="w-full lg:w-3/5 h-fit">
         <!-- categories -->
@@ -73,26 +204,8 @@ if (!isset($TPL)) {
             </div>
             <!-- end header -->
             <!-- order list -->
-            <div class="px-5 py-4 mt-5 overflow-y-auto h-64">
-                <!-- <div class="flex flex-row justify-between items-center mb-4">
-            <div class="flex flex-row items-center w-2/5">
-                <img src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" class="w-10 h-10 object-cover rounded-md" alt="">
-                <span class="ml-4 font-semibold text-sm">Indomie</span>
-            </div>
-            <div class="w-32 flex justify-center">
-                <div class="relative flex items-center">
-                    <button type="button" id="decrement-button" data-input-counter-decrement="counter-input" class="flex-shrink-0 bg-red-500 hover:bg-red-700 inline-flex items-center justify-center rounded-md h-5 w-5 focus:ring-gray-100">
-                        <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
-                        </svg>
-                    </button>
-                    <input type="text" id="counter-input" data-input-counter class="flex-shrink-0  border-0 bg-transparent text-sm font-normal focus:outline-none focus:ring-0 max-w-[2.5rem] text-center" placeholder="" value="1" required>
-                    <button type="button" id="increment-button" data-input-counter-increment="counter-input" class="flex-shrink-0 bg-green-500 hover:bg-green-700 inline-flex items-center justify-center rounded-md h-5 w-5 focus:ring-gray-100">
-                        <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-                        </svg>
-                    </button>
-                </div>
+            <div class="px-5 py-4 mt-5 overflow-y-auto h-64" id="order-container">
+                <!-- 
                 
                 <div class="flex flex-row justify-between items-center mb-4">
                     <div class="flex flex-row items-center w-2/5">
@@ -130,15 +243,15 @@ if (!isset($TPL)) {
                 <div class="py-4 rounded-md shadow-lg">
                     <div class=" px-4 flex justify-between ">
                         <span class="font-semibold text-sm">Subtotal</span>
-                        <span class="font-bold">Rp. 3000</span>
+                        <span class="font-bold" id="subtotal">Rp. 0</span>
                     </div>
                     <div class=" px-4 flex justify-between ">
                         <span class="font-semibold text-sm">Discount</span>
-                        <span class="font-bold">Rp. 0</span>
+                        <span class="font-bold" id="discount">Rp. 0</span>
                     </div>
                     <div class="border-t-2 mt-3 py-2 px-4 flex items-center justify-between">
                         <span class="font-semibold text-2xl">Total</span>
-                        <span class="font-bold text-2xl">Rp. 3000</span>
+                        <span class="font-bold text-2xl" id="total">Rp. 0</span>
                     </div>
                 </div>
             </div>
@@ -160,11 +273,6 @@ if (!isset($TPL)) {
     const allitemsContainer = document.getElementById('allItems')
     const foodsContainer = document.getElementById('food')
     const drinksContainer = document.getElementById('drink')
-    // <div class="p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="allItems" role="tabpanel" aria-labelledby="allItems-tab">
-    //         </div>
-    //         <div class="hidden p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="food" role="tabpanel" aria-labelledby="food-tab">
-    //         </div>
-    //         <div class="hidden p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="drink" role="tabpanel" aria-labelledby="drink-tab">
 
     if (productContainer) {
         fetch('/products', {
@@ -180,40 +288,40 @@ if (!isset($TPL)) {
                 let drinkItems = ''
 
                 result.data.forEach(content => {
-                    console.table(content)
+                    // console.table(content)
                     allItem += `
-                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full h-fit">
+                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full h-fit" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
-                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="" />
+                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
                                 </div>
                                 <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
-                                        <h5 class="mb-2 text-lg font-normal tracking-tight">${content.name}</h5>
-                                    <p class="mb-3 text-xl font-bold">Rp. ${content.price}</p>
+                                    <h5 class="mb-2 text-lg font-normal tracking-tight" id="item-name">${content.name}</h5>
+                                    <p class="mb-3 text-xl font-bold" id="item-price">Rp. ${content.price}</p>
                                 </div>
                             </button>`
 
                     if (content.category == 'food') {
                         foodItems += `
-                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full h-fit">
+                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full h-fit" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
-                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="" />
+                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
                                 </div>
                                 <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
-                                        <h5 class="mb-2 text-lg font-normal tracking-tight">${content.name}</h5>
-                                    <p class="mb-3 text-xl font-bold">Rp. ${content.price}</p>
+                                    <h5 class="mb-2 text-lg font-normal tracking-tight" id="item-name">${content.name}</h5>
+                                    <p class="mb-3 text-xl font-bold" id="item-price">Rp. ${content.price}</p>
                                 </div>
                             </button>`
                     }
 
                     if (content.category == 'drink') {
                         drinkItems += `
-                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full h-fit">
+                            <button class="bg-white border border-gray-200 rounded-lg shadow col-span-1 w-full h-fit" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
-                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="" />
+                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
                                 </div>
-                                <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
-                                        <h5 class="mb-2 text-lg font-normal tracking-tight">${content.name}</h5>
-                                    <p class="mb-3 text-xl font-bold">Rp. ${content.price}</p>
+                                <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col>
+                                    <h5 class="mb-2 text-lg font-normal tracking-tight" id="item-name">${content.name}</h5>
+                                    <p class="mb-3 text-xl font-bold" id="item-price">Rp. ${content.price}</p>
                                 </div>
                             </button>`
                     }
