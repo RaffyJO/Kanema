@@ -37,11 +37,9 @@ $current_page = $_SERVER['REQUEST_URI'];
                     </div>
                     <div class="z-50 hidden my-4 text-base list-none divide-y divide-gray-100 rounded shadow bg-gray-700 divide-gray-600" id="dropdown-user">
                         <div class="px-4 py-3" role="none">
-                            <p class="text-sm text-gray-900 text-white" role="none">
-                                <?= $_SESSION['username']; ?>
+                            <p class="text-sm text-gray-900 text-white" role="none" id="nav-username">
                             </p>
-                            <p class="text-sm font-medium text-gray-900 truncate text-gray-300" role="none">
-                                <?= $_SESSION['user_role']; ?>
+                            <p class="text-sm font-medium text-gray-900 truncate text-gray-300" role="none" id="nav-role">
                             </p>
                         </div>
                         <ul class="py-1" role="none">
@@ -105,6 +103,8 @@ $current_page = $_SERVER['REQUEST_URI'];
         </ul>
     </div>
 </aside>
+<script src="src/lib/Functions/CookieUtils.js"></script>
+<script src="src/lib/Functions/NavUtils.js"></script>
 <!-- end sidebar -->
 
 <!-- <div class="p-4 sm:ml-64">
@@ -113,3 +113,14 @@ $current_page = $_SERVER['REQUEST_URI'];
         </div>
     </div> -->
 </div>
+
+<script>
+    getUsername().then(result => {
+        console.table(result)
+        const navUsername = document.getElementById('nav-username');
+        const navRole = document.getElementById('nav-role');
+
+        navUsername.textContent = result.username
+        navRole.textContent = result.role
+    }).catch(err => console.error(err))
+</script>

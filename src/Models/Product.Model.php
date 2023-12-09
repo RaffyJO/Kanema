@@ -1,11 +1,10 @@
 <?php
-require 'src/../vendor/autoload.php';
 
 if (session_status() != PHP_SESSION_ACTIVE)
     session_start();
 
-require 'src/lib/Functions/Connections/DB.php';
-require('src/lib/Functions/URLDetection.php');
+require_once('src/lib/Functions/Connections/DB.php');
+require_once('src/lib/Functions/URLDetection.php');
 
 class ProductModel
 {

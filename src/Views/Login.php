@@ -93,7 +93,7 @@ if (!isset($TPL)) {
 
                 let cookieString = `Bearer=${encodeURIComponent(result.token)}; expires=${result.expire_at}; path=/`;
                 document.cookie = cookieString;
-                window.location.href = '/cashier'
+                window.location.href = '/cashier?token=Bearer%20' + result.token
                 localStorage.setItem('Bearer', result.token);
             }).catch(err => console.error(err))
     }

@@ -2,8 +2,8 @@
 
 use MongoDB\BSON\ObjectId;
 
-require('src/lib/Functions/JWT_Utils.php');
-require('src/lib/Functions/ValidateHeaders.php');
+require_once('src/lib/Functions/ValidateHeaders.php');
+require_once('src/lib/Functions/Connections/DB.php');
 
 class UsersController
 {
@@ -15,8 +15,19 @@ class UsersController
     }
     function routes()
     {
+        $requestUri = parse_url($this->server['REQUEST_URI'], PHP_URL_PATH);
+        $urlQuery = parse_url($this->server['REQUEST_URI'], PHP_URL_QUERY);
+        $queryParams =  array();
+
+        parse_str($urlQuery, $queryParams);
+
         if ($this->server['REQUEST_METHOD'] === 'POST') {
             echo $this->POST();
+            return;
+        }
+
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/aoi/user-all') {
+            echo $this->GETUSER();
             return;
         }
 
@@ -44,11 +55,24 @@ class UsersController
     function GET()
     {
         $validation = new ValidateHeaders();
-        $valid = $validation->validate(getallheaders());
+        $validToken = (array) json_decode($validation->validateData());
+
+        if (array_key_exists('error', $validToken)) {
+            echo json_encode($validation);
+            return;
+        }
+
+        http_response_code(200);
+        echo json_encode(array('username' => $validToken['username'], 'role' => $validToken['role']));
+    }
+
+    function GETUSER()
+    {
+        $validation = new ValidateHeaders();
+        $valid = $validation->validate();
 
         if (!$valid) return;
 
-        require 'src/lib/Functions/Connections/DB.php';
         $db = new DB();
         $connection = $db->getConnection();
 

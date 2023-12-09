@@ -10,6 +10,7 @@ if (!isset($TPL)) {
 }
 ?>
 
+<script type="text/javascript" src="src/lib/Functions/CookieUtils.js"></script>
 <script>
     let orderItemPlan = [];
 
@@ -158,7 +159,8 @@ if (!isset($TPL)) {
             orderItemPlan[idx].amount--;
             currentData = orderItemPlan[idx];
 
-            orderItemPlan.splice(idx, 1);
+            if (orderItemPlan[idx].amount < 1)
+                orderItemPlan.splice(idx, 1);
         }
 
         if (idx == INVALID_IDX) return;
@@ -263,54 +265,12 @@ if (!isset($TPL)) {
         }
     }
 
-    function submitOrder() {
-        fetch('/api/auth', {
-                method: 'POST',
-                body: JSON.stringify({
-                    "username": username,
-                    "password": password
-                })
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (new Object(result).hasOwnProperty('error')) {
-                    let alertBox = document.getElementById('box-alert');
-                    alertBox.classList.toggle('hidden')
-
-                    const template = `
-<div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 w-fit mt-2 mr-2" role="alert" id="instance-alert">
-    <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-    </svg>
-    <span class="sr-only">Error</span>
-    <div class="ms-3 text-sm font-medium">
-        ${result.error}
-    </div>
-</div>
-                    `
-
-                    alertBox.innerHTML = template
-
-                    setTimeout(() => {
-                        alertBox.classList.toggle('hidden')
-                    }, 5000);
-
-                    return;
-                }
-
-                let cookieString = `Bearer=${encodeURIComponent(result.token)}; expires=${result.expire_at}; path=/`;
-                document.cookie = cookieString;
-                window.location.href = '/cashier'
-                localStorage.setItem('Bearer', result.token);
-            }).catch(err => console.error(err))
-    }
-
     function formatToIDR(number) {
         // Format the number to IDR currency
         return new Intl.NumberFormat('id-ID', {
             style: 'currency',
             currency: 'IDR'
-        }).format(number);
+        }).format(number).replaceAll(',00', '');
     }
 
     function parseIDRToNumber(idrString) {
@@ -450,7 +410,7 @@ if (!isset($TPL)) {
             <!-- end total -->
             <!-- button pay-->
             <div class="px-5 mt-5">
-                <button href="#" class="block px-4 py-4 rounded-md shadow-lg text-center bg-blue-500 disabled:bg-blue-300 disabled:cursor-not-allowed text-white font-semibold w-full transition-all duration-200 ease-in" disabled onclick="validateSubmit()" id="submit-btn">
+                <button href="#" class="block px-4 py-4 rounded-md shadow-lg text-center bg-blue-500 disabled:bg-blue-300 disabled:cursor-not-allowed text-white font-semibold w-full transition-all duration-200 ease-in" disabled onclick="submitOrder()" id="submit-btn">
                     Process
                 </button>
             </div>
@@ -533,5 +493,89 @@ if (!isset($TPL)) {
             }).catch(error => console.error(error))
     } else {
         console.error('Product container not found!');
+    }
+</script>
+
+<script>
+    function submitOrder() {
+        let alertBox = document.getElementById('box-alert');
+
+        let preparedData = []
+
+        orderItemPlan.map(value => {
+            let dataTemplate = {
+                Product_id: null,
+                price: null,
+                qty: 0
+            }
+
+            dataTemplate.Product_id = value.id
+            dataTemplate.price = parseIDRToNumber(value.price)
+            dataTemplate.qty = value.amount
+
+            preparedData.push(dataTemplate)
+        })
+
+        let headersList = {
+            "Accept": "*/*",
+            "Authorization": `Bearer ${getCookie('Bearer')}`
+        }
+
+        fetch('/api/order', {
+                method: 'POST',
+                body: JSON.stringify({
+                    details: preparedData
+                }),
+                headers: headersList
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (new Object(result).hasOwnProperty('error')) {
+                    alertBox.classList.toggle('hidden')
+
+                    const template = `
+<div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 w-fit mt-2 mr-2" role="alert" id="instance-alert">
+    <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+    </svg>
+    <span class="sr-only">Error</span>
+    <div class="ms-3 text-sm font-medium">
+        ${result.error}
+    </div>
+</div>
+                    `
+
+                    alertBox.innerHTML = template
+
+                    setTimeout(() => {
+                        alertBox.classList.toggle('hidden')
+                        document.getElementById('instance-alert').classList.toggle('hidden')
+                    }, 5000);
+
+                    return;
+                }
+
+                const succeedTemplate = `
+                <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400  w-fit mt-2 mr-2" role="alert" id="instance-success">
+  <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+  </svg>
+  <span class="sr-only">Info</span>
+  <div>
+  ${result.message}
+  </div>
+  </div>
+  `
+
+                alertBox.innerHTML = succeedTemplate
+                alertBox.classList.toggle('hidden')
+
+                setTimeout(() => {
+                    alertBox.classList.toggle('hidden')
+                    document.getElementById('instance-success').classList.toggle('hidden')
+                }, 5000);
+
+                clearOrder()
+            }).catch(err => console.error(err))
     }
 </script>
