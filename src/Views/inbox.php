@@ -2,351 +2,132 @@
 
 require_once('src/Views/templates/source.php');
 if (!isset($TPL)) {
-    $TPL = new source();
-    $TPL->title = "Inbox Page";
-    $TPL->bodycontent = __FILE__;
-    include "src/Views/layout/layout.php";
-    exit;
+  $TPL = new source();
+  $TPL->title = "Inbox Page";
+  $TPL->bodycontent = __FILE__;
+  include "src/Views/layout/layout.php";
+  exit;
 }
 ?>
-<!-- Header -->
-<div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 white:border-gray-700 fixed-header">
-  <!-- Input -->
-  <div class="sm:col-span-1">
-    <label for="hs-as-table-product-review-search" class="sr-only">Search</label>
-    <div class="relative">
-      <input type="text" id="hs-as-table-product-review-search" name="hs-as-table-product-review-search" class="py-2 px-3 ps-11 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none white:bg-slate-900 white:border-gray-700 white:text-gray-400 white:focus:ring-gray-700" placeholder="Search">
-      <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4">
-        <svg class="h-4 w-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-        </svg>
-      </div>
+
+<div class="w-full bg-gray-800 relative shadow-md rounded-lg overflow-hidden">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+    <div class="w-full md:w-1/2">
+      <form class="flex items-center">
+        <label for="simple-search" class="sr-only">Search</label>
+        <div class="relative w-3/5">
+          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <input type="text" id="simple-search" class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" placeholder="Search" required="">
+        </div>
+      </form>
     </div>
-  </div>
-  <!-- End Input -->
-
-  <div class="sm:col-span-2 md:grow">
-    <div class="flex justify-end gap-x-2">
-
-      <div class="hs-dropdown relative inline-block [--placement:bottom-right]" data-hs-dropdown-auto-close="inside">
-        <button id="hs-as-table-table-filter-dropdown" type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none white:bg-slate-900 white:border-gray-700 white:text-white white:hover:bg-gray-800 white:focus:outline-none white:focus:ring-1 white:focus:ring-gray-600">
-          <svg class="flex-shrink-0 w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M7 12h10"/><path d="M10 18h4"/></svg>
+    <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+      <div class="flex items-center space-x-3 w-full md:w-auto">
+        <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown" class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-white focus:outline-none rounded-lg border border-gray-200 focus:z-10 focus:ring-gray-200 focus:ring-gray-700 bg-gray-800 border-gray-600 hover:text-white hover:bg-gray-700" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="h-4 w-4 mr-2 text-gray-400" viewbox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+          </svg>
           Filter
-          <span class="ps-2 text-xs font-semibold text-blue-600 border-s border-gray-200 white:border-gray-700 white:text-blue-500">
-            1
-          </span>
+          <svg class="-mr-1 ml-1.5 w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path clip-rule="evenodd" fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+          </svg>
         </button>
-        <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden mt-2 divide-y divide-gray-200 min-w-[12rem] z-10 bg-white shadow-md rounded-lg mt-2 white:divide-gray-700 white:bg-gray-800 white:border white:border-gray-700" aria-labelledby="hs-as-table-table-filter-dropdown">
-          <div class="divide-y divide-gray-200 white:divide-gray-700">
-            <label for="hs-as-filters-dropdown-all" class="flex py-2.5 px-3">
-              <input type="checkbox" class="shrink-0 mt-0.5 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none white:bg-slate-900 white:border-gray-600 white:checked:bg-blue-500 white:checked:border-blue-500 white:focus:ring-offset-gray-800" id="hs-as-filters-dropdown-all" checked>
-              <span class="ms-3 text-sm text-gray-800 white:text-gray-200">All</span>
-            </label>
-            <label for="hs-as-filters-dropdown-published" class="flex py-2.5 px-3">
-              <input type="checkbox" class="shrink-0 mt-0.5 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none white:bg-slate-900 white:border-gray-600 white:checked:bg-blue-500 white:checked:border-blue-500 white:focus:ring-offset-gray-800" id="hs-as-filters-dropdown-published">
-              <span class="ms-3 text-sm text-gray-800 white:text-gray-200">Published</span>
-            </label>  
-            <label for="hs-as-filters-dropdown-pending" class="flex py-2.5 px-3">
-              <input type="checkbox" class="shrink-0 mt-0.5 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none white:bg-slate-900 white:border-gray-600 white:checked:bg-blue-500 white:checked:border-blue-500 white:focus:ring-offset-gray-800" id="hs-as-filters-dropdown-pending">
-              <span class="ms-3 text-sm text-gray-800 white:text-gray-200">Pending</span>
-            </label>
-          </div>
+        <div id="filterDropdown" class="z-10 hidden w-56 p-3 rounded-lg shadow bg-gray-700">
+          <h6 class="mb-3 text-sm font-medium text-white">Category</h6>
+          <ul class="space-y-2 text-sm" aria-labelledby="filterDropdownButton">
+            <li class="flex items-center">
+              <input id="apple" type="checkbox" value="" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-blue-600 focus:ring-blue-600 ring-offset-gray-700 focus:ring-2 bg-gray-600 border-gray-500">
+              <label for="apple" class="ml-2 text-sm font-medium text-gray-100">Food</label>
+            </li>
+            <li class="flex items-center">
+              <input id="fitbit" type="checkbox" value="" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-600 ring-offset-gray-700 ring-2 bg-gray-600 border-gray-500">
+              <label for="fitbit" class="ml-2 text-sm font-medium text-gray-100">Drink</label>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
-</div>
-<!-- End Header -->
-          
-<!-- Table Section -->
-<div class="max-w-screen px-4 py-10 sm:px-1 lg:px-1 lg:py-2">
-  <!-- Card -->
-  <div class="flex flex-col">
-    <div class="-m-1.5 overflow-x-auto">
-      <div class="p-1.5 min-w-full inline-block align-middle">
-        <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden white:bg-slate-900 white:border-gray-700">
-          <!-- Table -->
-          <table class="table-auto overflow-scroll w-full">
-            <thead class="bg-gray-50 white:bg-slate-800 sticky top-0">
-              <tr>
-                <th scope="col" class="px-6 py-3 text-start">
-                  <div class="flex items-center gap-x-2">
-                    <span class="text-xs font-bold uppercase tracking-wide text-gray-800 white:text-gray-200">
-                      Product
-                    </span>
-                  </div>
-                </th>
-
-                <th scope="col" class="px-6 py-3 text-start">
-                  <div class="flex items-center gap-x-2">
-                    <span class="text-xs font-bold uppercase tracking-wide text-gray-800 white:text-gray-200">
-                      Cashier
-                    </span>
-                  </div>
-                </th>
-
-                <th scope="col" class="px-6 py-3 text-start">
-                  <div class="flex items-center gap-x-2">
-                    <span class="text-xs font-bold uppercase tracking-wide text-gray-800 white:text-gray-200">
-                      Description
-                    </span>
-                  </div>
-                </th>
-
-                <th scope="col" class="px-6 py-3 text-start">
-                  <div class="flex items-center gap-x-2">
-                    <span class="text-xs font-bold uppercase tracking-wide text-gray-800 white:text-gray-200">
-                      Date
-                    </span>
-                  </div>
-                </th>
-
-                <th scope="col" class="px-6 py-3 text-start">
-                  <div class="flex items-center gap-x-2">
-                    <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 white:text-gray-200">
-                      Status
-                    </span>
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200 white:divide-gray-700">
-              <tr class="bg-white hover:bg-gray-50 white:bg-slate-900 white:hover:bg-slate-800">
-                <td class="h-px w-px whitespace-nowrap align-top">
-                  <a class="block p-6" href="#">
-                    <div class="flex items-center gap-x-4">
-                      <img class="flex-shrink-0 h-[2.375rem] w-[2.375rem] rounded-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="Image Description">
-                      <div>
-                        <span class="block text-sm font-semibold text-gray-800 white:text-gray-200">Mie Goreng</span>
-                      </div>
-                    </div>
-                  </a>
-                </td>
-                <td class="h-px w-px whitespace-nowrap align-top">
-                  <a class="block p-6" href="#">
-                    <div class="flex items-center gap-x-3">
-                      <img class="inline-block h-[2.375rem] w-[2.375rem] rounded-full" src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80" alt="Image Description">
-                      <div class="grow">
-                        <span class="block text-sm font-semibold text-gray-800 white:text-gray-200">Stevanus Ageng</span>
-                      </div>
-                    </div>
-                  </a>
-                </td>
-                <td class="h-px w-72 min-w-[18rem] align-center">
-                  <a class="block p-6" href="#">   
-                    <span class="block text-sm font-semibold text-gray-800 white:text-gray-200">Rp5000 -> Rp7000</span>
-                  </a>
-                </td>
-                <td class="h-px w-px whitespace-nowrap align-center">
-                  <a class="block p-6" href="#">
-                    <span class="text-sm font-semibold text-gray-600 white:text-gray-400">04 Dec 2023</span>
-                  </a>
-                </td>
-                <td class="h-px w-px whitespace-nowrap align-center">
-                  <a class="block p-6" href="#">
-                    <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full white:bg-teal-500/10 white:text-teal-500">
-                      <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                      </svg>
-                      Approved
-                    </span>
-                  </a>
-                </td>
-              </tr>
-
-              <tr class="bg-white hover:bg-gray-50 white:bg-slate-900 white:hover:bg-slate-800">
-                <td class="h-px w-px whitespace-nowrap align-top">
-                  <a class="block p-6" href="#">
-                    <div class="flex items-center gap-x-4">
-                      <img class="flex-shrink-0 h-[2.375rem] w-[2.375rem] rounded-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="Image Description">
-                      <div>
-                        <span class="block text-sm font-semibold text-gray-800 white:text-gray-200">Mie Goreng</span>
-                      </div>
-                    </div>
-                  </a>
-                </td>
-                <td class="h-px w-px whitespace-nowrap align-top">
-                  <a class="block p-6" href="#">
-                    <div class="flex items-center gap-x-3">
-                      <img class="inline-block h-[2.375rem] w-[2.375rem] rounded-full" src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80" alt="Image Description">
-                      <div class="grow">
-                        <span class="block text-sm font-semibold text-gray-800 white:text-gray-200">Stevanus Ageng</span>
-                      </div>
-                    </div>
-                  </a>
-                </td>
-                <td class="h-px w-72 min-w-[18rem] align-center">
-                  <a class="block p-6" href="#">   
-                    <span class="block text-sm font-semibold text-gray-800 white:text-gray-200">Rp5000 -> Rp7000</span>
-                  </a>
-                </td>
-                <td class="h-px w-px whitespace-nowrap align-center">
-                  <a class="block p-6" href="#">
-                    <span class="text-sm font-semibold text-gray-600 white:text-gray-400">04 Dec 2023</span>
-                  </a>
-                </td>
-                <td class="h-px w-px whitespace-nowrap align-center">
-                  <a class="block p-6" href="#">
-                    <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-red-100 text-red-800 rounded-full white:bg-red-500/10 white:text-red-500">
-                      <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
-                      </svg>
-                      Rejected
-                    </span>
-                  </a>
-                </td>
-              </tr>
-              <tr class="bg-white hover:bg-gray-50 white:bg-slate-900 white:hover:bg-slate-800">
-                <td class="h-px w-px whitespace-nowrap align-top">
-                  <a class="block p-6" href="#">
-                    <div class="flex items-center gap-x-4">
-                      <img class="flex-shrink-0 h-[2.375rem] w-[2.375rem] rounded-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="Image Description">
-                      <div>
-                        <span class="block text-sm font-semibold text-gray-800 white:text-gray-200">Mie Goreng</span>
-                      </div>
-                    </div>
-                  </a>
-                </td>
-                <td class="h-px w-px whitespace-nowrap align-top">
-                  <a class="block p-6" href="#">
-                    <div class="flex items-center gap-x-3">
-                      <img class="inline-block h-[2.375rem] w-[2.375rem] rounded-full" src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80" alt="Image Description">
-                      <div class="grow">
-                        <span class="block text-sm font-semibold text-gray-800 white:text-gray-200">Stevanus Ageng</span>
-                      </div>
-                    </div>
-                  </a>
-                </td>
-                <td class="h-px w-72 min-w-[18rem] align-center">
-                  <a class="block p-6" href="#">   
-                    <span class="block text-sm font-semibold text-gray-800 white:text-gray-200">Rp5000 -> Rp7000</span>
-                  </a>
-                </td>
-                <td class="h-px w-px whitespace-nowrap align-center">
-                  <a class="block p-6" href="#">
-                    <span class="text-sm font-semibold text-gray-600 white:text-gray-400">04 Dec 2023</span>
-                  </a>
-                </td>
-                <td class="h-px w-px whitespace-nowrap align-center">
-                  <a class="block p-6" href="#">
-                    <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full white:bg-teal-500/10 white:text-yellow-500">
-                    <svg class=" text-yellow-700"  width="12" height="12" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" />  <polyline points="12 7 12 12 15 15" /></svg>
-                      Pending
-                    </span>
-                  </a>
-                </td>
-              </tr>
-              <tr class="bg-white hover:bg-gray-50 white:bg-slate-900 white:hover:bg-slate-800">
-                <td class="h-px w-px whitespace-nowrap align-top">
-                  <a class="block p-6" href="#">
-                    <div class="flex items-center gap-x-4">
-                      <img class="flex-shrink-0 h-[2.375rem] w-[2.375rem] rounded-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="Image Description">
-                      <div>
-                        <span class="block text-sm font-semibold text-gray-800 white:text-gray-200">Mie Goreng</span>
-                      </div>
-                    </div>
-                  </a>
-                </td>
-                <td class="h-px w-px whitespace-nowrap align-top">
-                  <a class="block p-6" href="#">
-                    <div class="flex items-center gap-x-3">
-                      <img class="inline-block h-[2.375rem] w-[2.375rem] rounded-full" src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80" alt="Image Description">
-                      <div class="grow">
-                        <span class="block text-sm font-semibold text-gray-800 white:text-gray-200">Stevanus Ageng</span>
-                      </div>
-                    </div>
-                  </a>
-                </td>
-                <td class="h-px w-72 min-w-[18rem] align-center">
-                  <a class="block p-6" href="#">   
-                    <span class="block text-sm font-semibold text-gray-800 white:text-gray-200">Rp5000 -> Rp7000</span>
-                  </a>
-                </td>
-                <td class="h-px w-px whitespace-nowrap align-center">
-                  <a class="block p-6" href="#">
-                    <span class="text-sm font-semibold text-gray-600 white:text-gray-400">04 Dec 2023</span>
-                  </a>
-                </td>
-                <td class="h-px w-px whitespace-nowrap align-center">
-                  <a class="block p-6" href="#">
-                    <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-red-100 text-red-800 rounded-full white:bg-red-500/10 white:text-red-500">
-                      <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
-                      </svg>
-                      Rejected
-                    </span>
-                  </a>
-                </td>
-              </tr>
-              <tr class="bg-white hover:bg-gray-50 white:bg-slate-900 white:hover:bg-slate-800">
-                <td class="h-px w-px whitespace-nowrap align-top">
-                  <a class="block p-6" href="#">
-                    <div class="flex items-center gap-x-4">
-                      <img class="flex-shrink-0 h-[2.375rem] w-[2.375rem] rounded-lg" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="Image Description">
-                      <div>
-                        <span class="block text-sm font-semibold text-gray-800 white:text-gray-200">Mie Goreng</span>
-                      </div>
-                    </div>
-                  </a>
-                </td>
-                <td class="h-px w-px whitespace-nowrap align-top">
-                  <a class="block p-6" href="#">
-                    <div class="flex items-center gap-x-3">
-                      <img class="inline-block h-[2.375rem] w-[2.375rem] rounded-full" src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80" alt="Image Description">
-                      <div class="grow">
-                        <span class="block text-sm font-semibold text-gray-800 white:text-gray-200">Stevanus Ageng</span>
-                      </div>
-                    </div>
-                  </a>
-                </td>
-                <td class="h-px w-72 min-w-[18rem] align-center">
-                  <a class="block p-6" href="#">   
-                    <span class="block text-sm font-semibold text-gray-800 white:text-gray-200">Rp5000 -> Rp7000</span>
-                  </a>
-                </td>
-                <td class="h-px w-px whitespace-nowrap align-center">
-                  <a class="block p-6" href="#">
-                    <span class="text-sm font-semibold text-gray-600 white:text-gray-400">04 Dec 2023</span>
-                  </a>
-                </td>
-                <td class="h-px w-px whitespace-nowrap align-center">
-                  <a class="block p-6" href="#">
-                    <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-red-100 text-red-800 rounded-full white:bg-red-500/10 white:text-red-500">
-                      <svg class="w-2.5 h-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
-                      </svg>
-                      Rejected
-                    </span>
-                  </a>
-                </td>
-              </tr>
-              
-            </tbody>
-          </table>
-          <!-- End Table -->
-
-          <!-- Footer -->
-          <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 white:border-gray-700">
-            <div class="max-w-sm space-y-3">
-            <div>
-              <div class="inline-flex gap-x-2">
-                <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none white:bg-slate-900 white:border-gray-700 white:text-white white:hover:bg-gray-800 white:focus:outline-none white:focus:ring-1 white:focus:ring-gray-600">
-                  <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                  Prev
-                </button>
-
-                <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none white:bg-slate-900 white:border-gray-700 white:text-white white:hover:bg-gray-800 white:focus:outline-none white:focus:ring-1 white:focus:ring-gray-600">
-                  Next
-                  <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- End Footer -->
-        </div>
-      </div>
-    </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm text-left text-gray-400">
+      <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+        <tr>
+          <th scope="col" class="px-4 py-4">Product name</th>
+          <th scope="col" class="px-4 py-3">Cashier</th>
+          <th scope="col" class="px-4 py-3">Description</th>
+          <th scope="col" class="px-4 py-3">Date</th>
+          <th scope="col" class="p-4">Status</th>
+        </tr>
+      </thead>
+      <tbody id="products-list">
+        <tr class="border-b border-gray-700">
+          <th scope="row" class="px-4 py-3 font-medium whitespace-nowrap text-white">Indomie</th>
+          <td class="px-4 py-3 text-white">
+            Ricky
+          </td>
+          <td class="px-4 py-3 text-white">Rp. 3000 -> Rp. 5000</td>
+          <td class="px-4 py-3 text-white">10 Dec 2023</td>
+          <td class="px-4 py-3 font-medium whitespace-nowrap text-white">
+            <span class="text-xs font-medium inline-flex items-center px-1.5 py-1 rounded-xl bg-green-100 text-green-800">
+              <svg class="w-[12px] h-[12px] mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+              </svg>
+              Approved
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <!-- End Card -->
+  <!-- <div class="w-full flex justify-center h-[15rem]  align-middle" id="container-spinner">
+    <div role="status" id="loading-el" class="m-auto">
+      <svg aria-hidden="true" class="inline w-10 h-10text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+      </svg>
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div> -->
+  <!-- <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
+    <span class="text-sm font-normal text-gray-400">
+      Showing
+      <span class="font-semibold text-white">1-10</span>
+      of
+      <span class="font-semibold text-white">10</span>
+    </span>
+    <ul class="inline-flex items-stretch -space-x-px">
+      <li>
+        <a href="#" class="flex items-center justify-center h-full py-1.5 px-3 ml-0 rounded-l-lg border bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white">
+          <span class="sr-only">Previous</span>
+          <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      </li>
+      <li>
+        <a href="#" class="flex items-center justify-center text-sm py-2 px-3 leading-tight border bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white">1</a>
+      </li>
+      <li>
+        <a href="#" class="flex items-center justify-center text-sm py-2 px-3 leading-tight border bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white">2</a>
+      </li>
+      <li>
+        <a href="#" class="flex items-center justify-center text-sm py-2 px-3 leading-tight border bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white">...</a>
+      </li>
+      <li>
+        <a href="#" class="flex items-center justify-center text-sm py-2 px-3 leading-tight border bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white">10</a>
+      </li>
+      <li>
+        <a href="#" class="flex items-center justify-center h-full py-1.5 px-3 leading-tight rounded-r-lg border bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white">
+          <span class="sr-only">Next</span>
+          <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      </li>
+    </ul>
+  </nav> -->
 </div>
-<!-- End Table Section -->
