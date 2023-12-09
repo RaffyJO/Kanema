@@ -10,6 +10,12 @@ class ProductsController
 
     function route()
     {
+        $requestUri = parse_url($this->server['REQUEST_URI'], PHP_URL_PATH);
+        $urlQuery = parse_url($this->server['REQUEST_URI'], PHP_URL_QUERY);
+        $queryParams =  array();
+
+        parse_str($urlQuery, $queryParams);
+
         // if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //     $postData = json_decode(file_get_contents('php://input'), true);
 
@@ -29,41 +35,46 @@ class ProductsController
         if ($this->server['REQUEST_METHOD'] === 'GET' && $this->server['REQUEST_URI'] === '/api/products') {
             echo $this->products();
         }
-        if ($this->server['REQUEST_METHOD'] === 'GET' && str_contains($this->server['REQUEST_URI'], '/api/product?')) {
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/product' && array_key_exists('search', $queryParams)) {
             echo $this->product();
         }
     }
 
-    private function products(): string
+    private function products()
     {
-        require('src/Models/Product.Model.php');
+        require_once('src/Models/Product.Model.php');
         $model = new ProductModel();
         $data = $model->getAll();
 
         if (array_key_exists('error', $data)) {
             http_response_code(400);
-            return json_encode($data);
+            echo json_encode($data);
+            return;
         } else {
             http_response_code(200);
-            return json_encode($data);
+            echo json_encode($data);
+            return;
         }
     }
-    private function product(): string
+    private function product()
     {
-        $parameter = $this->server['QUERY_STRING'];
-        $searchStr = str_replace('search=', '', $parameter);
-        $parsedStr = str_replace('%20', ' ', $searchStr);
+        $urlQuery = parse_url($this->server['REQUEST_URI'], PHP_URL_QUERY);
+        $queryParams =  array();
 
-        require('src/Models/Product.Model.php');
+        parse_str($urlQuery, $queryParams);
+
+        require_once('src/Models/Product.Model.php');
         $model = new ProductModel();
-        $data = $model->getItem($parsedStr);
+        $data = $model->getItem($queryParams['search']);
 
         if (array_key_exists('error', $data)) {
             http_response_code(400);
-            return json_encode($data);
+            echo json_encode($data);
+            return;
         } else {
             http_response_code(200);
-            return json_encode($data);
+            echo json_encode($data);
+            return;
         }
     }
 }

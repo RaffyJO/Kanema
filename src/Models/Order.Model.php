@@ -1,4 +1,6 @@
 <?php
+require_once('src/lib/Functions/Connections/DB.php');
+
 class OrderModel
 {
     public function createOrder(array $payload): bool
@@ -8,28 +10,18 @@ class OrderModel
             $connection = $db->getConnection();
             if ($connection == null) die(print_r("Connection is Null", true));
 
-            $collection = $connection->selectCollection('kanema', 'order');
-            $cursor = $collection->bulkWrite($payload);
+            $collection = $connection->selectCollection('kanema', 'Transaction');
+            $cursor = $collection->insertOne($payload);
 
 
-            if ($cursor) {
-                $data = array();
-
-                foreach ($cursor as $key) {
-                    array_push(
-                        $data,
-                        array('_id' => strval($key->_id), 'name' => $key->name, 'price' => $key->price, 'category' => $key->category, 'imgUrl' => $key->imgUrl, 'stock' => $key->stock, 'available' => $key->available)
-
-                    );
-                }
-                // var_dump($data);
-
+            if ($cursor->getInsertedCount() > 0) {
                 return true;
             } else {
-                return array('error' => 'Something went wrong');
+                return false;
             }
         } catch (Exception $th) {
             printf($th->getMessage());
+            echo json_encode(array('error' => $th->getMessage()));
             return false;
         }
     }

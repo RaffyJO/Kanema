@@ -3,13 +3,8 @@
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-require_once 'src/../vendor/autoload.php';
-
-class JWTUtils
+class JtokenUtils
 {
-    /**
-     * @param $payload in form of json
-     */
     public function sign(string $jsonData): string
     {
         $SECRET = getenv('JWT_TOKEN');
