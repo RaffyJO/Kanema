@@ -290,6 +290,94 @@ if (!isset($TPL)) {
 
         return isNaN(numberValue) ? 0 : numberValue; // Return 0 if parsing fails
     }
+
+    function searchOnEnter(value) {
+
+        if (value.length > 0) {
+
+            const productContainer = document.getElementById('default-tab-content');
+            const allitemsContainer = document.getElementById('allItems')
+            const foodsContainer = document.getElementById('food')
+            const drinksContainer = document.getElementById('drink')
+
+            if (productContainer) {
+                fetch(`/api/product?search=${value}`, {
+                        method: 'GET'
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        let elements = '';
+                        // let other = `<div class="p-4 rounded-lg" id="allItems" role="tabpanel" aria-labelledby="allItems-tab"> </div>`
+
+                        let allItem = ''
+                        let foodItems = ''
+                        let drinkItems = ''
+
+                        result.data.forEach(content => {
+                            // console.table(content)
+                            allItem += `
+                            <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
+                                <div class="h-3/5 w-full">
+                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
+                                </div>
+                                <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
+                                    <h5 class="mb-2 text-lg font-normal tracking-tight" id="item-name">${content.name}</h5>
+                                    <p class="mb-3 text-xl font-bold" id="item-price">${formatToIDR(content.price)}</p>
+                                </div>
+                            </button>`
+
+                            if (content.category == 'food') {
+                                foodItems += `
+                            <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
+                                <div class="h-3/5 w-full">
+                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
+                                </div>
+                                <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
+                                    <h5 class="mb-2 text-lg font-normal tracking-tight" id="item-name">${content.name}</h5>
+                                    <p class="mb-3 text-xl font-bold" id="item-price">${formatToIDR(content.price)}</p>
+                                </div>
+                            </button>`
+                            }
+
+                            if (content.category == 'drink') {
+                                drinkItems += `
+                        <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
+                                <div class="h-3/5 w-full">
+                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
+                                </div>
+                                <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
+                                    <h5 class="mb-2 text-lg font-normal tracking-tight" id="item-name">${content.name}</h5>
+                                    <p class="mb-3 text-xl font-bold" id="item-price">${formatToIDR(content.price)}</p>
+                                </div>
+                            </button>`
+                            }
+
+                        });
+
+                        let allitem = `${allItem}`
+                        let foods = `${foodItems}`
+                        let drinks = `${drinkItems}`
+
+                        if (document.getElementById('container-spinner') !== null)
+                            document.getElementById('container-spinner').remove()
+
+                        // productContainer.innerHTML += elements;
+                        allitemsContainer.innerHTML = allitem
+                        foodsContainer.innerHTML = foods
+                        drinksContainer.innerHTML = drinks
+
+                        // allitemsContainer.innerHTML += allitem
+                        // foodsContainer.innerHTML += foods
+                        // drinksContainer.innerHTML += drinks
+
+                    }).catch(error => console.error(error))
+            } else {
+                console.error('Product container not found!');
+            }
+        } else {
+            initPageData()
+        }
+    }
 </script>
 
 <div class="flex lg:flex-row flex-col-reverse h-fit pb-5" id="main-container">
@@ -333,8 +421,8 @@ if (!isset($TPL)) {
     <!-- end left section -->
     <!-- right section -->
     <div class="flex flex-col lg:w-2/5">
-        <div class="w-full md:w-3/5 mt-3 mb-5">
-            <form class="flex items-center">
+        <div class="w-full mt-3 mb-5">
+            <div class="flex items-center">
                 <label for="simple-search" class="sr-only">Search</label>
                 <div class="relative w-full">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -342,9 +430,9 @@ if (!isset($TPL)) {
                             <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                         </svg>
                     </div>
-                    <input type="text" id="simple-search" class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2  border-gray-600 placeholder-gray-400 text-white text-black" placeholder="Search" required="">
+                    <input type="text" id="simple-search" class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2  border-gray-600 placeholder-gray-400 text-white text-black" placeholder="Search">
                 </div>
-            </form>
+            </div>
         </div>
         <div class="w-full shadow-xl h-fit pb-5 rounded-lg">
             <!-- header -->
@@ -421,27 +509,28 @@ if (!isset($TPL)) {
 </div>
 
 <script>
-    const productContainer = document.getElementById('default-tab-content');
-    const allitemsContainer = document.getElementById('allItems')
-    const foodsContainer = document.getElementById('food')
-    const drinksContainer = document.getElementById('drink')
+    function initPageData() {
+        const productContainer = document.getElementById('default-tab-content');
+        const allitemsContainer = document.getElementById('allItems')
+        const foodsContainer = document.getElementById('food')
+        const drinksContainer = document.getElementById('drink')
 
-    if (productContainer) {
-        fetch('/api/products', {
-                method: 'GET'
-            })
-            .then(response => response.json())
-            .then(result => {
-                let elements = '';
-                // let other = `<div class="p-4 rounded-lg" id="allItems" role="tabpanel" aria-labelledby="allItems-tab"> </div>`
+        if (productContainer) {
+            fetch('/api/products', {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(result => {
+                    let elements = '';
+                    // let other = `<div class="p-4 rounded-lg" id="allItems" role="tabpanel" aria-labelledby="allItems-tab"> </div>`
 
-                let allItem = ''
-                let foodItems = ''
-                let drinkItems = ''
+                    let allItem = ''
+                    let foodItems = ''
+                    let drinkItems = ''
 
-                result.data.forEach(content => {
-                    // console.table(content)
-                    allItem += `
+                    result.data.forEach(content => {
+                        // console.table(content)
+                        allItem += `
                             <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
                                     <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
@@ -452,8 +541,8 @@ if (!isset($TPL)) {
                                 </div>
                             </button>`
 
-                    if (content.category == 'food') {
-                        foodItems += `
+                        if (content.category == 'food') {
+                            foodItems += `
                             <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
                                     <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
@@ -463,10 +552,10 @@ if (!isset($TPL)) {
                                     <p class="mb-3 text-xl font-bold" id="item-price">${formatToIDR(content.price)}</p>
                                 </div>
                             </button>`
-                    }
+                        }
 
-                    if (content.category == 'drink') {
-                        drinkItems += `
+                        if (content.category == 'drink') {
+                            drinkItems += `
                         <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
                                     <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
@@ -476,24 +565,29 @@ if (!isset($TPL)) {
                                     <p class="mb-3 text-xl font-bold" id="item-price">${formatToIDR(content.price)}</p>
                                 </div>
                             </button>`
-                    }
+                        }
 
-                });
+                    });
 
-                let allitem = `${allItem}`
-                let foods = `${foodItems}`
-                let drinks = `${drinkItems}`
+                    let allitem = `${allItem}`
+                    let foods = `${foodItems}`
+                    let drinks = `${drinkItems}`
 
-                document.getElementById('container-spinner').remove()
-                // productContainer.innerHTML += elements;
-                allitemsContainer.innerHTML += allitem
-                foodsContainer.innerHTML += foods
-                drinksContainer.innerHTML += drinks
+                    if (document.getElementById('container-spinner') !== null)
+                        document.getElementById('container-spinner').remove()
+                    // productContainer.innerHTML += elements;
+                    allitemsContainer.innerHTML = allitem
+                    foodsContainer.innerHTML = foods
+                    drinksContainer.innerHTML = drinks
 
-            }).catch(error => console.error(error))
-    } else {
-        console.error('Product container not found!');
+                }).catch(error => console.error(error))
+        } else {
+            console.error('Product container not found!');
+        }
     }
+
+
+    initPageData()
 </script>
 
 <script>
@@ -578,4 +672,15 @@ if (!isset($TPL)) {
                 clearOrder()
             }).catch(err => console.error(err))
     }
+
+    const search = document.getElementById('simple-search')
+
+    search.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            const value = event.currentTarget.value;
+
+            searchOnEnter(value)
+            event.preventDefault();
+        }
+    });
 </script>

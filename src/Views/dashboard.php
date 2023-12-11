@@ -78,13 +78,20 @@ if (!isset($TPL)) {
 </div>
 
 <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    <div class="w-full rounded-lg shadow p-4 md:p-6 bg-gray-800 text-white">
-        <h2 class="text-center font-bold mb-2">Best Product</h2>
-        <ol class="list-inside list-decimal">
-            <li>Mie goreng</li>
-            <li>Coca-cola</li>
-            <li>Sprite</li>
-        </ol>
+    <div class="col-span-1">
+        <div class="w-full rounded-lg shadow p-4 md:p-6 bg-gray-800 text-white h-fit">
+            <h2 class="text-center font-bold mb-2">Best Product</h2>
+            <ol class="list-inside list-decimal">
+                <li>Mie goreng</li>
+                <li>Coca-cola</li>
+                <li>Sprite</li>
+            </ol>
+        </div>
+    </div>
+    <div class="col-span-1 md:col-span-2">
+        <div class="w-full rounded-lg shadow bg-gray-800 p-4 md:p-6">
+            <div id="bar-chart"></div>
+        </div>
     </div>
 </div>
 
@@ -92,6 +99,7 @@ if (!isset($TPL)) {
     // ApexCharts options and config
     window.addEventListener("load", function() {
         let options = {
+            // main datanya disini
             series: [{
                     name: "Pengeluaran",
                     data: [1500, 1418, 1456, 1526, 1356, 1256],
@@ -149,6 +157,7 @@ if (!isset($TPL)) {
                 },
             },
             xaxis: {
+                // kolom horizontal bawah
                 categories: ['01 February', '02 February', '03 February', '04 February', '05 February', '06 February', '07 February'],
                 labels: {
                     show: false,
@@ -172,6 +181,113 @@ if (!isset($TPL)) {
 
         if (document.getElementById("data-series-chart") && typeof ApexCharts !== 'undefined') {
             const chart = new ApexCharts(document.getElementById("data-series-chart"), options);
+            chart.render();
+        }
+    });
+
+    // bar chart
+    window.addEventListener("load", function() {
+        var options = {
+            series: [{
+                // main datanya disini
+                data: [{
+                        x: "Food",
+                        y: 50,
+                        colors: "#93c5fd",
+                    },
+                    {
+                        x: "Drink",
+                        y: 70,
+                        colors: "#fde047",
+                    },
+                ],
+            }],
+            chart: {
+                sparkline: {
+                    enabled: false,
+                },
+                type: "bar",
+                width: "100%",
+                height: 150,
+                toolbar: {
+                    show: false,
+                }
+            },
+            fill: {
+                opacity: 1,
+            },
+            colors: ["#93c5fd", "#fde047"],
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                    columnWidth: "50%",
+                    borderRadiusApplication: "end",
+                    borderRadius: 6,
+                    distributed: true,
+                    dataLabels: {
+                        position: "top",
+                    },
+                },
+            },
+            legend: {
+                enabled: false,
+                show: false,
+                position: "bottom",
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            tooltip: {
+                shared: true,
+                intersect: false,
+                x: {
+                    show: false,
+                },
+                y: {
+                    title: {
+                        formatter: function() {
+                            return '';
+                        }
+                    }
+                }
+            },
+            xaxis: {
+                labels: {
+                    show: true,
+                    style: {
+                        fontFamily: "Inter, sans-serif",
+                        cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                    },
+                },
+                categories: ["Food", "Drink"],
+                axisTicks: {
+                    show: false,
+                },
+                axisBorder: {
+                    show: false,
+                },
+            },
+            yaxis: {
+                labels: {
+                    show: true,
+                    style: {
+                        fontFamily: "Inter, sans-serif",
+                        cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                    }
+                }
+            },
+            grid: {
+                show: false,
+                padding: {
+                    left: 2,
+                    right: 2,
+                    top: -20
+                },
+            },
+        }
+
+        if (document.getElementById("bar-chart") && typeof ApexCharts !== 'undefined') {
+            const chart = new ApexCharts(document.getElementById("bar-chart"), options);
             chart.render();
         }
     });
