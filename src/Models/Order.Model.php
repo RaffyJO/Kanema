@@ -61,4 +61,74 @@ class OrderModel
             return false;
         }
     }
+
+    public function callCleanedData(): string
+    {
+        try {
+            $db = new DB();
+            $connection = $db->getConnection();
+            if ($connection == null) die(print_r("Connection is Null", true));
+
+            $collection = $connection->selectCollection('kanema', 'TransactionCleanedData');
+            $response = $collection->find([]);
+
+            $cursor = $response;
+            if ($cursor) {
+                $data = array();
+                // {
+                //     "_id": {
+                //       "$oid": "6576c7ae1982e66341792f68"
+                //     },
+                //     "creator": "administrator",
+                //     "timestamp": {
+                //       "year": 2023,
+                //       "month": 12
+                //     },
+                //     "details": [
+                //       {
+                //         "productName": "Cocacola",
+                //         "category": "drink",
+                //         "qty": 2,
+                //         "subtotal": 10000
+                //       },
+                //       {
+                //         "productName": "Susu",
+                //         "category": "drink",
+                //         "qty": 2,
+                //         "subtotal": 10000
+                //       },
+                //       {
+                //         "productName": "Mie Goreng",
+                //         "category": "food",
+                //         "qty": 2,
+                //         "subtotal": 10000
+                //       },
+                //       {
+                //         "productName": "Ayam Goreng",
+                //         "category": "food",
+                //         "qty": 2,
+                //         "subtotal": 10000
+                //       }
+                //     ]
+                //   }
+                foreach ($cursor as $key) {
+                    array_push(
+                        $data,
+                        array(
+                            '_id' => $key->_id,
+                            'details' => $key->details
+                        )
+
+                    );
+                }
+
+                return json_encode(array('data' => $data));
+            } else {
+                return json_encode(array('error' => 'Something went wrong'));
+            }
+        } catch (Exception $th) {
+            printf($th);
+            return json_encode(array('error' => $th));
+        }
+    }
 }

@@ -117,7 +117,7 @@ class MainController
             return;
         }
 
-        if ($requestUri === '/api/order') {
+        if (str_contains($requestUri, '/api/order')) {
             require_once('src/Controllers/Order.Controller.php');
             $controller = new OrderController($this->server);
             $controller->routes();
@@ -140,7 +140,7 @@ class MainController
             return;
         } else {
             http_response_code(404);
-            echo json_encode(array('error' => 'URL not found'));
+            require_once('src/Views/ControllerGone.php');
             return;
         }
     }
