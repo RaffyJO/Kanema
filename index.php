@@ -8,6 +8,6 @@ if ($envConfig) {
     }
 }
 
-require_once 'src/Controllers/Controller.php';
-$mainRouter = new Controller($_SERVER);
+require_once 'src/Controllers/MainController.php';
+$mainRouter = new MainController($_SERVER);
 $mainRouter->router();
