@@ -1,10 +1,13 @@
 <?php
 
+use MongoDB\BSON\ObjectId;
+
 if (session_status() != PHP_SESSION_ACTIVE)
     session_start();
 
 require_once('src/lib/Functions/Connections/DB.php');
 require_once('src/lib/Functions/URLDetection.php');
+require_once('src/lib/Functions/MongoUtils.php');
 
 class ProductModel
 {
@@ -16,7 +19,15 @@ class ProductModel
             if ($connection == null) die(print_r("Connection is Null", true));
 
             $collection = $connection->selectCollection('kanema', 'Product');
-            $cursor = $collection->find(['name' => new MongoDB\BSON\Regex("$itemName", "i")]);
+            $cursor = null;
+
+            $isValidObjectId = MongoUtils::isValidObjectId($itemName);
+
+            if ($isValidObjectId)
+                $cursor = $collection->find(['_id' => new ObjectId($itemName)]);
+            else
+                $cursor = $collection->find(['name' => new MongoDB\BSON\Regex("$itemName", "i")]);
+
 
 
             if ($cursor) {
@@ -29,7 +40,6 @@ class ProductModel
 
                     );
                 }
-                // var_dump($data);
 
                 return array('data' => $data);
             } else {
@@ -61,7 +71,6 @@ class ProductModel
 
                     );
                 }
-                // var_dump($data);
 
                 return array('data' => $data);
             } else {
