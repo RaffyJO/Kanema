@@ -10,6 +10,61 @@ if (!isset($TPL)) {
 }
 ?>
 
+<script type="text/javascript" src="src/lib/Functions/PriceUtils.js"></script>
+<script type="text/javascript" src="src/lib/Functions/CookieUtils.js"></script>
+<script>
+    function previewButtonPress(element) {
+        const rawId = element.getAttribute('id')
+        const _id = rawId.replace('prev-', '')
+
+        callProudct(_id)
+    }
+
+    function callProudct(id) {
+        const modal = document.getElementById('readProductModal')
+
+        let headersList = {
+            "Accept": "*/*",
+            "Authorization": `Bearer ${getCookie('Bearer')}`
+        }
+
+        fetch(`/api/product?search=${id}`, {
+                method: 'GET',
+                headers: headersList
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (new Object(result).hasOwnProperty('error')) {
+                    alertBox.classList.toggle('hidden')
+                }
+
+                result.data.forEach(value => {
+                    const itemName = document.getElementById('prev-product-name');
+                    const itemPrice = document.getElementById('prev-product-price');
+                    const itemCategory = document.getElementById('prev-product-category');
+                    const itemStock = document.getElementById('prev-product-stock');
+                    const itemImage = document.getElementById('prev-product-image');
+
+                    itemName.innerText = value.name
+                    itemPrice.innerText = formatToIDR(value.price)
+                    itemCategory.innerText = value.category
+                    itemStock.innerText = value.stock
+                    itemImage.setAttribute('src', value.imgUrl)
+                });
+
+
+                modal.classList.toggle('hidden')
+            }).catch(err => console.error(err))
+    }
+
+    function toggleModal(modalId) {
+        const modal = document.getElementById(modalId)
+
+        if (modal != null)
+            modal.classList.toggle('hidden')
+    }
+</script>
+
 <div class="w-full bg-gray-800 relative shadow-md rounded-lg overflow-hidden">
     <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
         <div class="w-full md:w-1/2">
@@ -247,18 +302,18 @@ if (!isset($TPL)) {
 </div>
 
 <!-- Read modal -->
-<div id="readProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative p-4 w-full max-w-xl max-h-full">
+<div id="readProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] h-full flex justify-center align-middle" style="backdrop-filter: blur(10px);">
+    <div class="relative p-4 w-full max-w-xl h-fit">
         <!-- Modal content -->
         <div class="relative p-4 rounded-lg shadow bg-gray-800 sm:p-5">
             <!-- Modal header -->
             <div class="flex justify-between mb-4 rounded-t sm:mb-5">
                 <div class="text-lg md:text-xl text-white">
-                    <h3 class="font-semibold ">Indomie</h3>
-                    <p class="font-bold">Rp. 3000</p>
+                    <h3 class="font-semibold" id="prev-product-name">Indomie</h3>
+                    <p class="font-bold" id="prev-product-price">Rp. 3000</p>
                 </div>
                 <div>
-                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 rounded-lg text-sm p-1.5 inline-flex hover:bg-gray-600 hover:text-white" data-modal-toggle="readProductModal">
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 rounded-lg text-sm p-1.5 inline-flex hover:bg-gray-600 hover:text-white" data-modal-toggle="readProductModal" onclick="toggleModal('readProductModal')">
                         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
@@ -266,15 +321,15 @@ if (!isset($TPL)) {
                     </button>
                 </div>
             </div>
-            <img class="w-full h-auto" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="">
+            <img class="w-full h-auto" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" id="prev-product-image">
             <div class="flex w-full gap-4">
                 <div>
                     <p class="mb-2 font-semibold leading-none text-white">Category</p>
-                    <p class="font-light sm:mb-5 text-gray-400">Food</p>
+                    <p class="font-light sm:mb-5 text-gray-400" id="prev-product-category">Food</p>
                 </div>
                 <div>
                     <p class="mb-2 font-semibold leading-none text-white">Stock</p>
-                    <p class="font-light sm:mb-5 text-gray-400">10</p>
+                    <p class="font-light sm:mb-5 text-gray-400" id="prev-product-stock">10</p>
                 </div>
             </div>
         </div>
@@ -316,7 +371,7 @@ if (!isset($TPL)) {
                 let item = '';
 
                 result.data.forEach(content => {
-                    console.table(content);
+                    // console.table(content);
                     let badgeBgColor = content.category === 'food' ? 'bg-blue-900 text-blue-300' : (content.category == 'drink' ? 'bg-yellow-900 text-yellow-300' : '');
                     item += `<tr class="border-b border-gray-700">
                     <th scope="row" class="px-4 py-3 font-medium whitespace-nowrap text-white flex items-center h-full">
@@ -345,7 +400,7 @@ if (!isset($TPL)) {
                                 </svg>
                                 Edit
                             </button>
-                            <button type="button" data-modal-target="readProductModal" data-modal-toggle="readProductModal" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center text-gray-900 focus:outline-none rounded-lg border focus:ring-gray-700 bg-gray-800 text-gray-400 border-gray-600 hover:text-white hover:bg-gray-700">
+                            <button type="button" data-modal-target="readProductModal" data-modal-toggle="readProductModal" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center text-gray-900 focus:outline-none rounded-lg border focus:ring-gray-700 bg-gray-800 text-gray-400 border-gray-600 hover:text-white hover:bg-gray-700" onclick="previewButtonPress(this)" id="prev-${content._id}">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-2 -ml-0.5">
                                     <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" />
@@ -366,47 +421,6 @@ if (!isset($TPL)) {
                 document.getElementById('container-spinner').remove();
                 productContainer.innerHTML += item;
             }).catch(error => console.error(error))
-            .finally(() => {
-                console.log('test');
-                let modals = '';
-
-                modals += `
-                <!-- Read modal -->
-                <div id="readProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                    <div class="relative p-4 w-full max-w-xl max-h-full">
-                        <!-- Modal content -->
-                        <div class="relative p-4 rounded-lg shadow bg-gray-800 sm:p-5">
-                            <!-- Modal header -->
-                            <div class="flex justify-between mb-4 rounded-t sm:mb-5">
-                                <div class="text-lg md:text-xl text-white">
-                                    <h3 class="font-semibold ">Indomie</h3>
-                                    <p class="font-bold">Rp. 3000</p>
-                                </div>
-                                <div>
-                                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 rounded-lg text-sm p-1.5 inline-flex hover:bg-gray-600 hover:text-white" data-modal-toggle="readProductModal">
-                                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                        <span class="sr-only">Close modal</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <img class="w-full h-auto" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="">
-                            <div class="flex w-full gap-4">
-                                <div>
-                                    <p class="mb-2 font-semibold leading-none text-white">Category</p>
-                                    <p class="font-light sm:mb-5 text-gray-400">Food</p>
-                                </div>
-                                <div>
-                                    <p class="mb-2 font-semibold leading-none text-white">Stock</p>
-                                    <p class="font-light sm:mb-5 text-gray-400">10</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                `
-            })
     } else {
         console.error('Product container not found!');
     }
