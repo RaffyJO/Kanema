@@ -522,15 +522,12 @@ if (!isset($TPL)) {
                 .then(response => response.json())
                 .then(result => {
                     let elements = '';
-                    // let other = `<div class="p-4 rounded-lg" id="allItems" role="tabpanel" aria-labelledby="allItems-tab"> </div>`
 
                     let allItem = ''
                     let foodItems = ''
                     let drinkItems = ''
 
                     result.data.forEach(content => {
-                        // console.table(content)
-
                         if (content.available)
                             allItem += `
                             <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">

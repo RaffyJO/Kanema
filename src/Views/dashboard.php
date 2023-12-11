@@ -292,3 +292,9 @@ if (!isset($TPL)) {
         }
     });
 </script>
+
+<script>
+    function initPageData() {
+
+    }
+</script>

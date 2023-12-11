@@ -17,15 +17,40 @@ class OrderController implements Controller
 
     public function routes()
     {
+        $requestUri = parse_url($this->server['REQUEST_URI'], PHP_URL_PATH);
+        $urlQuery = parse_url($this->server['REQUEST_URI'], PHP_URL_QUERY);
+        $queryParams =  array();
+
+        parse_str($urlQuery, $queryParams);
+
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-clean') {
+            $this->GETCLEAN();
+            return;
+        }
+
         if ($this->server['REQUEST_METHOD'] === 'GET') {
-            echo $this->GET();
+            $this->GET();
             return;
         }
 
         if ($this->server['REQUEST_METHOD'] === 'POST') {
-            echo $this->POST();
+            $this->POST();
             return;
         }
+    }
+
+    function GETCLEAN()
+    {
+        $validation = new ValidateHeaders();
+        $validToken = (array) json_decode($validation->validateData());
+
+        if (array_key_exists('error', $validToken)) {
+            echo json_encode($validation);
+            return;
+        }
+
+        $model = new OrderModel();
+        echo $model->callCleanedData();
     }
 
     function POST()
@@ -60,7 +85,7 @@ class OrderController implements Controller
             $targetItem = $productModel->findOneItem($value['Product_id']);
 
             $subTotal = ((int)$value['qty']) * ((int)$targetItem['data']['price']);
-            $details[$key] = array('Product_id' => new ObjectId($value['Product_id']), 'subtotal' => $subTotal, 'qty' => ((int)$value['qty']), 'timestamp' => time());
+            $details[$key] = array('Product_id' => new ObjectId($value['Product_id']), 'subtotal' => $subTotal, 'qty' => ((int)$value['qty']));
 
             $total += $subTotal;
         }
@@ -68,6 +93,7 @@ class OrderController implements Controller
         $postData['users_id'] = new ObjectId($validToken['id']->{'$oid'});
         $postData['details'] = $details;
         $postData['total'] = $total;
+        $postData['timestamp'] = time();
 
         $model = new OrderModel();
         $insertStatus = $model->createOrder($postData);
