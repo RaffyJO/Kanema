@@ -1,5 +1,7 @@
 <?php
-class ProductsController
+require_once('src/Controllers/Controller.php');
+
+class ProductsController implements Controller
 {
     private array $server;
 
@@ -8,7 +10,7 @@ class ProductsController
         $this->server = $server;
     }
 
-    function route()
+    function routes()
     {
         $requestUri = parse_url($this->server['REQUEST_URI'], PHP_URL_PATH);
         $urlQuery = parse_url($this->server['REQUEST_URI'], PHP_URL_QUERY);
@@ -36,7 +38,7 @@ class ProductsController
             echo $this->products();
         }
         if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/product' && array_key_exists('search', $queryParams)) {
-            echo $this->product();
+            echo $this->GET();
         }
     }
 
@@ -56,7 +58,7 @@ class ProductsController
             return;
         }
     }
-    private function product()
+    function GET()
     {
         $urlQuery = parse_url($this->server['REQUEST_URI'], PHP_URL_QUERY);
         $queryParams =  array();
@@ -76,5 +78,17 @@ class ProductsController
             echo json_encode($data);
             return;
         }
+    }
+
+    function POST()
+    {
+    }
+
+    function PUT()
+    {
+    }
+
+    function DELETE()
+    {
     }
 }
