@@ -4,6 +4,7 @@ use MongoDB\BSON\ObjectId;
 
 require_once('src/Models/Order.Model.php');
 require_once('src/Controllers/Controller.php');
+require_once('src/Models/Order.Model.php');
 
 class OrderController implements Controller
 {
@@ -29,6 +30,8 @@ class OrderController implements Controller
 
     function POST()
     {
+        $productModel = new ProductModel();
+
         $validation = new ValidateHeaders();
         $validToken = (array) json_decode($validation->validateData());
 
@@ -54,7 +57,9 @@ class OrderController implements Controller
         $total = 0;
 
         foreach ($details as $key => $value) {
-            $subTotal = ((int)$value['qty']) * ((int)$value['price']);
+            $targetItem = $productModel->findOneItem($value['Product_id']);
+
+            $subTotal = ((int)$value['qty']) * ((int)$targetItem['data']['price']);
             $details[$key] = array('Product_id' => new ObjectId($value['Product_id']), 'subtotal' => $subTotal, 'qty' => ((int)$value['qty']), 'timestamp' => time());
 
             $total += $subTotal;

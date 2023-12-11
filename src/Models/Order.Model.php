@@ -21,7 +21,10 @@ class OrderModel
                     $stockAvailable = false;
             }
 
-            if (!$stockAvailable) return false;
+            if (!$stockAvailable) {
+                echo json_encode(array('error' => "Out of Stock"));
+                return false;
+            }
 
             $collection = $connection->selectCollection('kanema', 'Transaction');
             $cursor = $collection->insertOne($payload);
@@ -31,8 +34,6 @@ class OrderModel
 
                 foreach ($payload['details'] as $key => $value) {
                     $targetItem = $productModel->findOneItem($value['Product_id']);
-
-                    // var_dump($targetItem['data']);
 
                     $targetItem['data']['stock'] -= $value['qty'];
                     $id = $targetItem['data']['_id'];

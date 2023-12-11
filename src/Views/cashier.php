@@ -530,7 +530,9 @@ if (!isset($TPL)) {
 
                     result.data.forEach(content => {
                         // console.table(content)
-                        allItem += `
+
+                        if (content.available)
+                            allItem += `
                             <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
                                     <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
@@ -541,7 +543,7 @@ if (!isset($TPL)) {
                                 </div>
                             </button>`
 
-                        if (content.category == 'food') {
+                        if (content.category == 'food' && content.available) {
                             foodItems += `
                             <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
@@ -554,7 +556,7 @@ if (!isset($TPL)) {
                             </button>`
                         }
 
-                        if (content.category == 'drink') {
+                        if (content.category == 'drink' && content.available) {
                             drinkItems += `
                         <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
@@ -599,12 +601,10 @@ if (!isset($TPL)) {
         orderItemPlan.map(value => {
             let dataTemplate = {
                 Product_id: null,
-                price: null,
                 qty: 0
             }
 
             dataTemplate.Product_id = value.id
-            dataTemplate.price = parseIDRToNumber(value.price)
             dataTemplate.qty = value.amount
 
             preparedData.push(dataTemplate)
