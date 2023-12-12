@@ -28,11 +28,14 @@ class OrderController implements Controller
             return;
         }
 
-        if ($this->server['REQUEST_METHOD'] === 'GET') {
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $this->server['REQUEST_URI'] === '/api/orders') {
+            $this->GETALL();
+            return;
+        }
+        if ($this->server['REQUEST_METHOD'] === 'GET'&& $requestUri === '/api/order' && array_key_exists('search', $queryParams)) {
             $this->GET();
             return;
         }
-
         if ($this->server['REQUEST_METHOD'] === 'POST') {
             $this->POST();
             return;
@@ -107,9 +110,39 @@ class OrderController implements Controller
             return;
         }
     }
-    function GET()
+    function GETALL()
     {
-        # code...
+        $model = new OrderModel();
+        $data = $model->getAll();
+
+        if (array_key_exists('error', $data)) {
+            http_response_code(400);
+            echo json_encode($data);
+            return;
+        } else {
+            http_response_code(200);
+            echo json_encode($data);
+            return;
+        }
+    }
+    function GET(){
+        $urlQuery = parse_url($this->server['REQUEST_URI'], PHP_URL_QUERY);
+        $queryParams =  array();
+
+        parse_str($urlQuery, $queryParams);
+
+        $model = new OrderModel();
+        $data = $model->get($queryParams['search']);
+
+        if (array_key_exists('error', $data)) {
+            http_response_code(400);
+            echo json_encode($data);
+            return;
+        } else {
+            http_response_code(200);
+            echo json_encode($data);
+            return;
+        }
     }
 
     function PUT()

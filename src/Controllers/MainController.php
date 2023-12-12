@@ -117,13 +117,6 @@ class MainController
             return;
         }
 
-        if (str_contains($requestUri, '/api/order')) {
-            require_once('src/Controllers/Order.Controller.php');
-            $controller = new OrderController($this->server);
-            $controller->routes();
-            return;
-        }
-
         if (str_contains($requestUri, '/api/product') && count($queryParams) > 0 && array_key_exists('search', $queryParams)) {
             require_once('src/Controllers/Products.Controller.php');
             $controller = new ProductsController($this->server);
@@ -132,6 +125,19 @@ class MainController
         }
         if ($requestUri === '/product') {
             require_once 'src/Views/product.php';
+            return;
+        }
+        
+        if (str_contains($requestUri, '/api/order') && count($queryParams) > 0 && array_key_exists('search', $queryParams)) {
+            require_once('src/Controllers/Order.Controller.php');
+            $controller = new OrderController($this->server);
+            $controller->routes();
+            return;
+        }
+        if (str_contains($requestUri, '/api/orders')) {
+            require_once('src/Controllers/Order.Controller.php');
+            $controller = new OrderController($this->server);
+            $controller->routes();
             return;
         }
         if (str_contains($requestUri, '/api/')) {
