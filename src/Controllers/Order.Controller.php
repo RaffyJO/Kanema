@@ -28,6 +28,21 @@ class OrderController implements Controller
             return;
         }
 
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-count') {
+            $this->GETCOUNT();
+            return;
+        }
+
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-lastdays') {
+            $this->GETLASTDAYS();
+            return;
+        }
+
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-best-seller-year') {
+            $this->GETBESTSALLERYEAR();
+            return;
+        }
+
         if ($this->server['REQUEST_METHOD'] === 'GET') {
             $this->GET();
             return;
@@ -39,10 +54,27 @@ class OrderController implements Controller
         }
     }
 
+    function GETBESTSALLERYEAR()
+    {
+        $validation = new ValidateHeaders();
+        $validToken = (array) json_decode($validation->validateData());
+
+        // var_dump(gmdate("Y-m-d\TH:i:s\Z", 1699742424));
+
+        if (array_key_exists('error', $validToken)) {
+            echo json_encode($validation);
+            return;
+        }
+
+        $model = new OrderModel();
+        echo $model->callCleanedDataSeller();
+    }
     function GETCLEAN()
     {
         $validation = new ValidateHeaders();
         $validToken = (array) json_decode($validation->validateData());
+
+        // var_dump(gmdate("Y-m-d\TH:i:s\Z", 1699742424));
 
         if (array_key_exists('error', $validToken)) {
             echo json_encode($validation);
@@ -51,6 +83,41 @@ class OrderController implements Controller
 
         $model = new OrderModel();
         echo $model->callCleanedData();
+    }
+
+    function GETCOUNT()
+    {
+        $validation = new ValidateHeaders();
+        $validToken = (array) json_decode($validation->validateData());
+
+        // var_dump(gmdate("Y-m-d\TH:i:s\Z", 1699742424));
+
+        if (array_key_exists('error', $validToken)) {
+            echo json_encode($validation);
+            return;
+        }
+
+        $model = new OrderModel();
+        echo $model->transactionCount();
+    }
+
+    function GETLASTDAYS()
+    {
+        $validation = new ValidateHeaders();
+        $validToken = (array) json_decode($validation->validateData());
+
+        // var_dump(gmdate("Y-m-d\TH:i:s\Z", 1699742424));
+
+        if (array_key_exists('error', $validToken)) {
+            echo json_encode($validation);
+            return;
+        }
+
+        $model = new OrderModel();
+        $countToday = ((array) json_decode(($model->countTransactionToday())))['count'];
+        $countYesterday = ((array) json_decode(($model->countTransactionYesterday())))['count'];
+
+        echo json_encode(array('today' => $countToday, 'yesterday' => $countYesterday));
     }
 
     function POST()
