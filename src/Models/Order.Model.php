@@ -62,7 +62,46 @@ class OrderModel
             return false;
         }
     }
+    public function callCleanedDataSeller(): string
+    {
+        try {
+            $db = new DB();
+            $connection = $db->getConnection();
+            if ($connection == null) die(print_r("Connection is Null", true));
 
+            $collection = $connection->selectCollection('kanema', 'BestSellerYearClean');
+            $response = $collection->find([]);
+
+            $cursor = $response;
+            if ($cursor) {
+                $data = array();
+
+                $count = $this->transactionCount();
+
+                foreach ($cursor as $key) {
+                    array_push(
+                        $data,
+                        array(
+                            '_id' => $key->_id,
+                            'details' => $key->details,
+                            'total' => $key->total,
+                            'food' => $key->food,
+                            'drink' => $key->drink,
+                            'selledProduct' => $key->selledProduct,
+                        )
+
+                    );
+                }
+
+                return json_encode(array('data' => $data));
+            } else {
+                return json_encode(array('error' => 'Something went wrong'));
+            }
+        } catch (Exception $th) {
+            printf($th);
+            return json_encode(array('error' => $th));
+        }
+    }
     public function callCleanedData(): string{
         try {
             $db = new DB();
@@ -206,5 +245,74 @@ class OrderModel
         } catch (Exception $th) {
             return array('error' => $th->getMessage());
         }
+    }
+
+    public function transactionCount(): string
+    {
+        $db = new DB();
+        $connection = $db->getConnection();
+        if ($connection == null) die(print_r("Connection is Null", true));
+
+        $collection = $connection->selectCollection('kanema', 'Transaction');
+        $cursor = $collection->aggregate([['$count' => 'countTransaction']]);
+
+        $data = null;
+
+        foreach ($cursor as $key) {
+            $data = $key->countTransaction;
+        }
+
+        return json_encode(array('count' => $data));
+    }
+
+    public function countTransactionToday()
+    {
+        $db = new DB();
+        $connection = $db->getConnection();
+        if ($connection == null) die(print_r("Connection is Null", true));
+
+        $collection = $connection->selectCollection('kanema', 'Transaction');
+        $cursor = $collection->find([]);
+
+        if ($cursor) {
+            $counter = 0;
+
+            foreach ($cursor as $key) {
+                // var_dump($key);
+
+                date_default_timezone_set('Asia/Jakarta');
+                $date = gmdate("Y-m-d", $key->timestamp);
+                // var_dump($date);
+                // var_dump(gmdate("Y-m-d", time()));
+                // var_dump($date == gmdate("Y-m-d", time()));
+
+                if ($date == gmdate("Y-m-d", time()))
+                    $counter++;
+            }
+        }
+
+        return json_encode(array('count' => $counter));
+    }
+
+    public function countTransactionYesterday()
+    {
+        $db = new DB();
+        $connection = $db->getConnection();
+        if ($connection == null) die(print_r("Connection is Null", true));
+
+        $collection = $connection->selectCollection('kanema', 'Transaction');
+        $cursor = $collection->find([]);
+
+        if ($cursor) {
+            $counter = 0;
+
+            foreach ($cursor as $key) {
+                $date = gmdate("Y-m-d", $key->timestamp);
+                if ($date === gmdate("Y-m-d", strtotime('-1 day', time())))
+                    $counter++;
+            }
+        }
+
+        return json_encode(array('count' => $counter));
     }
 }

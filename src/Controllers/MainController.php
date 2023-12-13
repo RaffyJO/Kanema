@@ -149,5 +149,19 @@ class MainController
             require_once('src/Views/ControllerGone.php');
             return;
         }
+        
+    }
+    private function validateLogin($token, $requestUri): bool
+    {
+        if ($token) {
+            // if ($requestUri === '/login') {
+            // require_once 'src/Views/dashboard.php';
+            // }
+            return true;
+        } else {
+            // header('Location: /login');
+            // require_once 'src/Views/Login.php';
+            return false;
+        }
     }
 }
