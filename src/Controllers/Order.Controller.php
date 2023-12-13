@@ -3,8 +3,10 @@
 use MongoDB\BSON\ObjectId;
 
 require_once('src/Models/Order.Model.php');
+require_once('src/Controllers/Controller.php');
+require_once('src/Models/Order.Model.php');
 
-class OrderController
+class OrderController implements Controller
 {
     private array $server;
 
@@ -15,19 +17,113 @@ class OrderController
 
     public function routes()
     {
+        $requestUri = parse_url($this->server['REQUEST_URI'], PHP_URL_PATH);
+        $urlQuery = parse_url($this->server['REQUEST_URI'], PHP_URL_QUERY);
+        $queryParams =  array();
+
+        parse_str($urlQuery, $queryParams);
+
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-clean') {
+            $this->GETCLEAN();
+            return;
+        }
+
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-count') {
+            $this->GETCOUNT();
+            return;
+        }
+
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-lastdays') {
+            $this->GETLASTDAYS();
+            return;
+        }
+
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-best-seller-year') {
+            $this->GETBESTSALLERYEAR();
+            return;
+        }
+
         if ($this->server['REQUEST_METHOD'] === 'GET') {
-            echo $this->GET();
+            $this->GET();
             return;
         }
 
         if ($this->server['REQUEST_METHOD'] === 'POST') {
-            echo $this->POST();
+            $this->POST();
             return;
         }
     }
 
-    private function POST()
+    function GETBESTSALLERYEAR()
     {
+        $validation = new ValidateHeaders();
+        $validToken = (array) json_decode($validation->validateData());
+
+        // var_dump(gmdate("Y-m-d\TH:i:s\Z", 1699742424));
+
+        if (array_key_exists('error', $validToken)) {
+            echo json_encode($validation);
+            return;
+        }
+
+        $model = new OrderModel();
+        echo $model->callCleanedDataSeller();
+    }
+    function GETCLEAN()
+    {
+        $validation = new ValidateHeaders();
+        $validToken = (array) json_decode($validation->validateData());
+
+        // var_dump(gmdate("Y-m-d\TH:i:s\Z", 1699742424));
+
+        if (array_key_exists('error', $validToken)) {
+            echo json_encode($validation);
+            return;
+        }
+
+        $model = new OrderModel();
+        echo $model->callCleanedData();
+    }
+
+    function GETCOUNT()
+    {
+        $validation = new ValidateHeaders();
+        $validToken = (array) json_decode($validation->validateData());
+
+        // var_dump(gmdate("Y-m-d\TH:i:s\Z", 1699742424));
+
+        if (array_key_exists('error', $validToken)) {
+            echo json_encode($validation);
+            return;
+        }
+
+        $model = new OrderModel();
+        echo $model->transactionCount();
+    }
+
+    function GETLASTDAYS()
+    {
+        $validation = new ValidateHeaders();
+        $validToken = (array) json_decode($validation->validateData());
+
+        // var_dump(gmdate("Y-m-d\TH:i:s\Z", 1699742424));
+
+        if (array_key_exists('error', $validToken)) {
+            echo json_encode($validation);
+            return;
+        }
+
+        $model = new OrderModel();
+        $countToday = ((array) json_decode(($model->countTransactionToday())))['count'];
+        $countYesterday = ((array) json_decode(($model->countTransactionYesterday())))['count'];
+
+        echo json_encode(array('today' => $countToday, 'yesterday' => $countYesterday));
+    }
+
+    function POST()
+    {
+        $productModel = new ProductModel();
+
         $validation = new ValidateHeaders();
         $validToken = (array) json_decode($validation->validateData());
 
@@ -53,7 +149,9 @@ class OrderController
         $total = 0;
 
         foreach ($details as $key => $value) {
-            $subTotal = ((int)$value['qty']) * ((int)$value['price']);
+            $targetItem = $productModel->findOneItem($value['Product_id']);
+
+            $subTotal = ((int)$value['qty']) * ((int)$targetItem['data']['price']);
             $details[$key] = array('Product_id' => new ObjectId($value['Product_id']), 'subtotal' => $subTotal, 'qty' => ((int)$value['qty']));
 
             $total += $subTotal;
@@ -62,6 +160,7 @@ class OrderController
         $postData['users_id'] = new ObjectId($validToken['id']->{'$oid'});
         $postData['details'] = $details;
         $postData['total'] = $total;
+        $postData['timestamp'] = time();
 
         $model = new OrderModel();
         $insertStatus = $model->createOrder($postData);
@@ -75,8 +174,16 @@ class OrderController
             return;
         }
     }
-    private function GET()
+    function GET()
     {
         # code...
+    }
+
+    function PUT()
+    {
+    }
+
+    function DELETE()
+    {
     }
 }

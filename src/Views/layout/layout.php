@@ -29,7 +29,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 </head>
 
 <body id="body">
-  <div class="absolute top-14 right-0 w-full h-fit hidden flex justify-end z-[100]" id="box-alert">
+  <div class="absolute top-14 right-0 w-fit h-fit hidden flex justify-end z-[100]" id="box-alert">
   </div>
   <?php include __DIR__ . "/../templates/header.php" ?>
   <div class="p-4 sm:ml-64">

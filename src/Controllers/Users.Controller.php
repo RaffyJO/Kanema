@@ -4,8 +4,9 @@ use MongoDB\BSON\ObjectId;
 
 require_once('src/lib/Functions/ValidateHeaders.php');
 require_once('src/lib/Functions/Connections/DB.php');
+require_once('src/Controllers/Controller.php');
 
-class UsersController
+class UsersController implements Controller
 {
     private array $server;
 
@@ -26,7 +27,7 @@ class UsersController
             return;
         }
 
-        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/aoi/user-all') {
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/user-all') {
             echo $this->GETUSER();
             return;
         }
@@ -37,7 +38,7 @@ class UsersController
         }
     }
 
-    function POST(): string
+    function POST()
     {
         $postData = json_decode(file_get_contents('php://input'), true);
 
@@ -45,10 +46,12 @@ class UsersController
             $name = $postData['name'];
             $encodedName = base64_encode($name);
 
-            return json_encode(array('encoded_name' => urlencode($encodedName)));
+            echo json_encode(array('encoded_name' => urlencode($encodedName)));
+            return;
         } else {
             http_response_code(400);
-            return json_encode(array('error' => 'Parameter "name" is missing.'));
+            echo json_encode(array('error' => 'Parameter "name" is missing.'));
+            return;
         }
     }
 
@@ -91,5 +94,12 @@ class UsersController
 
         http_response_code(200);
         echo json_encode(array('data' => $data));
+    }
+
+    function PUT()
+    {
+    }
+    function DELETE()
+    {
     }
 }
