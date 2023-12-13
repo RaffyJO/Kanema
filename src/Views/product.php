@@ -20,6 +20,160 @@ if (!isset($TPL)) {
         callProudct(_id)
     }
 
+    function actionButtonPress(element, indicator) {
+        const rawId = element.getAttribute('id');
+        let _id = '';
+        switch (indicator) {
+            case 'upd':
+                _id = rawId.replace('upd-', '')
+                break;
+            case 'prev':
+                _id = rawId.replace('prev-', '')
+                break;
+            case 'crea':
+                _id = rawId.replace('crea-', '')
+                break;
+
+            default:
+                break;
+        }
+
+        actioncallProudct(_id, indicator)
+        // actioncallProudct('656e6ebc0a04f3555c2e4815', indicator)
+    }
+
+    function actioncallProudct(id, indicator) {
+        let modal = document.getElementById('universalProductModal');
+        let icon = '';
+        let headersList = '';
+        let titleModal = document.getElementById("title-modal");
+        let actionButton = document.getElementById("actionButtonModal");
+        switch (indicator) {
+            case 'upd':
+                titleModal.innerText = 'Update Product'
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                    <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                                </svg>`
+                actionButton.innerHTML = 'Update Product'
+                // console.log("masuk indikator");
+                headersList = {
+                    "Accept": "*/*",
+                    "Authorization": `Bearer ${getCookie('Bearer')}`
+                }
+
+                fetch(`/api/product?search=${id}`, {
+                        method: 'GET',
+                        headers: headersList
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (new Object(result).hasOwnProperty('error')) {
+                            alertBox.classList.toggle('hidden')
+                        }
+
+                        result.data.forEach(value => {
+                            const itemName = document.getElementById('product-name')
+                            const itemPrice = document.getElementById('product-price')
+                            const itemCategory = document.getElementById('product-category')
+                            const itemStock = document.getElementById('product-stock')
+                            const itemImage = document.getElementById('preview-image')
+                            const prevImage = document.getElementById('image-preview')
+                            const prevtext = document.getElementById('text-preview')
+                            const actionModal = document.getElementById('action-modal').classList.remove("hidden")
+
+                            removeDisbled()
+                            itemName.value = value.name
+                            itemPrice.value = value.price
+                            itemCategory.value = value.category
+                            itemStock.value = value.stock
+                            prevtext.classList.add("hidden")
+                            itemImage.src = value.imgUrl
+                            prevImage.classList.remove("hidden")
+                        });
+
+                        document.getElementById("icon-action-modal").innerHTML = icon
+                        modal.classList.toggle('hidden')
+                    }).catch(err => console.error(err))
+                break;
+            case 'prev':
+                titleModal.innerText = 'Preview Product'
+                icon = ''
+                actionButton.innerHTML = 'Update Product'
+                headersList = {
+                    "Accept": "*/*",
+                    "Authorization": `Bearer ${getCookie('Bearer')}`
+                }
+
+                fetch(`/api/product?search=${id}`, {
+                        method: 'GET',
+                        headers: headersList
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (new Object(result).hasOwnProperty('error')) {
+                            alertBox.classList.toggle('hidden')
+                        }
+
+                        result.data.forEach(value => {
+                            const itemName = document.getElementById('product-name')
+                            const itemPrice = document.getElementById('product-price')
+                            const itemCategory = document.getElementById('product-category')
+                            const itemStock = document.getElementById('product-stock')
+                            const itemImage = document.getElementById('preview-image')
+                            const prevImage = document.getElementById('image-preview')
+                            const prevtext = document.getElementById('text-preview')
+                            document.getElementById('dropzone-input').setAttribute("style", "pointer-events:none")
+                            document.getElementById('radio-image').classList.add("hidden")
+                            document.getElementById('action-modal').classList.add("hidden")
+
+                            itemName.value = value.name
+                            itemName.setAttribute("disabled", "")
+                            itemPrice.value = value.price
+                            itemPrice.setAttribute("disabled", "")
+                            itemCategory.value = value.category
+                            itemCategory.setAttribute("disabled", "")
+                            itemStock.value = value.stock
+                            itemStock.setAttribute("disabled", "")
+                            prevtext.classList.add("hidden")
+                            itemImage.src = value.imgUrl
+                            prevImage.classList.remove("hidden")
+                        });
+                        modal.classList.toggle('hidden')
+                    }).catch(err => console.error(err))
+                break;
+            case 'crea':
+                titleModal.innerText = 'Add Product'
+                icon = `<svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                        </svg>`
+                actionButton.innerHTML = 'Add new Product'
+                removeDisbled()
+                document.getElementById('image-preview').classList.add("hidden")
+                document.getElementById('text-preview').classList.remove("hidden")
+                document.getElementById('dropzone-input').setAttribute("style", "")
+                document.getElementById('radio-image').classList.remove("hidden")
+                document.getElementById('action-modal').classList.remove("hidden")
+                document.getElementById("form-modal").reset();
+                document.getElementById("icon-action-modal").innerHTML = icon
+                modal.classList.toggle('hidden')
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    function removeDisbled() {
+        const checkInput = document.getElementById('product-name')
+        if (checkInput.disabled) {
+            document.getElementById('product-name').disabled = false
+            document.getElementById('product-price').disabled = false
+            document.getElementById('product-category').disabled = false
+            document.getElementById('product-stock').disabled = false
+        }
+    }
+
     function callProudct(id) {
         const modal = document.getElementById('readProductModal')
 
@@ -63,14 +217,50 @@ if (!isset($TPL)) {
         if (modal != null)
             modal.classList.toggle('hidden')
     }
+
+    function deleteButtonPress(element) {
+        const rawId = element.getAttribute('id')
+        const _id = rawId.replace('del-', '')
+
+        callProudctDelete(_id)
+    }
+
+    function callProudctDelete(id) {
+        const modal = document.getElementById('deleteModal')
+
+        let headersList = {
+            "Accept": "*/*",
+            "Authorization": `Bearer ${getCookie('Bearer')}`
+        }
+
+        fetch(`/api/product?search=${id}`, {
+                method: 'GET',
+                headers: headersList
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (new Object(result).hasOwnProperty('error')) {
+                    alertBox.classList.toggle('hidden')
+                }
+
+                result.data.forEach(value => {
+                    const itemName = document.getElementById('confirm-del');
+
+                    itemName.innerText = value.name
+                });
+
+
+                modal.classList.toggle('hidden')
+            }).catch(err => console.error(err))
+    }
 </script>
 
 <div class="w-full bg-gray-800 relative shadow-md rounded-lg overflow-hidden">
     <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-        <div class="w-full md:w-1/2">
+        <div class="w-full w-full md:w-1/2">
             <form class="flex items-center">
                 <label for="simple-search" class="sr-only">Search</label>
-                <div class="relative w-3/5">
+                <div class="relative lg:w-3/5 w-full">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                         <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
@@ -81,7 +271,7 @@ if (!isset($TPL)) {
             </form>
         </div>
         <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-            <button type="button" id="createProductModalButton" data-modal-target="createProductModal" data-modal-toggle="createProductModal" class="flex items-center justify-center text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
+            <button type="button" id="createProductModalButton" onclick="actionButtonPress(this, 'crea')" class="flex items-center justify-center text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
                 <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                 </svg>
@@ -177,8 +367,88 @@ if (!isset($TPL)) {
     </nav>
 </div>
 
+<!-- Universal Product Modal -->
+<div id="universalProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full flex items-center justify-center" style="backdrop-filter: blur(10px); height:100%;">
+    <div class="relative p-4 w-full max-w-2xl max-h-full m">
+        <!-- Modal content -->
+        <div class="relative p-4 rounded-lg shadow bg-gray-800 sm:p-5">
+            <!-- Modal header -->
+            <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-gray-600">
+                <h3 class="text-lg font-semibold text-white" id="title-modal">universal</h3>
+                <button type="button" class="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white" onclick="toggleModal('universalProductModal')">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <form action="#" id="form-modal">
+                <div class="mb-3">
+                    <label for="product-name" class="block mb-2 text-sm font-medium text-white">Name</label>
+                    <input type="text" name="product-name" id="product-name" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Type product name" required="">
+                </div>
+                <div class="flex flex-col-reverse lg:flex-row flex-1 gap-3">
+                    <div class="flex justify-center items-center w-full mb-4 lg:w-1/2 flex-col">
+
+                        <label for="dropzone-file" class="flex flex-col justify-center items-center w-full h-64 rounded-lg border-2 border-dashed cursor-pointer hover:bg-bray-800 bg-gray-700 border-gray-600 hover:border-gray-500 bg-gray-600" id="dropzone-input">
+                            <div class="flex flex-col justify-center items-center pt-5 pb-6" id="text-preview">
+                                <svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                </svg>
+                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                    <span class="font-semibold">Click to upload</span>
+                                    or drag and drop
+                                </p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, or JPEG</p>
+                            </div>
+                            <div id="image-preview" class="hidden">
+                                <img id="preview-image" alt="Preview Image" class="max-w-full max-h-64">
+                            </div>
+                        </label>
+
+                        <label for="link-input" class="hidden w-full" id="link-input">
+                            <textarea type="text" name="link-image" id="link-image" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 w-full h-64" placeholder="Input link Image" required="" style="resize: none;"></textarea>
+                        </label>
+
+                        <div class="text-white mb-2" id="radio-image">
+                            <input type="radio" id="radio-drag-drop" name="upload-type" checked>
+                            <label for="radio-drag-drop">Drag and Drop</label>
+
+                            <input type="radio" id="radio-link" name="upload-type">
+                            <label for="radio-link">Link</label>
+                        </div>
+                    </div>
+                    <div class="flex flex-col flex-1 lg:w-1/2 gap-3">
+                        <div>
+                            <label for="product-price" class="block mb-2 text-sm font-medium text-gray-900 text-white">Price</label>
+                            <input type="number" name="product-price" id="product-price" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Price" required="">
+                        </div>
+                        <div>
+                            <label for="product-stock" class="block mb-2 text-sm font-medium text-gray-900 text-white">Stock</label>
+                            <input type="text" name="product-stock" id="product-stock" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Stock" required="">
+                        </div>
+                        <div><label for="product-category" class="block mb-2 text-sm font-medium text-gray-900 text-white">Category</label><select id="product-category" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
+                                <option selected="">Select category</option>
+                                <option value="food">Food</option>
+                                <option value="drink">Drink</option>
+                            </select></div>
+                    </div>
+                </div>
+                <div class="text-right" id="action-modal">
+                    <button type="submit" class="text-white inline-flex items-center focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800 flex justify-center items-center">
+                        <span id="icon-action-modal"></span>
+                        <span id="actionButtonModal">
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Create product -->
-<div id="createProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+<div id="createProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full" style="backdrop-filter: blur(10px); height:100%;">
     <div class="relative p-4 w-full max-w-2xl max-h-full">
         <!-- Modal content -->
         <div class="relative p-4 rounded-lg shadow bg-gray-800 sm:p-5">
@@ -240,14 +510,14 @@ if (!isset($TPL)) {
 </div>
 
 <!-- Update modal -->
-<div id="updateProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative p-4 w-full max-w-2xl max-h-full">
+<div id="updateProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full" style="backdrop-filter: blur(10px); height:100%">
+    <div class="relative p-4 w-full max-w-2xl max-h-full mx-auto">
         <!-- Modal content -->
         <div class="relative p-4 rounded-lg shadow bg-gray-800 sm:p-5">
             <!-- Modal header -->
             <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-gray-600">
                 <h3 class="text-lg font-semibold text-white">Update Product</h3>
-                <button type="button" class="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white" data-modal-toggle="updateProductModal">
+                <button type="button" class="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white" onclick="toggleModal('updateProductModal')">
                     <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                     </svg>
@@ -259,21 +529,24 @@ if (!isset($TPL)) {
                 <div class="grid gap-4 mb-4 sm:grid-cols-2">
                     <div>
                         <label for="name" class="block mb-2 text-sm font-medium text-white">Name</label>
-                        <input type="text" name="name" id="name" value="" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Type product name" required="">
+                        <input type="text" name="name" id="name" value="" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Type product name" required="" id="upd-product-name">
                     </div>
                     <div>
                         <label for="price" class="block mb-2 text-sm font-medium text-gray-900 text-white">Price</label>
-                        <input type="number" name="price" id="price" value="" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Price" required="">
+                        <input type="number" name="price" id="price" value="" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Price" required="" id="upd-product-price">
                     </div>
                     <div>
                         <label for="stock" class="block mb-2 text-sm font-medium text-gray-900 text-white">Stock</label>
-                        <input type="text" name="stock" id="stock" value="" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Stock" required="">
+                        <input type="text" name="stock" id="stock" value="" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Stock" required="" id="upd-product-stock">
                     </div>
-                    <div><label for="category" class="block mb-2 text-sm font-medium text-gray-900 text-white">Category</label><select id="category" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
+                    <div>
+                        <label for="category" class="block mb-2 text-sm font-medium text-gray-900 text-white">Category</label>
+                        <select id="category" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" id="upd-product-category">
                             <option selected="">Select category</option>
                             <option value="food">Food</option>
                             <option value="drink">Drink</option>
-                        </select></div>
+                        </select>
+                    </div>
                 </div>
                 <div class="flex justify-center items-center w-full mb-4">
                     <label for="dropzone-file" class="flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -302,7 +575,7 @@ if (!isset($TPL)) {
 </div>
 
 <!-- Read modal -->
-<div id="readProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] h-full flex justify-center align-middle" style="backdrop-filter: blur(10px);">
+<div id="readProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] h-full flex justify-center align-middle" style="backdrop-filter: blur(10px);height: 100%">
     <div class="relative p-4 w-full max-w-xl h-fit">
         <!-- Modal content -->
         <div class="relative p-4 rounded-lg shadow bg-gray-800 sm:p-5">
@@ -313,7 +586,7 @@ if (!isset($TPL)) {
                     <p class="font-bold" id="prev-product-price">Rp. 3000</p>
                 </div>
                 <div>
-                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 rounded-lg text-sm p-1.5 inline-flex hover:bg-gray-600 hover:text-white" data-modal-toggle="readProductModal" onclick="toggleModal('readProductModal')">
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 rounded-lg text-sm p-1.5 inline-flex hover:bg-gray-600 hover:text-black" onclick="toggleModal('readProductModal')">
                         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
@@ -321,7 +594,7 @@ if (!isset($TPL)) {
                     </button>
                 </div>
             </div>
-            <img class="w-full h-auto" src="https://www.indomie.com/uploads/product/indomie-mi-goreng-special_detail_094906814.png" alt="" id="prev-product-image">
+            <img class="w-3/5 h-auto mx-auto" src="" alt="" id="prev-product-image">
             <div class="flex w-full gap-4">
                 <div>
                     <p class="mb-2 font-semibold leading-none text-white">Category</p>
@@ -337,11 +610,11 @@ if (!isset($TPL)) {
 </div>
 
 <!-- Delete modal -->
-<div id="deleteModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative p-4 w-full max-w-md max-h-full">
+<div id="deleteModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full" style="backdrop-filter: blur(10px);height: 100%">
+    <div class="relative p-4 w-full max-w-md h-full mx-auto flex justify-center items-center">
         <!-- Modal content -->
-        <div class="relative p-4 text-center rounded-lg shadow bg-gray-800 sm:p-5">
-            <button type="button" class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white" data-modal-toggle="deleteModal">
+        <div class="relative p-4 text-center rounded-lg shadow bg-gray-800 sm:p-5 mx-auto">
+            <button type="button" class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white" onclick="toggleModal('deleteModal')">
                 <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                 </svg>
@@ -350,9 +623,9 @@ if (!isset($TPL)) {
             <svg class="text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
             </svg>
-            <p class="mb-4 text-gray-300">Are you sure you want to delete this item?</p>
+            <p class="mb-4 text-gray-300">Are you sure you want to delete <span id="confirm-del" class="font-bold"></span>?</p>
             <div class="flex justify-center items-center space-x-4">
-                <button data-modal-toggle="deleteModal" type="button" class="py-2 px-3 text-sm font-medium rounded-lg border focus:ring-4 focus:outline-none  focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600">No, cancel</button>
+                <button type="button" class="py-2 px-3 text-sm font-medium rounded-lg border focus:ring-4 focus:outline-none  focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600">No, cancel</button>
                 <button type="submit" class="py-2 px-3 text-sm font-medium text-center text-white rounded-lg focus:ring-4 focus:outline-none bg-red-500 hover:bg-red-600 focus:ring-red-900">Yes, I'm sure</button>
             </div>
         </div>
@@ -387,27 +660,27 @@ if (!isset($TPL)) {
                     </td>
                     <td class="px-4 py-3 font-medium whitespace-nowrap text-white">
                         <div class="flex items-center space-x-4">
-                            <button type="button" data-modal-target="updateProductModal" data-modal-toggle="updateProductModal" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700">
+                            <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700">
                             <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 1v5h-5M2 19v-5h5m10-4a8 8 0 0 1-14.947 3.97M1 10a8 8 0 0 1 14.947-3.97"/>
                             </svg>
                                 Update
                             </button>
-                            <button type="button" data-modal-target="updateProductModal" data-modal-toggle="updateProductModal" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-blue-700 text-blue-400 border-blue-600 hover:text-white hover:bg-blue-700">
+                            <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-blue-700 text-blue-400 border-blue-600 hover:text-white hover:bg-blue-700" onclick="actionButtonPress(this, 'upd')" id="upd-${content._id}">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
                                     <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
                                 </svg>
                                 Edit
                             </button>
-                            <button type="button" data-modal-target="readProductModal" data-modal-toggle="readProductModal" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center text-gray-900 focus:outline-none rounded-lg border focus:ring-gray-700 bg-gray-800 text-gray-400 border-gray-600 hover:text-white hover:bg-gray-700" onclick="previewButtonPress(this)" id="prev-${content._id}">
+                            <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center text-gray-900 focus:outline-none rounded-lg border focus:ring-gray-700 bg-gray-800 text-gray-400 border-gray-600 hover:text-white hover:bg-gray-700" onclick="actionButtonPress(this, 'prev')" id="prev-${content._id}">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-2 -ml-0.5">
                                     <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" />
                                 </svg>
                                 Preview
                             </button>
-                            <button type="button" data-modal-target="deleteModal" data-modal-toggle="deleteModal" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900">
+                            <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="deleteButtonPress(this)" id="del-${content._id}">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                 </svg>
@@ -424,4 +697,82 @@ if (!isset($TPL)) {
     } else {
         console.error('Product container not found!');
     }
+
+    // drag and drop
+    document.addEventListener("DOMContentLoaded", function() {
+        const dropzone = document.getElementById("dropzone-input");
+        const dropzoneFile = document.getElementById("dropzone-file");
+        const imagePreview = document.getElementById("image-preview");
+        const previewImage = document.getElementById("preview-image");
+        const textPreview = document.getElementById("text-preview");
+        const linkInput = document.getElementById("link-input");
+        const radioDragDrop = document.getElementById("radio-drag-drop");
+        const radioLink = document.getElementById("radio-link");
+
+        radioDragDrop.addEventListener("change", function() {
+            dropzone.classList.remove("hidden");
+            linkInput.classList.add("hidden");
+        });
+
+        radioLink.addEventListener("change", function() {
+            dropzone.classList.add("hidden");
+            linkInput.classList.remove("hidden");
+            resetImagePreview();
+        });
+
+        dropzoneFile.addEventListener("change", handleFileSelect);
+        dropzoneFile.addEventListener("dragover", handleDragOver);
+        dropzoneFile.addEventListener("drop", handleDrop);
+
+        function resetImagePreview() {
+            previewImage.src = "";
+            imagePreview.classList.add("hidden");
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+
+            if (file && isImageFile(file)) {
+                showImagePreview(file);
+            } else {
+                alert("Please upload a valid image file (PNG, JPG, or JPEG).");
+            }
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            dropzone.classList.add("border-gray-500");
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            dropzone.classList.remove("border-gray-500");
+
+            const file = event.dataTransfer.files[0];
+
+            if (file && isImageFile(file)) {
+                showImagePreview(file);
+            } else {
+                alert("Please upload a valid image file (PNG, JPG, or JPEG).");
+            }
+        }
+
+        function isImageFile(file) {
+            const acceptedTypes = ["image/png", "image/jpeg", "image/jpg"];
+            return acceptedTypes.includes(file.type);
+        }
+
+        function showImagePreview(file) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                imagePreview.classList.remove("hidden");
+                textPreview.classList.add("hidden");
+                console.log("gambar masuk");
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
 </script>

@@ -110,6 +110,11 @@ class Controller
             return;
         }
 
+        if ($requestUri === '/request') {
+            require_once 'src/Views/request.php';
+            return;
+        }
+
         if ($requestUri === '/api/products') {
             require_once('src/Controllers/Products.Controller.php');
             $controller = new ProductsController($this->server);
