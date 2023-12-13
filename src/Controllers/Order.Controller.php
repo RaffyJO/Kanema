@@ -23,11 +23,14 @@ class OrderController implements Controller
 
         parse_str($urlQuery, $queryParams);
 
-        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-clean') {
-            $this->GETCLEAN();
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $this->server['REQUEST_URI'] === '/api/orders') {
+            $this->GETALL();
             return;
         }
 
+        if ($this->server['REQUEST_METHOD'] === 'GET') {
+            $this->GET();
+        }
         if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-count') {
             $this->GETCOUNT();
             return;
@@ -37,17 +40,14 @@ class OrderController implements Controller
             $this->GETLASTDAYS();
             return;
         }
-
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-clean') {
+            $this->GETCLEAN();
+            return;
+        }
         if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-best-seller-year') {
             $this->GETBESTSALLERYEAR();
             return;
         }
-
-        if ($this->server['REQUEST_METHOD'] === 'GET') {
-            $this->GET();
-            return;
-        }
-
         if ($this->server['REQUEST_METHOD'] === 'POST') {
             $this->POST();
             return;
@@ -174,9 +174,39 @@ class OrderController implements Controller
             return;
         }
     }
-    function GET()
+    function GETALL()
     {
-        # code...
+        $model = new OrderModel();
+        $data = $model->getAll();
+
+        if (array_key_exists('error', $data)) {
+            http_response_code(400);
+            echo json_encode($data);
+            return;
+        } else {
+            http_response_code(200);
+            echo json_encode($data);
+            return;
+        }
+    }
+    function GET(){
+        $urlQuery = parse_url($this->server['REQUEST_URI'], PHP_URL_QUERY);
+        $queryParams =  array();
+
+        parse_str($urlQuery, $queryParams);
+
+        $model = new OrderModel();
+        $data = $model->get($queryParams['search']);
+
+        if (array_key_exists('error', $data)) {
+            http_response_code(400);
+            echo json_encode($data);
+            return;
+        } else {
+            http_response_code(200);
+            echo json_encode($data);
+            return;
+        }
     }
 
     function PUT()

@@ -166,20 +166,20 @@ class MainController
             return;
         }
 
-        if (str_contains($requestUri, '/api/order')) {
-            require_once('src/Controllers/Order.Controller.php');
-            $controller = new OrderController($this->server);
-            $controller->routes();
-            return;
-        }
-
         if (str_contains($requestUri, '/api/product') && count($queryParams) > 0 && array_key_exists('search', $queryParams)) {
             require_once('src/Controllers/Products.Controller.php');
             $controller = new ProductsController($this->server);
             $controller->routes();
             return;
         }
-
+      
+        if (str_contains($requestUri, '/api/order')) {
+            require_once('src/Controllers/Order.Controller.php');
+            $controller = new OrderController($this->server);
+            $controller->routes();
+            return;
+        }
+      
         if (str_contains($requestUri, '/api/')) {
             http_response_code(404);
             echo json_encode(array('error' => 'API URL not found'));
@@ -188,6 +188,20 @@ class MainController
             http_response_code(404);
             require_once('src/Views/ControllerGone.php');
             return;
+        }
+        
+    }
+    private function validateLogin($token, $requestUri): bool
+    {
+        if ($token) {
+            // if ($requestUri === '/login') {
+            // require_once 'src/Views/dashboard.php';
+            // }
+            return true;
+        } else {
+            // header('Location: /login');
+            // require_once 'src/Views/Login.php';
+            return false;
         }
     }
 
