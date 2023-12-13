@@ -62,6 +62,7 @@ class OrderModel
             return false;
         }
     }
+
     public function callCleanedDataSeller(): string
     {
         try {
@@ -102,60 +103,33 @@ class OrderModel
             return json_encode(array('error' => $th));
         }
     }
-    public function callCleanedData(): string{
+  
+    public function callCleanedData(): string
+    {
         try {
             $db = new DB();
             $connection = $db->getConnection();
             if ($connection == null) die(print_r("Connection is Null", true));
 
-            $collection = $connection->selectCollection('kanema', 'TransactionCleanedData');
+            $collection = $connection->selectCollection('kanema', 'BestSellerYearClean');
             $response = $collection->find([]);
 
             $cursor = $response;
             if ($cursor) {
                 $data = array();
-                // {
-                //     "_id": {
-                //       "$oid": "6576c7ae1982e66341792f68"
-                //     },
-                //     "creator": "administrator",
-                //     "timestamp": {
-                //       "year": 2023,
-                //       "month": 12
-                //     },
-                //     "details": [
-                //       {
-                //         "productName": "Cocacola",
-                //         "category": "drink",
-                //         "qty": 2,
-                //         "subtotal": 10000
-                //       },
-                //       {
-                //         "productName": "Susu",
-                //         "category": "drink",
-                //         "qty": 2,
-                //         "subtotal": 10000
-                //       },
-                //       {
-                //         "productName": "Mie Goreng",
-                //         "category": "food",
-                //         "qty": 2,
-                //         "subtotal": 10000
-                //       },
-                //       {
-                //         "productName": "Ayam Goreng",
-                //         "category": "food",
-                //         "qty": 2,
-                //         "subtotal": 10000
-                //       }
-                //     ]
-                //   }
+
+                $count = $this->transactionCount();
+
                 foreach ($cursor as $key) {
                     array_push(
                         $data,
                         array(
                             '_id' => $key->_id,
-                            'details' => $key->details
+                            'details' => $key->details,
+                            'total' => $key->total,
+                            'food' => $key->food,
+                            'drink' => $key->drink,
+                            'selledProduct' => $key->selledProduct,
                         )
 
                     );
@@ -170,6 +144,47 @@ class OrderModel
             return json_encode(array('error' => $th));
         }
     }
+  
+    public function callCleanedData(): string{
+        try {
+            $db = new DB();
+            $connection = $db->getConnection();
+            if ($connection == null) die(print_r("Connection is Null", true));
+
+            $collection = $connection->selectCollection('kanema', 'TransactionCleanedData');
+            $response = $collection->find([]);
+
+            $cursor = $response;
+            if ($cursor) {
+                $data = array();
+
+                $count = $this->transactionCount();
+
+                foreach ($cursor as $key) {
+                    array_push(
+                        $data,
+                        array(
+                            '_id' => $key->_id,
+                            'details' => $key->details,
+                            'total' => $key->total,
+                            'food' => $key->food,
+                            'drink' => $key->drink,
+                            'selledProduct' => $key->selledProduct,
+                        )
+
+                    );
+                }
+
+                return json_encode(array('data' => $data));
+            } else {
+                return json_encode(array('error' => 'Something went wrong'));
+            }
+        } catch (Exception $th) {
+            printf($th);
+            return json_encode(array('error' => $th));
+        }
+    }
+  
     public function getAll(): array{
         try{
             $db = new DB();
@@ -204,6 +219,7 @@ class OrderModel
             return array('error'=> $th);
         }
     }
+  
     public function get(String $search): array
     {
         try {

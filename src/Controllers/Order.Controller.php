@@ -27,7 +27,8 @@ class OrderController implements Controller
             $this->GETALL();
             return;
         }
-        if ($this->server['REQUEST_METHOD'] === 'GET'&& $requestUri === '/api/order' && array_key_exists('search', $queryParams)) {
+
+        if ($this->server['REQUEST_METHOD'] === 'GET') {
             $this->GET();
         }
         if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-count') {
