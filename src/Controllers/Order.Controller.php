@@ -69,6 +69,7 @@ class OrderController implements Controller
         $model = new OrderModel();
         echo $model->callCleanedDataSeller();
     }
+
     function GETCLEAN()
     {
         $validation = new ValidateHeaders();
@@ -189,7 +190,8 @@ class OrderController implements Controller
             return;
         }
     }
-    function GET(){
+    function GET()
+    {
         $urlQuery = parse_url($this->server['REQUEST_URI'], PHP_URL_QUERY);
         $queryParams =  array();
 

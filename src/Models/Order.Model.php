@@ -4,9 +4,11 @@ require_once('src/Models/Product.Model.php');
 
 
 use MongoDB\BSON\ObjectId;
+
 class OrderModel
 {
-    public function createOrder(array $payload): bool{
+    public function createOrder(array $payload): bool
+    {
         try {
             $db = new DB();
             $connection = $db->getConnection();
@@ -77,8 +79,6 @@ class OrderModel
             if ($cursor) {
                 $data = array();
 
-                $count = $this->transactionCount();
-
                 foreach ($cursor as $key) {
                     array_push(
                         $data,
@@ -103,7 +103,7 @@ class OrderModel
             return json_encode(array('error' => $th));
         }
     }
-  
+
     public function callCleanedData(): string
     {
         try {
@@ -118,8 +118,6 @@ class OrderModel
             if ($cursor) {
                 $data = array();
 
-                $count = $this->transactionCount();
-
                 foreach ($cursor as $key) {
                     array_push(
                         $data,
@@ -144,68 +142,32 @@ class OrderModel
             return json_encode(array('error' => $th));
         }
     }
-  
-    public function callCleanedData(): string{
+
+    public function getAll(): array
+    {
         try {
             $db = new DB();
             $connection = $db->getConnection();
-            if ($connection == null) die(print_r("Connection is Null", true));
+            if ($connection == null) die(print_r('Connection is Null', true));
 
-            $collection = $connection->selectCollection('kanema', 'TransactionCleanedData');
-            $response = $collection->find([]);
+            $collection = $connection->selectCollection('kanema', 'TransactionJOIN');
+            $cursor = $collection->find([]);
 
-            $cursor = $response;
             if ($cursor) {
                 $data = array();
-
-                $count = $this->transactionCount();
-
                 foreach ($cursor as $key) {
+
                     array_push(
                         $data,
                         array(
-                            '_id' => $key->_id,
-                            'details' => $key->details,
+                            '_id' => strval($key->_id),
+                            'user' => $key->creator,
+                            'time' => $key->timestamp,
+                            'qty' => sizeof($key->details),
                             'total' => $key->total,
-                            'food' => $key->food,
-                            'drink' => $key->drink,
-                            'selledProduct' => $key->selledProduct,
+                            'details' => $key->details
                         )
-
                     );
-                }
-
-                return json_encode(array('data' => $data));
-            } else {
-                return json_encode(array('error' => 'Something went wrong'));
-            }
-        } catch (Exception $th) {
-            printf($th);
-            return json_encode(array('error' => $th));
-        }
-    }
-  
-    public function getAll(): array{
-        try{
-            $db = new DB();
-            $connection = $db->getConnection();
-            if($connection == null) die(print_r('Connection is Null', true));
-
-            $collection = $connection->selectCollection('kanema','TransactionJOIN');
-            $cursor = $collection->find([]);
-            
-            if($cursor) {
-                $data = array();
-                foreach ($cursor as $key) {
-
-                    array_push($data,
-                        array('_id' => strval($key->_id), 
-                        'user' => $key->creator,
-                        'time' => $key->timestamp,
-                        'qty' => sizeof($key->details),
-                        'total' => $key->total,
-                        'details'=> $key->details
-                    ));
                 }
                 //var_dump($data);
 
@@ -213,13 +175,11 @@ class OrderModel
             } else {
                 return array('error' => 'Something went wrong');
             }
-    
-        }
-        catch(Exception $th){
-            return array('error'=> $th);
+        } catch (Exception $th) {
+            return array('error' => $th);
         }
     }
-  
+
     public function get(String $search): array
     {
         try {
@@ -245,13 +205,15 @@ class OrderModel
                 foreach ($cursor as $key) {
                     array_push(
                         $data,
-                        array('_id' => strval($key->_id), 
-                        'user' => $key->creator,
-                        'time' => $key->timestamp,
-                        'qty' => sizeof($key->details),
-                        'total' => $key->total,
-                        'details'=> $key->details
-                    ));
+                        array(
+                            '_id' => strval($key->_id),
+                            'user' => $key->creator,
+                            'time' => $key->timestamp,
+                            'qty' => sizeof($key->details),
+                            'total' => $key->total,
+                            'details' => $key->details
+                        )
+                    );
                 }
 
                 return array('data' => $data);
