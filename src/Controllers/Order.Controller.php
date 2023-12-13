@@ -47,11 +47,6 @@ class OrderController implements Controller
             $this->GETBESTSALLERYEAR();
             return;
         }
-
-        if ($this->server['REQUEST_METHOD'] === 'GET') {
-            $this->GET();
-            return;
-        }
         if ($this->server['REQUEST_METHOD'] === 'POST') {
             $this->POST();
             return;

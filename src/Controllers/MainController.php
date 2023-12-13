@@ -128,13 +128,7 @@ class MainController
             return;
         }
         
-        if (str_contains($requestUri, '/api/order') && count($queryParams) > 0 && array_key_exists('search', $queryParams)) {
-            require_once('src/Controllers/Order.Controller.php');
-            $controller = new OrderController($this->server);
-            $controller->routes();
-            return;
-        }
-        if (str_contains($requestUri, '/api/orders')) {
+        if (str_contains($requestUri, '/api/order')) {
             require_once('src/Controllers/Order.Controller.php');
             $controller = new OrderController($this->server);
             $controller->routes();
