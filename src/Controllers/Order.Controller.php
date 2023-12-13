@@ -39,7 +39,10 @@ class OrderController implements Controller
             $this->GETLASTDAYS();
             return;
         }
-
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-clean') {
+            $this->GETCLEAN();
+            return;
+        }
         if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-best-seller-year') {
             $this->GETBESTSALLERYEAR();
             return;
