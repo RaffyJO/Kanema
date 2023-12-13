@@ -75,18 +75,28 @@ $current_page = $_SERVER['REQUEST_URI'];
                     <span class="flex-1 ms-3 whitespace-nowrap">Product</span>
                 </a>
             </li>
-            <li>
+            <li id="cashier">
                 <a href="/cashier" class="flex items-center p-2 text-gray-900 rounded-lg text-white hover:bg-gray-100 hover:bg-gray-700 group <?= ($current_page === '/cashier') ? 'bg-gray-700' : 'hover:bg-gray-100 hover:bg-gray-700 group'; ?>">
-                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 text-gray-400 group-hover:text-gray-900 group-hover:text-white w-[20px] h-[20px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5h4m-2 2V3M6 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0h8m-8 0-1-4m9 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.938-11H17l-2 7H5m0 0L3 4m0 0h2M3 4l-.792-3H1" />
+                    <svg class="lex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 text-gray-400 group-hover:text-gray-900 group-hover:text-white w-[20px] h-[20px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 21">
+                        <path d="M15 14H7.78l-.5-2H16a1 1 0 0 0 .962-.726l.473-1.655A2.968 2.968 0 0 1 16 10a3 3 0 0 1-3-3 3 3 0 0 1-3-3 2.97 2.97 0 0 1 .184-1H4.77L4.175.745A1 1 0 0 0 3.208 0H1a1 1 0 0 0 0 2h1.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 10 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3Zm-8 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm8 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" />
+                        <path d="M19 3h-2V1a1 1 0 0 0-2 0v2h-2a1 1 0 1 0 0 2h2v2a1 1 0 0 0 2 0V5h2a1 1 0 1 0 0-2Z" />
                     </svg>
                     <span class="flex-1 ms-3 whitespace-nowrap">Cashier</span>
                 </a>
             </li>
-            <li>
-                <a href="/inbox" class="flex items-center p-2 text-gray-900 rounded-lg text-white hover:bg-gray-100 hover:bg-gray-700 group <?= ($current_page === '/inbox') ? 'bg-gray-700' : 'hover:bg-gray-100 hover:bg-gray-700 group'; ?>">
+            <li id="request">
+                <a href="/request" class="flex items-center p-2 text-gray-900 rounded-lg text-white hover:bg-gray-100 hover:bg-gray-700 group <?= ($current_page === '/request') ? 'bg-gray-700' : 'hover:bg-gray-100 hover:bg-gray-700 group'; ?>">
                     <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 text-gray-400 group-hover:text-gray-900 group-hover:text-white w-[20px] h-[20px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 10">
                         <path stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M6 1h10M6 5h10M6 9h10M1.49 1h.01m-.01 4h.01m-.01 4h.01" />
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Request</span>
+                    <!-- <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full bg-blue-900 text-blue-300">3</span> -->
+                </a>
+            </li>
+            <li id="inbox">
+                <a href="/inbox" class="flex items-center p-2 text-gray-900 rounded-lg text-white hover:bg-gray-100 hover:bg-gray-700 group <?= ($current_page === '/inbox') ? 'bg-gray-700' : 'hover:bg-gray-100 hover:bg-gray-700 group'; ?>">
+                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 text-gray-400 group-hover:text-gray-900 group-hover:text-white w-[20px] h-[20px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z" />
                     </svg>
                     <span class="flex-1 ms-3 whitespace-nowrap">Inbox</span>
                     <!-- <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full bg-blue-900 text-blue-300">3</span> -->
@@ -119,6 +129,15 @@ $current_page = $_SERVER['REQUEST_URI'];
         console.table(result)
         const navUsername = document.getElementById('nav-username');
         const navRole = document.getElementById('nav-role');
+
+        // kalau mau menghilangkan menu komen if dibawah ini
+        // if (result.role == 'admin') {
+        //     document.getElementById('cashier').classList.add('hidden')
+        //     document.getElementById('inbox').classList.add('hidden')
+        // }
+        // if (result.role == 'cashier') {
+        //     document.getElementById('request').classList.add('hidden')
+        // }
 
         navUsername.textContent = result.username
         navRole.textContent = result.role
