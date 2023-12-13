@@ -18,6 +18,15 @@ class ProductsController implements Controller
 
         parse_str($urlQuery, $queryParams);
 
+
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $this->server['REQUEST_URI'] === '/api/products') {
+            echo $this->products();
+        }
+
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/product' && array_key_exists('search', $queryParams)) {
+            echo $this->GET();
+        }
+
         // if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //     $postData = json_decode(file_get_contents('php://input'), true);
 
@@ -33,13 +42,6 @@ class ProductsController implements Controller
         //         exit;
         //     }
         // }
-
-        if ($this->server['REQUEST_METHOD'] === 'GET' && $this->server['REQUEST_URI'] === '/api/products') {
-            echo $this->products();
-        }
-        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/product' && array_key_exists('search', $queryParams)) {
-            echo $this->GET();
-        }
     }
 
     private function products()
