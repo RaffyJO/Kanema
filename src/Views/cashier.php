@@ -318,7 +318,7 @@ if (!isset($TPL)) {
                             allItem += `
                             <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
-                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
+                                    <img class="rounded-t-lg w-full aspect-square object-cover object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
                                 </div>
                                 <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
                                     <h5 class="mb-2 text-lg font-normal tracking-tight" id="item-name">${content.name}</h5>
@@ -330,7 +330,7 @@ if (!isset($TPL)) {
                                 foodItems += `
                             <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
-                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
+                                    <img class="rounded-t-lg w-full aspect-square object-cover object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
                                 </div>
                                 <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
                                     <h5 class="mb-2 text-lg font-normal tracking-tight" id="item-name">${content.name}</h5>
@@ -343,7 +343,7 @@ if (!isset($TPL)) {
                                 drinkItems += `
                         <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
-                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
+                                    <img class="rounded-t-lg w-full aspect-square object-cover object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
                                 </div>
                                 <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
                                     <h5 class="mb-2 text-lg font-normal tracking-tight" id="item-name">${content.name}</h5>
@@ -409,11 +409,11 @@ if (!isset($TPL)) {
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>
-            <div class="p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="allItems" role="tabpanel" aria-labelledby="allItems-tab">
+            <div class="p-4 rounded-lg grid grid-cols-2 md:grid-cols-3 gap-4 w-full" id="allItems" role="tabpanel" aria-labelledby="allItems-tab">
             </div>
-            <div class="hidden p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="food" role="tabpanel" aria-labelledby="food-tab">
+            <div class="hidden p-4 rounded-lg grid grid-cols-2 md:grid-cols-3 gap-4 w-full" id="food" role="tabpanel" aria-labelledby="food-tab">
             </div>
-            <div class="hidden p-4 rounded-lg grid grid-cols-2 max-sm:grid-cols-1 md:grid-cols-3 gap-4 w-full" id="drink" role="tabpanel" aria-labelledby="drink-tab">
+            <div class="hidden p-4 rounded-lg grid grid-cols-2 md:grid-cols-3 gap-4 w-full" id="drink" role="tabpanel" aria-labelledby="drink-tab">
             </div>
         </div>
         <!-- end products -->
@@ -532,7 +532,7 @@ if (!isset($TPL)) {
                             allItem += `
                             <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
-                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
+                                    <img class="rounded-t-lg w-full aspect-square object-cover object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
                                 </div>
                                 <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
                                     <h5 class="mb-2 text-lg font-normal tracking-tight" id="item-name">${content.name}</h5>
@@ -544,7 +544,7 @@ if (!isset($TPL)) {
                             foodItems += `
                             <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
-                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
+                                    <img class="rounded-t-lg w-full aspect-square object-cover object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
                                 </div>
                                 <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
                                     <h5 class="mb-2 text-lg font-normal tracking-tight" id="item-name">${content.name}</h5>
@@ -557,7 +557,7 @@ if (!isset($TPL)) {
                             drinkItems += `
                         <button class="bg-white border border-gray-200 rounded-lg shadow-2xl drop-shadow-lg col-span-1 w-full h-fit transition-all duration-200 ease-in" onclick="getItem(this)" id="${content._id}">
                                 <div class="h-3/5 w-full">
-                                    <img class="rounded-t-lg w-full h-full object-contain object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
+                                    <img class="rounded-t-lg w-full aspect-square object-cover object-center" src="${content.imgUrl}" alt="item-pict" id="item-picture" />
                                 </div>
                                 <div class="p-3 bg-gray-800 text-white rounded-b-lg flex flex-col items-center justify-center">
                                     <h5 class="mb-2 text-lg font-normal tracking-tight" id="item-name">${content.name}</h5>
