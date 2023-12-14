@@ -180,6 +180,13 @@ class MainController
             return;
         }
 
+        if (str_contains($requestUri, '/api/request')) {
+            require_once('src/Controllers/Request.Controller.php');
+            $controller = new RequestController($this->server);
+            $controller->routes();
+            return;
+        }
+
         if (str_contains($requestUri, '/api/')) {
             http_response_code(404);
             echo json_encode(array('error' => 'API URL not found'));
