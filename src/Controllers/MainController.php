@@ -128,6 +128,16 @@ class MainController
             return;
         }
 
+        if ($requestUri === '/customers') {
+            if (!$validToken) {
+                require_once 'src/Views/Login.php';
+                return;
+            }
+
+            require_once 'src/Views/customer.php';
+            return;
+        }
+
         if ($requestUri === '/product') {
             if (!$validToken) {
                 require_once 'src/Views/Login.php';
