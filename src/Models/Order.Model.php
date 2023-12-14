@@ -111,12 +111,13 @@ class OrderModel
             $connection = $db->getConnection();
             if ($connection == null) die(print_r("Connection is Null", true));
 
-            $collection = $connection->selectCollection('kanema', 'BestSellerYearClean');
+            $collection = $connection->selectCollection('kanema', 'TransactionCleanedData');
             $response = $collection->find([]);
 
             $cursor = $response;
             if ($cursor) {
                 $data = array();
+
 
                 foreach ($cursor as $key) {
                     array_push(
