@@ -118,7 +118,7 @@ if (!isset($TPL)) {
 
                     precentageTemplate = `
                     <span class="text-[#EF4444]">
-                        ${Math.abs((((result.today - result.yesterday) / result.yesterday)) * 100)}%
+                        ${result.yesterday === 0 ? 100 : Math.abs((((result.today - result.yesterday) / result.yesterday)) * 100)}%
                     </span>
                     <svg class="w-6 h-6 ms-1 fill-[#EF4444]" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M0.210025 6.44933C0.276364 6.38222 0.355193 6.32897 0.44199 6.29264C0.528786 6.2563 0.621844 6.2376 0.715826 6.2376C0.809808 6.2376 0.902864 6.2563 0.989661 6.29264C1.07646 6.32897 1.15529 6.38222 1.22163 6.44933L4.28559 9.53812V0.719858C4.28559 0.528939 4.36082 0.345841 4.49474 0.210842C4.62865 0.0758419 4.81028 0 4.99966 0C5.18905 0 5.37067 0.0758419 5.50459 0.210842C5.6385 0.345841 5.71373 0.528939 5.71373 0.719858V9.53812L8.77889 6.44933C8.91304 6.31409 9.09498 6.23812 9.28469 6.23812C9.4744 6.23812 9.65634 6.31409 9.79049 6.44933C9.92464 6.58456 10 6.76798 10 6.95923C10 7.15048 9.92464 7.33389 9.79049 7.46913L5.50606 11.7883C5.43972 11.8554 5.36089 11.9086 5.27409 11.945C5.1873 11.9813 5.09424 12 5.00026 12C4.90628 12 4.81322 11.9813 4.72642 11.945C4.63963 11.9086 4.5608 11.8554 4.49446 11.7883L0.210025 7.46913C0.143455 7.40225 0.0906343 7.32278 0.0545931 7.23528C0.0185528 7.14778 0 7.05397 0 6.95923C0 6.86448 0.0185528 6.77067 0.0545931 6.68317C0.0906343 6.59567 0.143455 6.5162 0.210025 6.44933Z" fill="#EF4444" />
@@ -128,7 +128,7 @@ if (!isset($TPL)) {
 
                     precentageTemplate = `
                     <span>
-                        ${(((result.today - result.yesterday) / result.yesterday)) * 100}%
+                        ${result.yesterday === 0 ? 100 : Math.abs((((result.today - result.yesterday) / result.yesterday)) * 100)}%
                     </span>
                     <svg class="w-6 h-6 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
                         <path class="" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
@@ -452,6 +452,8 @@ if (!isset($TPL)) {
                     }
 
                     lastYearIncome += (value._id.timestamp.year - 1) === (new Date(Date.now()).getFullYear() - 1) ? value.total : 0
+
+                    console.log(value)
 
                     if (value._id.timestamp.month === ((new Date(Date.now()).getMonth()) + 1) && value._id.timestamp.year === new Date(Date.now()).getFullYear()) {
                         incomeThisMonth = value.total
