@@ -25,6 +25,16 @@ if (session_status() !== PHP_SESSION_ACTIVE) session_start();
       -webkit-appearance: none;
       margin: 0;
     }
+
+    .remove-arrow::-webkit-inner-spin-button,
+    .remove-arrow::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .remove-arrow {
+      -moz-appearance: textfield;
+    }
   </style>
 </head>
 

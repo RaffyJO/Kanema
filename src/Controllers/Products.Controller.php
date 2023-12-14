@@ -50,6 +50,7 @@ class ProductsController implements Controller
         $model = new ProductModel();
         $data = $model->getAll();
 
+        header('content-type: application/json');
         if (array_key_exists('error', $data)) {
             http_response_code(400);
             echo json_encode($data);
@@ -66,6 +67,11 @@ class ProductsController implements Controller
         $queryParams =  array();
 
         parse_str($urlQuery, $queryParams);
+
+        if (!array_key_exists('search', $queryParams)) {
+            echo json_encode(array('error' => 'Parameter "search" is required'));
+            return;
+        }
 
         require_once('src/Models/Product.Model.php');
         $model = new ProductModel();
