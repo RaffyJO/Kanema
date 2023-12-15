@@ -28,9 +28,6 @@ class OrderController implements Controller
             return;
         }
 
-        if ($this->server['REQUEST_METHOD'] === 'GET') {
-            $this->GET();
-        }
         if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-count') {
             $this->GETCOUNT();
             return;
@@ -40,17 +37,24 @@ class OrderController implements Controller
             $this->GETLASTDAYS();
             return;
         }
+
         if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-clean') {
             $this->GETCLEAN();
             return;
         }
+
         if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/order-best-seller-year') {
             $this->GETBESTSALLERYEAR();
             return;
         }
+
         if ($this->server['REQUEST_METHOD'] === 'POST') {
             $this->POST();
             return;
+        }
+
+        if ($this->server['REQUEST_METHOD'] === 'GET') {
+            $this->GET();
         }
     }
 
@@ -74,8 +78,6 @@ class OrderController implements Controller
     {
         $validation = new ValidateHeaders();
         $validToken = (array) json_decode($validation->validateData());
-
-        // var_dump(gmdate("Y-m-d\TH:i:s\Z", 1699742424));
 
         if (array_key_exists('error', $validToken)) {
             echo json_encode($validation);
@@ -196,6 +198,11 @@ class OrderController implements Controller
         $queryParams =  array();
 
         parse_str($urlQuery, $queryParams);
+
+        if (!array_key_exists('search', $queryParams)) {
+            echo json_encode(array('error' => 'Parameter "search" is required'));
+            return;
+        }
 
         $model = new OrderModel();
         $data = $model->get($queryParams['search']);

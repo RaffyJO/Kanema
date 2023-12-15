@@ -128,6 +128,16 @@ class MainController
             return;
         }
 
+        if ($requestUri === '/customers') {
+            if (!$validToken) {
+                require_once 'src/Views/Login.php';
+                return;
+            }
+
+            require_once 'src/Views/customer.php';
+            return;
+        }
+
         if ($requestUri === '/product') {
             if (!$validToken) {
                 require_once 'src/Views/Login.php';
@@ -176,6 +186,13 @@ class MainController
         if (str_contains($requestUri, '/api/order')) {
             require_once('src/Controllers/Order.Controller.php');
             $controller = new OrderController($this->server);
+            $controller->routes();
+            return;
+        }
+
+        if (str_contains($requestUri, '/api/request')) {
+            require_once('src/Controllers/Request.Controller.php');
+            $controller = new RequestController($this->server);
             $controller->routes();
             return;
         }

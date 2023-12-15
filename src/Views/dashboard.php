@@ -67,17 +67,6 @@ if (!isset($TPL)) {
             </div>
         </div>
         <div id="data-series-chart" class="transition-all duration-300 ease-in w-full h-full">
-            <!-- <div class="w-full h-[20rem] flex justify-center items-center" id="data-series-skeleton">
-                <div class="text-center">
-                    <div role="status">
-                        <svg aria-hidden="true" class="inline w-14 h-14 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-                            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
-                        </svg>
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                </div>
-            </div> -->
         </div>
     </div>
 </div>
@@ -98,6 +87,54 @@ if (!isset($TPL)) {
 </div>
 
 <script>
+    const a = {
+        "_id": {
+            "$oid": "657a828440ee3d4c1541f13d"
+        },
+        "creatorName": "administrator",
+        "created_at": 1702527603,
+        "update": [{
+            "status": "pending",
+            "productID": {
+                "$oid": "656e6ebc0a04f3555c2e4815"
+            },
+            "old": {
+                "name": "Cocacola",
+                "price": 5000,
+                "category": "drink",
+                "available": true,
+                "imgUrl": "https://clipart-library.com/images_k/coca-cola-bottle-transparent-background/coca-cola-bottle-transparent-background-17.png",
+                "stock": 123
+            },
+            "new": {
+                "name": "Cocacola",
+                "price": 5000,
+                "category": "drink",
+                "available": true,
+                "imgUrl": "https://clipart-library.com/images_k/coca-cola-bottle-transparent-background/coca-cola-bottle-transparent-background-17.png",
+                "stock": 123
+            }
+        }],
+        "create": [{
+            "status": "pending",
+            "fields": {
+                "name": "Mie Kuah",
+                "price": 4000,
+                "category": "food",
+                "imgUrl": "https://www.nissin.com/en_jp/brands/images/export/japan/instant_noodles/02.jpg",
+                "available": false,
+                "stock": 123
+            }
+        }],
+        "delete": [{
+            "status": "pending",
+            "productID": {
+                "$oid": "65731686088c66361df900d7"
+            },
+            "productName": "Mie Goreng"
+        }]
+    }
+
     function initPageData() {
         let headersList = {
             "Accept": "*/*",
@@ -118,7 +155,7 @@ if (!isset($TPL)) {
 
                     precentageTemplate = `
                     <span class="text-[#EF4444]">
-                        ${Math.abs((((result.today - result.yesterday) / result.yesterday)) * 100)}%
+                        ${result.yesterday === 0 ? 100 : Math.abs((((result.today - result.yesterday) / result.yesterday)) * 100)}%
                     </span>
                     <svg class="w-6 h-6 ms-1 fill-[#EF4444]" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M0.210025 6.44933C0.276364 6.38222 0.355193 6.32897 0.44199 6.29264C0.528786 6.2563 0.621844 6.2376 0.715826 6.2376C0.809808 6.2376 0.902864 6.2563 0.989661 6.29264C1.07646 6.32897 1.15529 6.38222 1.22163 6.44933L4.28559 9.53812V0.719858C4.28559 0.528939 4.36082 0.345841 4.49474 0.210842C4.62865 0.0758419 4.81028 0 4.99966 0C5.18905 0 5.37067 0.0758419 5.50459 0.210842C5.6385 0.345841 5.71373 0.528939 5.71373 0.719858V9.53812L8.77889 6.44933C8.91304 6.31409 9.09498 6.23812 9.28469 6.23812C9.4744 6.23812 9.65634 6.31409 9.79049 6.44933C9.92464 6.58456 10 6.76798 10 6.95923C10 7.15048 9.92464 7.33389 9.79049 7.46913L5.50606 11.7883C5.43972 11.8554 5.36089 11.9086 5.27409 11.945C5.1873 11.9813 5.09424 12 5.00026 12C4.90628 12 4.81322 11.9813 4.72642 11.945C4.63963 11.9086 4.5608 11.8554 4.49446 11.7883L0.210025 7.46913C0.143455 7.40225 0.0906343 7.32278 0.0545931 7.23528C0.0185528 7.14778 0 7.05397 0 6.95923C0 6.86448 0.0185528 6.77067 0.0545931 6.68317C0.0906343 6.59567 0.143455 6.5162 0.210025 6.44933Z" fill="#EF4444" />
@@ -128,7 +165,7 @@ if (!isset($TPL)) {
 
                     precentageTemplate = `
                     <span>
-                        ${(((result.today - result.yesterday) / result.yesterday)) * 100}%
+                        ${result.yesterday === 0 ? 100 : Math.abs((((result.today - result.yesterday) / result.yesterday)) * 100)}%
                     </span>
                     <svg class="w-6 h-6 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
                         <path class="" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
@@ -230,29 +267,23 @@ if (!isset($TPL)) {
                 let optionsLine = {
                     // main datanya disini
                     series: [{
-                            name: "Pemasukan",
-                            data: [
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0
-                            ],
-                            color: "#1A56DB",
-                        },
-                        // {
-                        //     name: "Barang Terjual",
-                        //     data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                        //     color: "#7E3BF2",
-                        // },
-                    ],
+                        name: "Pemasukan",
+                        data: [
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0
+                        ],
+                        color: "#1A56DB",
+                    }, ],
                     chart: {
                         height: "100%",
                         maxWidth: "100%",
@@ -452,6 +483,8 @@ if (!isset($TPL)) {
                     }
 
                     lastYearIncome += (value._id.timestamp.year - 1) === (new Date(Date.now()).getFullYear() - 1) ? value.total : 0
+
+                    console.log(value)
 
                     if (value._id.timestamp.month === ((new Date(Date.now()).getMonth()) + 1) && value._id.timestamp.year === new Date(Date.now()).getFullYear()) {
                         incomeThisMonth = value.total
