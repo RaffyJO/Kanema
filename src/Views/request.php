@@ -11,12 +11,6 @@ if (!isset($TPL)) {
 ?>
 <script type="text/javascript" src="src/lib/Functions/CookieUtils.js"></script>
 <script type="text/javascript" src="src/lib/Functions/PriceUtils.js"></script>
-<style>
-    .scrollbar-none::-webkit-scrollbar {
-        display: none;
-    }
-</style>
-
 <script>
     function detailButtonPress(element) {
         const rawId = element.getAttribute('id')
@@ -58,7 +52,8 @@ if (!isset($TPL)) {
     }
 </script>
 
-<div class="w-full bg-gray-800 relative shadow-md rounded-lg overflow-hidden">
+
+<div class="w-full bg-gray-800 relative shadow-md rounded-lg overflow-hidden col-span-2">
     <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
         <div class="w-full md:w-1/2">
             <form class="flex items-center">
@@ -104,38 +99,15 @@ if (!isset($TPL)) {
         <table class="w-full text-sm text-left text-gray-400">
             <thead class="text-xs uppercase bg-gray-700 text-gray-400">
                 <tr>
-                    <th scope="col" class="px-4 py-4">Product name</th>
-                    <th scope="col" class="px-4 py-3">Cashier</th>
-                    <th scope="col" class="px-4 py-3">Description</th>
-                    <th scope="col" class="px-4 py-3">Date</th>
-                    <th scope="col" class="p-4">Action</th>
+                    <!-- <th scope="col" class="px-4 py-4">Product name</th> -->
+                    <th scope="col" class="px-4 py-3 text-center">Creator</th>
+                    <!-- <th scope="col" class="px-4 py-3">Description</th> -->
+                    <th scope="col" class="px-4 py-3 text-center">Date</th>
+                    <th scope="col" class="p-4 text-center">Action</th>
                 </tr>
             </thead>
-            <tbody id="products-list">
-                <tr class="border-b border-gray-700">
-                    <th scope="row" class="px-4 py-3 font-medium whitespace-nowrap text-white">Indomie</th>
-                    <td class="px-4 py-3 text-white">
-                        Ricky
-                    </td>
-                    <td class="px-4 py-3 text-white">Rp. 3000 -> Rp. 5000</td>
-                    <td class="px-4 py-3 text-white">10 Dec 2023</td>
-                    <td class="px-4 py-3 text-white">
-                        <div class="flex items-center space-x-4">
-                            <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700">
-                                <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                                </svg>
-                                Accept
-                            </button>
-                            <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="deleteButtonPress(this)" id="del-${content._id}">
-                                <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
-                                </svg>
-                                Decline
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+            <tbody id="req-list">
+
             </tbody>
         </table>
     </div>
@@ -473,6 +445,11 @@ if (!isset($TPL)) {
         </div>
     </div>
 </div>
+              <style>
+    .scrollbar-none::-webkit-scrollbar {
+        display: none;
+    }
+</style>
 <script>
     function initPageData() {
         const reqContainer = document.getElementById('req-list');

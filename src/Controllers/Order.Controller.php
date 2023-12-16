@@ -79,8 +79,6 @@ class OrderController implements Controller
         $validation = new ValidateHeaders();
         $validToken = (array) json_decode($validation->validateData());
 
-        // var_dump(gmdate("Y-m-d\TH:i:s\Z", 1699742424));
-
         if (array_key_exists('error', $validToken)) {
             echo json_encode($validation);
             return;
@@ -200,6 +198,11 @@ class OrderController implements Controller
         $queryParams =  array();
 
         parse_str($urlQuery, $queryParams);
+
+        if (!array_key_exists('search', $queryParams)) {
+            echo json_encode(array('error' => 'Parameter "search" is required'));
+            return;
+        }
 
         $model = new OrderModel();
         $data = $model->get($queryParams['search']);

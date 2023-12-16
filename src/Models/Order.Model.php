@@ -257,13 +257,8 @@ class OrderModel
             $counter = 0;
 
             foreach ($cursor as $key) {
-                // var_dump($key);
-
                 date_default_timezone_set('Asia/Jakarta');
                 $date = gmdate("Y-m-d", $key->timestamp);
-                // var_dump($date);
-                // var_dump(gmdate("Y-m-d", time()));
-                // var_dump($date == gmdate("Y-m-d", time()));
 
                 if ($date == gmdate("Y-m-d", time()))
                     $counter++;
