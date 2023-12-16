@@ -11,6 +11,46 @@ if (!isset($TPL)) {
 ?>
 <script type="text/javascript" src="src/lib/Functions/CookieUtils.js"></script>
 <script type="text/javascript" src="src/lib/Functions/PriceUtils.js"></script>
+<script>
+    function detailButtonPress(element) {
+        const rawId = element.getAttribute('id')
+        const _id = rawId.replace('details-', '')
+
+        callDetails(_id)
+    }
+
+    function callDetails(id) {
+        const modal = document.getElementById('detailRequest')
+
+        let headersList = {
+            "Accept": "*/*",
+            "Authorization": `Bearer ${getCookie('Bearer')}`
+        }
+
+        fetch(`/api/product?search=${id}`, {
+                method: 'GET',
+                headers: headersList
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (new Object(result).hasOwnProperty('error')) {
+                    alertBox.classList.toggle('hidden')
+                }
+
+                result.data.forEach(value => {});
+
+
+                modal.classList.toggle('hidden')
+            }).catch(err => console.error(err))
+    }
+
+    function toggleModal(modalId) {
+        const modal = document.getElementById(modalId)
+
+        if (modal != null)
+            modal.classList.toggle('hidden')
+    }
+</script>
 
 
 <div class="w-full bg-gray-800 relative shadow-md rounded-lg overflow-hidden col-span-2">
@@ -72,16 +112,16 @@ if (!isset($TPL)) {
         </table>
     </div>
 </div>
-<div id="select-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative p-4 w-full max-w-md max-h-full">
+<div id="detailRequest" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full" style="backdrop-filter: blur(10px);height: 100%">
+    <div class="relative p-4 w-full h-full mx-auto flex justify-center items-center overflow-hidden">
         <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <div class="relative rounded-lg shadow bg-gray-800 w-4/5 overflow-y-auto h-full scrollbar-none">
             <!-- Modal header -->
-            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                    Open positions
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
+                <h3 class="text-lg font-semibold text-white">
+                    Detail Request - <span class="font-bold" id="id_details"></span>
                 </h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="select-modal">
+                <button type="button" class="text-gray-400 bg-transparent rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center hover:bg-gray-600 hover:text-white" onclick="toggleModal('detailRequest')">
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                     </svg>
@@ -90,52 +130,326 @@ if (!isset($TPL)) {
             </div>
             <!-- Modal body -->
             <div class="p-4 md:p-5">
-                <p class="text-gray-500 dark:text-gray-400 mb-4">Select your desired position:</p>
-                <ul class="space-y-4 mb-4">
-                    <li>
-                        <input type="radio" id="job-1" name="job" value="job-1" class="hidden peer" required>
-                        <label for="job-1" class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
-                            <div class="block">
-                                <div class="w-full text-lg font-semibold">UI/UX Engineer</div>
-                                <div class="w-full text-gray-500 dark:text-gray-400">Flowbite</div>
-                            </div>
-                            <svg class="w-4 h-4 ms-3 rtl:rotate-180 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                <div class="mb-4 border-b border-gray-700 flex justify-between">
+                    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
+                        <li class="me-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="update-tab" data-tabs-target="#update" type="button" role="tab" aria-controls="update" aria-selected="false">Update</button>
+                        </li>
+                        <li class="me-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="create-tab" data-tabs-target="#create" type="button" role="tab" aria-controls="create" aria-selected="false">Create</button>
+                        </li>
+                        <li class="me-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="delete-tab" data-tabs-target="#delete" type="button" role="tab" aria-controls="delete" aria-selected="false">Delete</button>
+                        </li>
+                    </ul>
+                    <div class="flex p-3">
+                        <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="" id="">
+                            <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
                             </svg>
-                        </label>
-                    </li>
-                    <li>
-                        <input type="radio" id="job-2" name="job" value="job-2" class="hidden peer">
-                        <label for="job-2" class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
-                            <div class="block">
-                                <div class="w-full text-lg font-semibold">React Developer</div>
-                                <div class="w-full text-gray-500 dark:text-gray-400">Alphabet</div>
-                            </div>
-                            <svg class="w-4 h-4 ms-3 rtl:rotate-180 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                            Approved choice
+                        </button>
+                        <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="" id="">
+                            <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
                             </svg>
-                        </label>
-                    </li>
-                    <li>
-                        <input type="radio" id="job-3" name="job" value="job-3" class="hidden peer">
-                        <label for="job-3" class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
-                            <div class="block">
-                                <div class="w-full text-lg font-semibold">Full Stack Engineer</div>
-                                <div class="w-full text-gray-500 dark:text-gray-400">Apple</div>
-                            </div>
-                            <svg class="w-4 h-4 ms-3 rtl:rotate-180 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                            </svg>
-                        </label>
-                    </li>
-                </ul>
-                <button class="text-white inline-flex w-full justify-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    Next step
-                </button>
+                            Reject choice
+                        </button>
+                    </div>
+                </div>
+                <div id="default-tab-content">
+                    <div class="hidden relative overflow-x-auto bg-gray-800" id="update" role="tabpanel" aria-labelledby="update-tab">
+                        <table class="w-full text-sm text-left text-gray-400">
+                            <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+                                <!-- start template update -->
+                                <tr>
+                                    <th scope="col" class="p-4">
+                                        <div class="flex items-center">
+                                            <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                                            <label for="checkbox-all" class="sr-only">checkbox</label>
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="p-4">Product</th>
+                                    <th scope="col" class="p-4">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="accordion-collapse-update" data-accordion="open">
+                                <tr class="border-b border-gray-600 hover:bg-gray-700" id="upd-proc-1" data-accordion-target="#accor-upd-proc-1" aria-expanded="false" aria-controls="accor-upd-proc-1">
+                                    <td class="p-4 w-4">
+                                        <div class="flex items-center">
+                                            <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                                            <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                                        </div>
+                                    </td>
+                                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap text-white">
+                                        <div class="flex items-center mr-3">
+                                            <img src="https://cdn.discordapp.com/avatars/460429122431221771/799decc5388b211d9e827c8f45208537.webp?size=48" alt="iMac Front Image" class="h-8 h-8 mr-3 rounded-full">
+                                            Apple Pie
+                                        </div>
+                                    </th>
+                                    <td class="px-4 py-3">
+                                        <span class="text-xs font-medium px-2 py-0.5 rounded bg-primary-900 text-primary-300">
+                                            <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300" id="status">pending</span>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr id="accor-upd-proc-1" class="hidden" aria-labelledby="accor-upd-proc-1">
+                                    <td class="p-5 bg-gray-900 relative overflow-x-auto" colspan="3">
+                                        <table class="w-full text-sm text-left rtl:text-right text-gray-400">
+                                            <thead class="text-xs uppercase text-gray-400">
+                                                <tr>
+                                                    <th scope="col" class="px-6 py-3">
+
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Old Data
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3 bg-gray-800">
+                                                        New Data
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="border-b border-gray-700">
+                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                                        Product name
+                                                    </th>
+                                                    <td class="px-6 py-4"> mie goreng
+                                                    </td>
+                                                    <td class="px-6 py-4 bg-gray-800"> mie ayam
+                                                    </td>
+                                                </tr>
+                                                <tr class="border-b border-gray-700">
+                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                                        Price
+                                                    </th>
+                                                    <td class="px-6 py-4">10000
+                                                    </td>
+                                                    <td class="px-6 py-4 bg-gray-800">12000
+                                                    </td>
+                                                </tr>
+                                                <tr class="border-b border-gray-700">
+                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                                        Stock
+                                                    </th>
+                                                    <td class="px-6 py-4">10
+                                                    </td>
+                                                    <td class="px-6 py-4 bg-gray-800">12
+                                                    </td>
+                                                </tr>
+                                                <tr class="border-b border-gray-700">
+                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                                        Category
+                                                    </th>
+                                                    <td class="px-6 py-4">Food
+                                                    </td>
+                                                    <td class="px-6 py-4 bg-gray-800">Food
+                                                    </td>
+                                                </tr>
+                                                <tr class="border-b border-gray-700">
+                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                                        Available
+                                                    </th>
+                                                    <td class="px-6 py-4">true
+                                                    </td>
+                                                    <td class="px-6 py-4 bg-gray-800">true
+                                                    </td>
+                                                </tr>
+                                                <tr class="border-b border-gray-700">
+                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                                        Img
+                                                    </th>
+                                                    <td class="px-6 py-4">
+                                                        <img src="https://www.kkisitb1.com/wp-content/uploads/2022/11/indomieaceh1.jpg" class="w-full rounded-lg" alt="">
+                                                    </td>
+                                                    <td class="px-6 py-4 bg-gray-800">
+                                                        <img src="https://www.kkisitb1.com/wp-content/uploads/2022/11/indomieaceh1.jpg" class="w-full rounded-lg" alt="">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="block flex justify-end mt-3 gap-3">
+                                            <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="" id="">
+                                                <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                                </svg>
+                                                Approved
+                                            </button>
+                                            <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="" id="">
+                                                <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                                                </svg>
+                                                Reject
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- end template update -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="hidden rounded-lg bg-gray-800" id="create" role="tabpanel" aria-labelledby="create-tab">
+                        <table class="w-full text-sm text-left text-gray-400 rounded-t-lg">
+                            <thead class="text-xs rounded-t-lg uppercase bg-gray-900 text-gray-400">
+                                <!-- start template create -->
+                                <div class="relative overflow-x-auto">
+                                    <table class="w-full text-sm text-left rtl:text-right text-gray-400">
+                                        <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="p-4">
+                                                    <div class="flex items-center">
+                                                        <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                                                        <label for="checkbox-all" class="sr-only">checkbox</label>
+                                                    </div>
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Product name
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Price
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Stock
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Category
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Available
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Img
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Status
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Action
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="border-b bg-gray-800 border-gray-700">
+                                                <td class="p-4 w-4">
+                                                    <div class="flex items-center">
+                                                        <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                                                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                                                    </div>
+                                                </td>
+                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-white">
+                                                    Mie kuah
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    3000
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    10
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    Food
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    True
+                                                </td>
+                                                <td class="text-center">
+                                                    <img src="https://lzd-img-global.slatic.net/g/p/66d6ba51a0d95fd32a291b65723fc326.png_720x720q80.png" class="h-12 w-auto rounded-full ms-3" alt="">
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300">Pending</span>
+                                                </td>
+                                                <td class="px-6 py-4 flex items-center">
+                                                    <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="" id="">
+                                                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                                        </svg>
+                                                        Approved
+                                                    </button>
+                                                    <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="" id="">
+                                                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                                                        </svg>
+                                                        Reject
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end template create -->
+                                </tbody>
+                        </table>
+                    </div>
+                    <div class="hidden rounded-lg bg-gray-800" id="delete" role="tabpanel" aria-labelledby="delete-tab">
+                        <table class="w-full text-sm text-left text-gray-400 rounded-t-lg">
+                            <thead class="text-xs rounded-t-lg uppercase bg-gray-900 text-gray-400">
+                                <!-- start template delete -->
+                                <div class="relative overflow-x-auto">
+                                    <table class="w-full text-sm text-left rtl:text-right text-gray-400">
+                                        <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="p-4 w-4">
+                                                    <div class="flex items-center">
+                                                        <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                                                        <label for="checkbox-all" class="sr-only">checkbox</label>
+                                                    </div>
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Product name
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Status
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Action
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="border-b bg-gray-800 border-gray-700">
+                                                <td class="p-4">
+                                                    <div class="flex items-center">
+                                                        <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" class="w-4 h-4 text-primary-600 rounded  focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                                                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                                                    </div>
+                                                </td>
+                                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white flex items-center">
+                                                    Mie kuah
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300">Pending</span>
+                                                </td>
+                                                <td class="px-6 py-4 flex items-center">
+                                                    <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="" id="">
+                                                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                                        </svg>
+                                                        Approved
+                                                    </button>
+                                                    <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="" id="">
+                                                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                                                        </svg>
+                                                        Reject
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end template delete -->
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+              <style>
+    .scrollbar-none::-webkit-scrollbar {
+        display: none;
+    }
+</style>
 <script>
     function initPageData() {
         const reqContainer = document.getElementById('req-list');

@@ -50,12 +50,12 @@ if (!isset($TPL)) {
         let actionButton = document.getElementById("actionButtonModal");
         switch (indicator) {
             case 'upd':
-                titleModal.innerText = 'Update Product'
+                titleModal.innerText = 'Edit Product'
                 icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
                                     <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
                                 </svg>`
-                actionButton.innerHTML = 'Update Product'
+                actionButton.innerHTML = 'Edit Product'
                 // console.log("masuk indikator");
                 headersList = {
                     "Accept": "*/*",
@@ -253,6 +253,54 @@ if (!isset($TPL)) {
                 modal.classList.toggle('hidden')
             }).catch(err => console.error(err))
     }
+
+    function stockButtonPress(element) {
+        const rawId = element.getAttribute('id')
+        const _id = rawId.replace('stoc-', '')
+
+        callProudctstock(_id)
+    }
+
+    function callProudctstock(id) {
+        const modal = document.getElementById('stockProductModal')
+
+        let headersList = {
+            "Accept": "*/*",
+            "Authorization": `Bearer ${getCookie('Bearer')}`
+        }
+
+        fetch(`/api/product?search=${id}`, {
+                method: 'GET',
+                headers: headersList
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (new Object(result).hasOwnProperty('error')) {
+                    alertBox.classList.toggle('hidden')
+                }
+
+                result.data.forEach(value => {
+                    const titleModal = document.getElementById('title-modal-edit')
+                    const itemName = document.getElementById('product-name-stock')
+                    const valueInput = document.getElementById('edit-product-stock')
+                    const iconButton = document.getElementById('icon-action-modal-stock')
+                    const textButton = document.getElementById('actionButtonModal-stock')
+
+                    titleModal.innerText = 'Edit Stock'
+                    itemName.innerText = value.name
+                    valueInput.value = value.stock
+                    iconButton.innerHTML = `<svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 1v5h-5M2 19v-5h5m10-4a8 8 0 0 1-14.947 3.97M1 10a8 8 0 0 1 14.947-3.97"/>
+                            </svg>`
+                    textButton.innerText = 'Update Stock'
+                    console.log(textButton.innerText);
+                    console.log(iconButton);
+                    console.log(textButton);
+                });
+
+                modal.classList.toggle('hidden')
+            }).catch(err => console.error(err))
+    }
 </script>
 
 <div class="w-full bg-gray-800 relative shadow-md rounded-lg overflow-hidden">
@@ -439,6 +487,37 @@ if (!isset($TPL)) {
                     <button type="submit" class="text-white inline-flex items-center focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800 flex justify-center items-center">
                         <span id="icon-action-modal"></span>
                         <span id="actionButtonModal">
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- stock Product Modal -->
+<div id="stockProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full flex items-center justify-center w-full" style="backdrop-filter: blur(10px); height:100%;">
+    <div class="relative p-4 max-w-2xl max-h-full w-3/5">
+        <!-- Modal content -->
+        <div class="relative p-4 rounded-lg shadow bg-gray-800 sm:p-5">
+            <!-- Modal header -->
+            <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-gray-600">
+                <h3 class="text-lg font-semibold text-white" id="title-modal-edit"></h3>
+                <button type="button" class="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white" onclick="toggleModal('stockProductModal')">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <form action="#" id="form-modal">
+                <label for="number-input" class="block mb-2 text-sm font-medium text-white">Input new <span id="product-name-stock" class="font-bold"></span> Stock</label>
+                <input type="number" id="edit-product-stock" class="border text-sm rounded-lg focus:border-blue-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 mb-3" placeholder="90210" required>
+                <div class="text-right" id="action-modal">
+                    <button type="submit" class="text-white inline-flex items-center focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800 flex justify-center items-center">
+                        <span id="icon-action-modal-stock"></span>
+                        <span id="actionButtonModal-stock">
                         </span>
                     </button>
                 </div>
@@ -656,11 +735,11 @@ if (!isset($TPL)) {
                     </td>
                     <td class="px-4 py-3 text-white" id="item-price">Rp.${content.price}</td>
                     <td class="px-4 py-3 text-white">
-                        <input type="number" value="${content.stock}" min="0" max="100" class="w-10 bg-transparent border-transparent p-0 focus:border-transparent focus:ring-0" id="item-stock"/>
+                        <span>${content.stock}</span>
                     </td>
                     <td class="px-4 py-3 font-medium whitespace-nowrap text-white">
                         <div class="flex items-center space-x-4">
-                            <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700">
+                            <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700" onclick="stockButtonPress(this)" id="stoc-${content._id}">
                             <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 1v5h-5M2 19v-5h5m10-4a8 8 0 0 1-14.947 3.97M1 10a8 8 0 0 1 14.947-3.97"/>
                             </svg>
