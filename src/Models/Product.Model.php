@@ -110,15 +110,6 @@ class ProductModel
 
     public function updateItem(string $itemID, array $itemPayload): bool
     {
-        // {
-        //     "_id": "656e6ebc0a04f3555c2e4815",
-        //     "name": "Cocacola",
-        //     "price": 5000,
-        //     "category": "drink",
-        //     "imgUrl": "https://clipart-library.com/images_k/coca-cola-bottle-transparent-background/coca-cola-bottle-transparent-background-17.png",
-        //     "stock": 2,
-        //     "available": true
-        //   }
         try {
             $db = new DB();
             $connection = $db->getConnection();
@@ -130,6 +121,56 @@ class ProductModel
 
 
             if ($updateResult->getMatchedCount() === 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception $th) {
+            printf($th->getMessage());
+            return false;
+        }
+    }
+
+    public function create(array $payload): bool
+    {
+        try {
+            $db = new DB();
+            $connection = $db->getConnection();
+
+            if ($connection == null) die(print_r("Connection is Null", true));
+
+            $collection = $connection->selectCollection('kanema', 'Product');
+            // var_dump($payload);
+            $insertResult = $collection->insertMany($payload);
+
+
+            if ($insertResult->getInsertedCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception $th) {
+            printf($th->getMessage());
+            return false;
+        }
+    }
+
+    public function delete(ObjectId $id): bool
+    {
+        try {
+            $db = new DB();
+            $connection = $db->getConnection();
+
+            if ($connection == null) die(print_r("Connection is Null", true));
+
+            $target = $this->findOneItem($id->__toString());
+            if (count($target['data']) < 1) return false;
+
+            $collection = $connection->selectCollection('kanema', 'Product');
+            $deleteResult = $collection->deleteOne(['_id' => $id]);
+
+
+            if ($deleteResult->getDeletedCount() > 0) {
                 return true;
             } else {
                 return false;

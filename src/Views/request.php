@@ -12,36 +12,387 @@ if (!isset($TPL)) {
 <script type="text/javascript" src="src/lib/Functions/CookieUtils.js"></script>
 <script type="text/javascript" src="src/lib/Functions/PriceUtils.js"></script>
 <script>
+    let dataBearer = [];
+    let selectedID = null;
+
     function detailButtonPress(element) {
         const rawId = element.getAttribute('id')
         const _id = rawId.replace('details-', '')
 
+        selectedID = _id
         callDetails(_id)
+    }
+
+    function expandUpdate(ElementID) {
+        const accordion = document.getElementById(ElementID)
+
+        if (accordion === undefined || accordion === null) return;
+
+        accordion.classList.toggle('hidden')
+    }
+
+    function declineUpdate(id, idx) {
+        let containedData = dataBearer.find(value => value._id.$oid === id)
+
+        const target = containedData.update[idx]
+        target.status = 'declined'
+        containedData.update[idx] = target
+
+        sendData(containedData)
+        toggleModal('detailRequest')
+        initPageData()
+    }
+
+    function declineCreate(id, idx) {
+        let containedData = dataBearer.find(value => value._id.$oid === id)
+
+        const target = containedData.create[idx]
+        target.status = 'declined'
+        containedData.create[idx] = target
+
+        sendData(containedData)
+        toggleModal('detailRequest')
+        initPageData()
+    }
+
+    function declineDelete(id, idx) {
+        let containedData = dataBearer.find(value => value._id.$oid === id)
+
+        const target = containedData.delete[idx]
+        target.status = 'declined'
+        containedData.delete[idx] = target
+
+        sendData(containedData)
+        toggleModal('detailRequest')
+        initPageData()
+
+    }
+
+    function approveUpdate(id, idx) {
+        let containedData = dataBearer.find(value => value._id.$oid === id)
+
+        const target = containedData.update[idx]
+        target.status = 'approved'
+        containedData.update[idx] = target
+
+        sendData(containedData)
+        toggleModal('detailRequest')
+        initPageData()
+    }
+
+    function approveCreate(id, idx) {
+        let containedData = dataBearer.find(value => value._id.$oid === id)
+
+        const target = containedData.create[idx]
+        target.status = 'approved'
+        containedData.create[idx] = target
+
+        sendData(containedData)
+        toggleModal('detailRequest')
+        initPageData()
+
+    }
+
+    function approveDelete(id, idx) {
+        let containedData = dataBearer.find(value => value._id.$oid === id)
+
+        const target = containedData.delete[idx]
+        target.status = 'approved'
+        containedData.delete[idx] = target
+
+        sendData(containedData)
+        toggleModal('detailRequest')
+        initPageData()
+
     }
 
     function callDetails(id) {
         const modal = document.getElementById('detailRequest')
+        const modalTitle = document.getElementById('id_details')
+        const tbodyUpdate = document.getElementById('accordion-collapse-update')
+        const tbodyCreate = document.getElementById('tbody-create')
+        const tbodyDelete = document.getElementById('tbody-delete')
 
-        let headersList = {
-            "Accept": "*/*",
-            "Authorization": `Bearer ${getCookie('Bearer')}`
+        let requestStatus = {
+            create: false,
+            update: false,
+            delete: false
         }
 
-        fetch(`/api/product?search=${id}`, {
-                method: 'GET',
-                headers: headersList
+        if ((!requestStatus.update && !requestStatus.create && !requestStatus.delete) && document.getElementById('approve-all').classList.contains('hidden')) {
+            toggelCentralButton()
+        }
+
+        const selectedData = dataBearer.find(value => value._id.$oid === id);
+
+        modalTitle.innerText = `${selectedData._id.$oid}`
+        console.log(selectedData)
+
+        if (selectedData === undefined || selectedData === null) {
+            alertBox.classList.toggle('hidden')
+        }
+
+        if (selectedData.update.length > 0) {
+            let arrStat = []
+
+            selectedData.update.map(value => {
+                const template = `
+            <tr class="border-b border-gray-600 hover:bg-gray-900 cursor-pointer" onclick="expandUpdate('accor-upd-${value.productID.$oid}')" id="upd-${value.productID.$oid}" data-accordion-target="#accor-upd-${value.productID.$oid}" aria-expanded="false" aria-controls="accor-upd-${value.productID.$oid}">
+                                    <td class="p-4 w-4">
+                                        <div class="flex items-center">
+                                            <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                                            <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                                        </div>
+                                    </td>
+                                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap text-white">
+                                        <div class="flex items-center mr-3">
+                                            <img src="${value.old.imgUrl}" alt="iMac Front Image" class="h-8 h-8 mr-3 rounded-full">
+                                            ${value.old.name}
+                                        </div>
+                                    </th>
+                                    <td class="px-4 py-3">
+                                        <span class="text-xs font-medium px-2 py-0.5 rounded bg-primary-900 text-primary-300">
+                                            <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300" id="status">${value.status}</span>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr id="accor-upd-${value.productID.$oid}" class="transition-all ease-in duration-200 hidden" aria-labelledby="accor-upd-${value.productID.$oid}">
+                                    <td class="p-5 bg-gray-900 relative overflow-x-auto" colspan="3">
+                                        <table class="w-full text-sm text-left rtl:text-right text-gray-400">
+                                            <thead class="text-xs uppercase text-gray-400">
+                                                <tr>
+                                                    <th scope="col" class="px-6 py-3">
+
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Old Data
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3 bg-gray-800">
+                                                        New Data
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="border-b border-gray-700">
+                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                                        Product name
+                                                    </th>
+                                                    <td class="px-6 py-4">
+                                                        ${value.old.name}
+                                                    </td>
+                                                    <td class="px-6 py-4 bg-gray-800">
+                                                    ${value.new.name}
+                                                    </td>
+                                                </tr>
+                                                <tr class="border-b border-gray-700">
+                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                                        Price
+                                                    </th>
+                                                    <td class="px-6 py-4">
+                                                        ${value.old.price}
+                                                    </td>
+                                                    <td class="px-6 py-4 bg-gray-800">
+                                                        ${value.new.price}
+                                                    </td>
+                                                </tr>
+                                                <tr class="border-b border-gray-700">
+                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                                        Stock
+                                                    </th>
+                                                    <td class="px-6 py-4">
+                                                        ${value.old.price}
+                                                    </td>
+                                                    <td class="px-6 py-4 bg-gray-800">
+                                                        ${value.new.price}
+                                                    </td>
+                                                </tr>
+                                                <tr class="border-b border-gray-700">
+                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                                        Category
+                                                    </th>
+                                                    <td class="px-6 py-4">
+                                                        ${value.old.category}
+                                                    </td>
+                                                    <td class="px-6 py-4 bg-gray-800">
+                                                        ${value.new.category}
+                                                    </td>
+                                                </tr>
+                                                <tr class="border-b border-gray-700">
+                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                                        Available
+                                                    </th>
+                                                    <td class="px-6 py-4">
+                                                        ${value.old.available}
+                                                    </td>
+                                                    <td class="px-6 py-4 bg-gray-800">
+                                                        ${value.new.available}
+                                                    </td>
+                                                </tr>
+                                                <tr class="border-b border-gray-700">
+                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                                        Img
+                                                    </th>
+                                                    <td class="px-6 py-4">
+                                                        <img src="${value.old.imgUrl}" class="w-full rounded-lg" alt="">
+                                                    </td>
+                                                    <td class="px-6 py-4 bg-gray-800">
+                                                        <img src="${value.new.imgUrl}" class="w-full rounded-lg" alt="">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="block flex justify-end mt-3 gap-3">
+                                        ${value.status === 'pending' ? `
+                                            <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="approveUpdate('${selectedData._id.$oid}','${selectedData.update.indexOf(value)}')" id="">
+                                                <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                                </svg>
+                                                Approved
+                                            </button>
+                                            <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="declineUpdate('${selectedData._id.$oid}','${selectedData.update.indexOf(value)}')" id="">
+                                                <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                                                </svg>
+                                                Reject
+                                            </button>
+                                            `
+                                            :
+                                             ''}
+                                        </div>
+                                    </td>
+                                </tr>
+        `
+
+                tbodyUpdate.innerHTML += template;
+                arrStat.push(value.status !== 'pending')
             })
-            .then(response => response.json())
-            .then(result => {
-                if (new Object(result).hasOwnProperty('error')) {
-                    alertBox.classList.toggle('hidden')
-                }
+            requestStatus.update = !arrStat.includes(false)
+        }
 
-                result.data.forEach(value => {});
+        if (selectedData.create.length > 0) {
+            let arrStat = []
 
+            selectedData.create.map(value => {
+                const template = `
+            <tr class="border-b bg-gray-800 border-gray-700">
+                                                <td class="p-4 w-4">
+                                                    <div class="flex items-center">
+                                                        <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                                                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                                                    </div>
+                                                </td>
+                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-white">
+                                                    ${value.fields.name}
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                ${value.fields.price}
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                ${value.fields.stock}
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                ${value.fields.category}
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                ${value.fields.available}
+                                                </td>
+                                                <td class="text-center">
+                                                    <img src="${value.fields.imgUrl}" class="h-12 w-auto rounded-full ms-3" alt="">
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300">${value.status}</span>
+                                                </td>
+                                                <td class="px-6 py-4 flex items-center">
+                                                ${
+                                                    value.status === 'pending' ? 
+                                                    `
+                                                    <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="approveCreate('${selectedData._id.$oid}','${selectedData.create.indexOf(value)}')" id="">
+                                                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                                        </svg>
+                                                        Approved
+                                                    </button>
+                                                    <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="declineCreate('${selectedData._id.$oid}','${selectedData.create.indexOf(value)}')" id="">
+                                                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                                                        </svg>
+                                                        Reject
+                                                    </button>
+                                                    `
+                                                    :
+                                                    ''
+                                                }
+                                                </td>
+                                            </tr>
+            `
 
-                modal.classList.toggle('hidden')
-            }).catch(err => console.error(err))
+                tbodyCreate.innerHTML += template
+                arrStat.push(value.status !== 'pending')
+            })
+            requestStatus.create = !arrStat.includes(false)
+        }
+
+        if (selectedData.delete.length > 0) {
+            let arrStat = []
+
+            selectedData.delete.map(value => {
+                const template = `
+                <tr class="border-b bg-gray-800 border-gray-700">
+                                                <td class="p-4">
+                                                    <div class="flex items-center">
+                                                        <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" class="w-4 h-4 text-primary-600 rounded  focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                                                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                                                    </div>
+                                                </td>
+                                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white flex items-center">
+                                                    ${value.productName}
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300">${value.status}</span>
+                                                </td>
+                                                <td class="px-6 py-4 flex items-center">
+                                                ${
+                                                    value.status === 'pending' ?
+                                                    `
+                                                    <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="approveDelete('${selectedData._id.$oid}','${selectedData.delete.indexOf(value)}')" id="">
+                                                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                                        </svg>
+                                                        Approved
+                                                    </button>
+                                                    <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="declineDelete('${selectedData._id.$oid}','${selectedData.delete.indexOf(value)}')" id="">
+                                                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                                                        </svg>
+                                                        Reject
+                                                    </button>
+                                                    `
+                                                    : ''
+                                                }
+                                                </td>
+                                            </tr>
+            `
+
+                tbodyDelete.innerHTML += template
+                arrStat.push(value.status !== 'pending')
+            })
+            requestStatus.delete = !arrStat.includes(false)
+        }
+
+        if (selectedData.create.length < 1) requestStatus.create = true;
+        if (selectedData.update.length < 1) requestStatus.update = true;
+        if (selectedData.delete.length < 1) requestStatus.delete = true;
+
+        if (requestStatus.update && requestStatus.create && requestStatus.delete) {
+            toggelCentralButton()
+        }
+
+        modal.classList.toggle('hidden')
+    }
+
+    function toggelCentralButton() {
+        document.getElementById('approve-all').classList.toggle('hidden')
+        document.getElementById('decline-all').classList.toggle('hidden')
     }
 
     function toggleModal(modalId) {
@@ -49,6 +400,144 @@ if (!isset($TPL)) {
 
         if (modal != null)
             modal.classList.toggle('hidden')
+
+        if (modal.classList.contains('hidden')) {
+            document.getElementById('accordion-collapse-update').innerHTML = ""
+            document.getElementById('tbody-create').innerHTML = ""
+            document.getElementById('tbody-delete').innerHTML = ""
+        }
+    }
+
+    function approveAll() {
+        if (selectedID === null) return;
+
+        const selectedData = dataBearer.find(value => value._id.$oid === selectedID);
+
+        if (selectedData === undefined || selectedData === null) {
+            alertBox.classList.toggle('hidden')
+        }
+
+        if (selectedData.update.length > 0) {
+            selectedData.update.map(value => {
+                value.status = 'approved'
+            })
+        }
+
+        if (selectedData.create.length > 0) {
+            selectedData.create.map(value => {
+                value.status = 'approved'
+            })
+        }
+
+        if (selectedData.delete.length > 0) {
+            selectedData.delete.map(value => {
+                value.status = 'approved'
+            })
+        }
+
+        sendData(selectedData)
+
+        toggleModal('detailRequest')
+        initPageData()
+    }
+
+    function declineAll() {
+        if (selectedID === null) return;
+
+        const selectedData = dataBearer.find(value => value._id.$oid === selectedID);
+
+        if (selectedData === undefined || selectedData === null) {
+            alertBox.classList.toggle('hidden')
+        }
+
+        if (selectedData.update.length > 0) {
+            selectedData.update.map(value => {
+                value.status = 'declined'
+            })
+        }
+
+        if (selectedData.create.length > 0) {
+            selectedData.create.map(value => {
+                value.status = 'declined'
+            })
+        }
+
+        if (selectedData.delete.length > 0) {
+            selectedData.delete.map(value => {
+                value.status = 'declined'
+            })
+        }
+
+        sendData(selectedData)
+
+        toggleModal('detailRequest')
+        initPageData()
+    }
+
+    function sendData(requestData) {
+        let alertBox = document.getElementById('box-alert');
+
+        console.log(requestData)
+        let headersList = {
+            "Accept": "*/*",
+            "Authorization": `Bearer ${getCookie('Bearer')}`
+        }
+
+        fetch('/api/request', {
+                method: 'PUT',
+                headers: headersList,
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log(result)
+
+                if (new Object(result).hasOwnProperty('error')) {
+                    alertBox.classList.toggle('hidden')
+
+                    const template = `
+<div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 w-fit mt-2 mr-2" role="alert" id="instance-alert">
+    <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+    </svg>
+    <span class="sr-only">Error</span>
+    <div class="ms-3 text-sm font-medium">
+        ${result.error}
+    </div>
+</div>
+                    `
+
+                    alertBox.innerHTML = template
+
+                    setTimeout(() => {
+                        alertBox.classList.toggle('hidden')
+                        document.getElementById('instance-alert').classList.toggle('hidden')
+                    }, 5000);
+
+                    return;
+                }
+
+                const succeedTemplate = `
+                <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400  w-fit mt-2 mr-2" role="alert" id="instance-success">
+  <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+  </svg>
+  <span class="sr-only">Info</span>
+  <div>
+   Success Updating Request
+  </div>
+  </div>
+  `
+
+                alertBox.innerHTML = succeedTemplate
+                alertBox.classList.toggle('hidden')
+
+                setTimeout(() => {
+                    alertBox.classList.toggle('hidden')
+                    document.getElementById('instance-success').classList.toggle('hidden')
+                }, 5000);
+
+            })
     }
 </script>
 
@@ -104,6 +593,7 @@ if (!isset($TPL)) {
                     <!-- <th scope="col" class="px-4 py-3">Description</th> -->
                     <th scope="col" class="px-4 py-3 text-center">Date</th>
                     <th scope="col" class="p-4 text-center">Action</th>
+                    <th scope="col" class="p-4 text-center">Status</th>
                 </tr>
             </thead>
             <tbody id="req-list">
@@ -115,7 +605,7 @@ if (!isset($TPL)) {
 <div id="detailRequest" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full" style="backdrop-filter: blur(10px);height: 100%">
     <div class="relative p-4 w-full h-full mx-auto flex justify-center items-center overflow-hidden">
         <!-- Modal content -->
-        <div class="relative rounded-lg shadow bg-gray-800 w-4/5 overflow-y-auto h-full scrollbar-none">
+        <div class="relative rounded-lg shadow bg-gray-800 w-3/5 overflow-y-auto h-full scrollbar-none">
             <!-- Modal header -->
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
                 <h3 class="text-lg font-semibold text-white">
@@ -129,7 +619,7 @@ if (!isset($TPL)) {
                 </button>
             </div>
             <!-- Modal body -->
-            <div class="p-4 md:p-5">
+            <div class="p-4 md:p-5 h-[90%] rounded-lg">
                 <div class="mb-4 border-b border-gray-700 flex justify-between">
                     <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
                         <li class="me-2" role="presentation">
@@ -143,13 +633,13 @@ if (!isset($TPL)) {
                         </li>
                     </ul>
                     <div class="flex p-3">
-                        <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="" id="">
+                        <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" id="approve-all">
                             <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
                             </svg>
                             Approved choice
                         </button>
-                        <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="" id="">
+                        <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" id="decline-all">
                             <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
                             </svg>
@@ -157,9 +647,9 @@ if (!isset($TPL)) {
                         </button>
                     </div>
                 </div>
-                <div id="default-tab-content">
-                    <div class="hidden relative overflow-x-auto bg-gray-800" id="update" role="tabpanel" aria-labelledby="update-tab">
-                        <table class="w-full text-sm text-left text-gray-400">
+                <div id="default-tab-content" class="h-[90%] overflow-auto rounded-lg">
+                    <div class="hidden relative overflow-x-auto bg-gray-800 h-full" id="update" role="tabpanel" aria-labelledby="update-tab">
+                        <table class="w-full text-sm text-left text-gray-400 overflow-auto">
                             <thead class="text-xs uppercase bg-gray-700 text-gray-400">
                                 <!-- start template update -->
                                 <tr>
@@ -173,8 +663,8 @@ if (!isset($TPL)) {
                                     <th scope="col" class="p-4">Status</th>
                                 </tr>
                             </thead>
-                            <tbody id="accordion-collapse-update" data-accordion="open">
-                                <tr class="border-b border-gray-600 hover:bg-gray-700" id="upd-proc-1" data-accordion-target="#accor-upd-proc-1" aria-expanded="false" aria-controls="accor-upd-proc-1">
+                            <tbody id="accordion-collapse-update" class="overflow-auto" data-accordion="open">
+                                <!-- <tr class="border-b border-gray-600 hover:bg-gray-900 cursor-pointer" id="upd-proc-1" data-accordion-target="#accor-upd-proc-1" aria-expanded="false" aria-controls="accor-upd-proc-1">
                                     <td class="p-4 w-4">
                                         <div class="flex items-center">
                                             <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
@@ -283,7 +773,7 @@ if (!isset($TPL)) {
                                             </button>
                                         </div>
                                     </td>
-                                </tr>
+                                </tr> -->
                                 <!-- end template update -->
                             </tbody>
                         </table>
@@ -328,50 +818,8 @@ if (!isset($TPL)) {
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr class="border-b bg-gray-800 border-gray-700">
-                                                <td class="p-4 w-4">
-                                                    <div class="flex items-center">
-                                                        <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
-                                                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                                                    </div>
-                                                </td>
-                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-white">
-                                                    Mie kuah
-                                                </th>
-                                                <td class="px-6 py-4">
-                                                    3000
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    10
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    Food
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    True
-                                                </td>
-                                                <td class="text-center">
-                                                    <img src="https://lzd-img-global.slatic.net/g/p/66d6ba51a0d95fd32a291b65723fc326.png_720x720q80.png" class="h-12 w-auto rounded-full ms-3" alt="">
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300">Pending</span>
-                                                </td>
-                                                <td class="px-6 py-4 flex items-center">
-                                                    <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="" id="">
-                                                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                                                        </svg>
-                                                        Approved
-                                                    </button>
-                                                    <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="" id="">
-                                                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
-                                                        </svg>
-                                                        Reject
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                        <tbody id="tbody-create">
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -404,35 +852,8 @@ if (!isset($TPL)) {
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr class="border-b bg-gray-800 border-gray-700">
-                                                <td class="p-4">
-                                                    <div class="flex items-center">
-                                                        <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" class="w-4 h-4 text-primary-600 rounded  focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
-                                                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                                                    </div>
-                                                </td>
-                                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white flex items-center">
-                                                    Mie kuah
-                                                </th>
-                                                <td class="px-6 py-4">
-                                                    <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300">Pending</span>
-                                                </td>
-                                                <td class="px-6 py-4 flex items-center">
-                                                    <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="" id="">
-                                                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                                                        </svg>
-                                                        Approved
-                                                    </button>
-                                                    <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="" id="">
-                                                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
-                                                        </svg>
-                                                        Reject
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                        <tbody id="tbody-delete">
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -445,7 +866,7 @@ if (!isset($TPL)) {
         </div>
     </div>
 </div>
-              <style>
+<style>
     .scrollbar-none::-webkit-scrollbar {
         display: none;
     }
@@ -453,6 +874,7 @@ if (!isset($TPL)) {
 <script>
     function initPageData() {
         const reqContainer = document.getElementById('req-list');
+        reqContainer.innerHTML = ''
 
         let headersList = {
             "Accept": "*/*",
@@ -465,12 +887,10 @@ if (!isset($TPL)) {
             })
             .then(response => response.json())
             .then(result => {
-                console.log(result.data)
+                dataBearer = result.data;
 
                 result.data.map(value => {
 
-                    // <th scope="row" class="px-4 py-3 font-medium whitespace-nowrap text-white">${value.name}</th>
-                    // <td class="px-4 py-3 text-white">Rp. 3000 -> Rp. 5000</td>
                     const template = `
                     <tr class="border-b border-gray-700">
                     <td class="px-4 py-3 text-white text-center">
@@ -478,20 +898,28 @@ if (!isset($TPL)) {
                     </td>
                     <td class="px-4 py-3 text-white text-center">${new Date(value.created_at * 1000).toLocaleString()}</td>
                     <td class="px-4 py-3 text-white flex justify-center">
-                        <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-sky-500 text-sky-500 hover:text-white hover:bg-sky-600 focus:ring-sky-900 transition-all ease-in duration-200" onclick="detailButtonPress(this)" id="${value._id.toString()}">
+                        <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-sky-500 text-sky-500 hover:text-white hover:bg-sky-600 focus:ring-sky-900 transition-all ease-in duration-200" onclick="detailButtonPress(this)" id="${value._id.$oid.toString()}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5 mr-2 -ml-0.5" fill="currentColor">
                                 <path d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z"></path>
                             </svg>
                             Detail
                         </button>
                     </td>
+                    <td class="px-4 py-3">
+                                        <span class="text-xs font-medium px-2 py-0.5 rounded bg-primary-900 text-primary-300 flex justify-center">
+                                            <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300" id="status">${value.done ? 'DONE' : 'ON PROCESS'}</span>
+                                        </span>
+                                    </td>
                 </tr>
                     `
                     reqContainer.innerHTML += template
                 })
-
             })
     }
 
     initPageData()
+</script>
+<script>
+    document.getElementById('approve-all').addEventListener('click', () => approveAll())
+    document.getElementById('decline-all').addEventListener('click', () => declineAll())
 </script>
