@@ -87,54 +87,6 @@ if (!isset($TPL)) {
 </div>
 
 <script>
-    const a = {
-        "_id": {
-            "$oid": "657a828440ee3d4c1541f13d"
-        },
-        "creatorName": "administrator",
-        "created_at": 1702527603,
-        "update": [{
-            "status": "pending",
-            "productID": {
-                "$oid": "656e6ebc0a04f3555c2e4815"
-            },
-            "old": {
-                "name": "Cocacola",
-                "price": 5000,
-                "category": "drink",
-                "available": true,
-                "imgUrl": "https://clipart-library.com/images_k/coca-cola-bottle-transparent-background/coca-cola-bottle-transparent-background-17.png",
-                "stock": 123
-            },
-            "new": {
-                "name": "Cocacola",
-                "price": 5000,
-                "category": "drink",
-                "available": true,
-                "imgUrl": "https://clipart-library.com/images_k/coca-cola-bottle-transparent-background/coca-cola-bottle-transparent-background-17.png",
-                "stock": 123
-            }
-        }],
-        "create": [{
-            "status": "pending",
-            "fields": {
-                "name": "Mie Kuah",
-                "price": 4000,
-                "category": "food",
-                "imgUrl": "https://www.nissin.com/en_jp/brands/images/export/japan/instant_noodles/02.jpg",
-                "available": false,
-                "stock": 123
-            }
-        }],
-        "delete": [{
-            "status": "pending",
-            "productID": {
-                "$oid": "65731686088c66361df900d7"
-            },
-            "productName": "Mie Goreng"
-        }]
-    }
-
     function initPageData() {
         let headersList = {
             "Accept": "*/*",
@@ -192,7 +144,7 @@ if (!isset($TPL)) {
 
                 result.data.map(value => {
                     value.details.map(item => {
-                        if (counter < 5) {
+                        if (counter < 5 && new Object(item).hasOwnProperty('productName')) {
                             templateList += `<li>${item.productName}</li>`
                             counter++
                         }
