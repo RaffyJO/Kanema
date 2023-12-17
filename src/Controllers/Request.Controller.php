@@ -1,7 +1,5 @@
 <?php
 
-use MongoDB\BSON\ObjectId;
-
 require_once('src/Models/RequestModel.php');
 require_once('src/Controllers/Controller.php');
 require_once('src/lib/Functions/MongoUtils.php');
@@ -32,7 +30,7 @@ class RequestController implements Controller
             $this->GETCLEAN();
             return;
         }
-
+      
         if ($this->server['REQUEST_METHOD'] === 'PUT') {
             $this->PUT();
             return;
@@ -68,7 +66,7 @@ class RequestController implements Controller
             echo json_encode(array('error' => 'Parameter "search" is required'));
             return;
         }
-
+      
         if (!MongoUtils::isValidObjectId($queryParams['search'])) {
             echo json_encode(array('error' => 'Parameter "search" is not a valid objectId'));
             return;
