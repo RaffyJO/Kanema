@@ -151,7 +151,7 @@ class ProductModel
             $updateResult = $collection->updateOne(['_id' => new ObjectId($itemID)], ['$set' => $itemPayload]);
 
 
-            if ($updateResult->getMatchedCount() === 1) {
+            if ($updateResult->isAcknowledged() === true) {
                 return true;
             } else {
                 return false;
