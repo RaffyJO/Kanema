@@ -192,7 +192,7 @@ if (!isset($TPL)) {
 
                 result.data.map(value => {
                     value.details.map(item => {
-                        if (counter < 5) {
+                        if (counter < 5 && new Object(item).hasOwnProperty('productName')) {
                             templateList += `<li>${item.productName}</li>`
                             counter++
                         }
