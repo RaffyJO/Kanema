@@ -173,8 +173,10 @@ class RequestModel
                 $updateCounter = 0;
                 if (count($payload['update']) > 0) {
                     foreach ($payload['update'] as $key => $value) {
+                        var_dump($value);
                         if ($value['status'] === 'approved') {
-                            $updateStatus = $productModel->updateItem($strID, $value);
+                            $updIDStr = ((array)$value['productID'])['$oid'];
+                            $updateStatus = $productModel->updateItem($updIDStr, $value['new']);
 
                             if (!$updateStatus) {
                                 $updateState = false;
