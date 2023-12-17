@@ -1,5 +1,7 @@
 <?php
 
+use MongoDB\BSON\ObjectId;
+
 require_once('src/Models/RequestModel.php');
 require_once('src/Controllers/Controller.php');
 require_once('src/lib/Functions/MongoUtils.php');
@@ -30,9 +32,19 @@ class RequestController implements Controller
             $this->GETCLEAN();
             return;
         }
-      
+
+        if ($this->server['REQUEST_METHOD'] === 'PUT' && $requestUri === '/api/request-update') {
+            $this->UPDATE();
+            return;
+        }
+
         if ($this->server['REQUEST_METHOD'] === 'PUT') {
             $this->PUT();
+            return;
+        }
+
+        if ($this->server['REQUEST_METHOD'] === 'DELETE') {
+            $this->DELETE();
             return;
         }
 
@@ -40,10 +52,6 @@ class RequestController implements Controller
             $this->GET();
             return;
         }
-    }
-
-    function POST()
-    {
     }
 
     function GET()
@@ -66,7 +74,7 @@ class RequestController implements Controller
             echo json_encode(array('error' => 'Parameter "search" is required'));
             return;
         }
-      
+
         if (!MongoUtils::isValidObjectId($queryParams['search'])) {
             echo json_encode(array('error' => 'Parameter "search" is not a valid objectId'));
             return;
@@ -169,5 +177,160 @@ class RequestController implements Controller
 
     function DELETE()
     {
+        $reqModel = new RequestModel();
+
+        $validation = new ValidateHeaders();
+        $validToken = (array) json_decode($validation->validateData());
+
+        if (array_key_exists('error', $validToken)) {
+            echo json_encode($validation);
+            return;
+        }
+
+        $postData = json_decode(file_get_contents('php://input'), true);
+
+        $requestContent = array(
+            'user_id' => new ObjectId($validToken['id']->{'$oid'}),
+            'time' => time(),
+            'requests' => array(
+                "status" => "pending",
+                "type" => "delete",
+                "itemID" => new ObjectId($postData['itemID']),
+            ),
+            'done' => false
+        );
+
+        $data = $reqModel->create($requestContent);
+
+        if (array_key_exists('error', $data)) {
+            http_response_code(400);
+            echo json_encode($data);
+            return;
+        } else {
+            http_response_code(200);
+            echo json_encode($data);
+            return;
+        }
+    }
+
+    function UPDATE()
+    {
+        $reqModel = new RequestModel();
+
+        $validation = new ValidateHeaders();
+        $validToken = (array) json_decode($validation->validateData());
+
+        if (array_key_exists('error', $validToken)) {
+            echo json_encode($validation);
+            return;
+        }
+
+        $postData = json_decode(file_get_contents('php://input'), true);
+        $requestContent = array(
+            'user_id' => new ObjectId($validToken['id']->{'$oid'}),
+            'time' => time(),
+            'requests' => array(
+                "status" => "pending",
+                "type" => "update",
+                "itemID" => new ObjectId($postData['itemID']),
+                'fields' => $postData['fields'],
+            ),
+            'done' => false
+        );
+
+        $data = $reqModel->create($requestContent);
+
+        if (array_key_exists('error', $data)) {
+            http_response_code(400);
+            echo json_encode($data);
+            return;
+        } else {
+            http_response_code(200);
+            echo json_encode($data);
+            return;
+        }
+    }
+    // {
+    //     "status": "declined",
+    //     "type": "create",
+    //     "field": {
+    //       "name": "Mie Kuah",
+    //       "price": 4000,
+    //       "category": "food",
+    //       "imgUrl": "https://www.nissin.com/en_jp/brands/images/export/japan/instant_noodles/02.jpg",
+    //       "available": false,
+    //       "stock": 123
+    //     }
+    //   }
+    function POST()
+    {
+        $reqModel = new RequestModel();
+
+        $validation = new ValidateHeaders();
+        $validToken = (array) json_decode($validation->validateData());
+
+        if (array_key_exists('error', $validToken)) {
+            echo json_encode($validation);
+            return;
+        }
+
+        $postData = json_decode(file_get_contents('php://input'), true);
+
+        $base64_image = $postData['imgFile'];
+        $requestContent = null;
+
+        if ($base64_image != null) {
+
+            // Remove the prefix from the base64 string
+            $base64_image = preg_replace('/^data:image\/\w+;base64,/', '', $base64_image);
+
+            // Decode the base64 string
+            $decoded_image = base64_decode($base64_image);
+
+            // Generate a unique filename or use the original filename if available
+            $filename = 'uploaded_image_' . uniqid() . '.png'; // Example filename
+
+            // Specify the path where the image will be stored
+            $filepath = 'src/lib/Assets/uploads/' . $filename;
+
+            // Write the decoded image data to the file
+            file_put_contents($filepath, $decoded_image);
+
+            $postData['field']['imgUrl'] = $filepath;
+
+            $requestContent = array(
+                'user_id' => new ObjectId($validToken['id']->{'$oid'}),
+                'time' => time(),
+                'requests' => array(
+                    "status" => "pending",
+                    "type" => "create",
+                    "field" => $postData['field']
+                ),
+                'done' => false
+            );
+        } else {
+            $requestContent = array(
+                'user_id' => new ObjectId($validToken['id']->{'$oid'}),
+                'time' => time(),
+                'requests' => array(
+                    "status" => "pending",
+                    "type" => "create",
+                    "field" => $postData['field']
+                ),
+                'done' => false
+            );
+        }
+
+        $data = $reqModel->create($requestContent, $postData['imgFile']);
+
+        if (array_key_exists('error', $data)) {
+            http_response_code(400);
+            echo json_encode($data);
+            return;
+        } else {
+            http_response_code(200);
+            echo json_encode($data);
+            return;
+        }
     }
 }

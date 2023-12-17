@@ -141,12 +141,11 @@ if (!isset($TPL)) {
                 let idx = selectedData.update.indexOf(value)
                 let containedData = dataBearer.find(value => value._id.$oid === id)
 
-                const target = containedData.update[idx]
-                target.status = 'declined'
-                containedData.update[idx] = target
-
-                if (!new Object(value.old).hasOwnProperty('name')) value.status = 'declined'
-
+                if (value.old.hasOwnProperty('name') == false) {
+                    const target = containedData.update[idx]
+                    target.status = 'declined'
+                    containedData.update[idx] = target
+                }
 
                 const template = `
             <tr class="border-b border-gray-600 hover:bg-gray-900 cursor-pointer" onclick="expandUpdate('accor-upd-${value.productID.$oid}')" id="upd-${value.productID.$oid}" data-accordion-target="#accor-upd-${value.productID.$oid}" aria-expanded="false" aria-controls="accor-upd-${value.productID.$oid}">
@@ -502,6 +501,7 @@ if (!isset($TPL)) {
             })
             .then(response => response.json())
             .then(result => {
+                console.log(result)
                 if (new Object(result).hasOwnProperty('error')) {
                     alertBox.classList.toggle('hidden')
 

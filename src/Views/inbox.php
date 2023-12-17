@@ -429,34 +429,33 @@ if (!isset($TPL)) {
           </div>
           <div class="hidden rounded-lg bg-gray-800" id="delete" role="tabpanel" aria-labelledby="delete-tab">
             <table class="w-full text-sm text-left text-gray-400 rounded-t-lg">
-              <!-- start template delete -->
-              <div class="relative overflow-x-auto">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-400">
-                  <thead class="text-xs uppercase bg-gray-700 text-gray-400">
-                    <tr>
-                      <th scope="col" class="p-4 w-4">
-                        <div class="flex items-center">
-                          <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
-                          <label for="checkbox-all" class="sr-only">checkbox</label>
-                        </div>
-                      </th>
-                      <th scope="col" class="px-6 py-3">
-                        Product name
-                      </th>
-                      <th scope="col" class="px-6 py-3">
-                        Status
-                      </th>
-                      <th scope="col" class="px-6 py-3">
-                        Action
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody id="tbody-delete">
+              <thead class="text-xs rounded-t-lg uppercase bg-gray-900 text-gray-400">
+                <!-- start template delete -->
+                <div class="relative overflow-x-auto">
+                  <table class="w-full text-sm text-left rtl:text-right text-gray-400">
+                    <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+                      <tr>
+                        <th scope="col" class="p-4 w-4">
+                          <div class="flex items-center">
+                            <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                            <label for="checkbox-all" class="sr-only">checkbox</label>
+                          </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Product name
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Status
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbody-delete">
 
-                  </tbody>
-                </table>
-              </div>
-              <!-- end template delete -->
+                    </tbody>
+                  </table>
+                </div>
+                <!-- end template delete -->
+                </tbody>
             </table>
           </div>
         </div>

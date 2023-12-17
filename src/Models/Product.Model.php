@@ -162,6 +162,29 @@ class ProductModel
         }
     }
 
+    public function updateStock(string $itemID, int $stock): bool
+    {
+        try {
+            $db = new DB();
+            $connection = $db->getConnection();
+
+            if ($connection == null) die(print_r("Connection is Null", true));
+
+            $collection = $connection->selectCollection('kanema', 'Product');
+            $updateResult = $collection->updateOne(['_id' => new ObjectId($itemID)], ['$set' => ['stock' => $stock]]);
+
+
+            if ($updateResult->getMatchedCount() === 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception $th) {
+            printf($th->getMessage());
+            return false;
+        }
+    }
+
     public function create(array $payload): bool
     {
         try {
