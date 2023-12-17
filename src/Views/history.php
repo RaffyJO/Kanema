@@ -10,7 +10,12 @@ if (!isset($TPL)) {
 }
 ?>
 
+<script type="text/javascript" src="src/lib/Functions/PriceUtils.js"></script>
+<script type="text/javascript" src="src/lib/Functions/CookieUtils.js"></script>
+
 <script>
+  let dataContainer = []
+
   function actionButtonPress(element) {
     const rawId = element.getAttribute('id')
     const _id = rawId.replace('prev-', '')
@@ -22,39 +27,46 @@ if (!isset($TPL)) {
     const modal = document.getElementById('readProductModal')
     let actionButton = document.getElementById("actionButtonModal");
 
-    let headersList = {
-      "Accept": "*/*",
-      "Authorization": `Bearer ${getCookie('Bearer')}`
-    }
+    const detailAmount = document.getElementById('detail-amount');
+    const detailDate = document.getElementById('detail-date');
+    const modalListItem = document.getElementById('modal-list-item');
+    const detailCashier = document.getElementById('detail-cashier');
 
-    fetch(`/api/product?search=${id}`, {
-        method: 'GET',
-        headers: headersList
-      })
-      .then(response => response.json())
-      .then(result => {
-        if (new Object(result).hasOwnProperty('error')) {
-          alertBox.classList.toggle('hidden')
-        }
+    modalListItem.innerHTML = ''
 
-        result.data.forEach(value => {
-          const detailId = document.getElementById('detail-id');
-          const detailAmount = document.getElementById('detail-amount');
-          const detailDate = document.getElementById('detail-date');
-          const detailCashier = document.getElementById('detail-cashier');
+    let selectedData = dataContainer.find(value => value._id === id);
 
-          detailId.innerText = value._id
-          detailAmount.innerText = value.total
-          detailDate.innerText = value.time
-          detailCashier.innerText = value.user
-          console.log(detailId);
-          console.log(detailAmount);
-          console.log(detailDate);
-          console.log(detailCashier);
-          prevImage.classList.remove("hidden")
-        });
-        modal.classList.toggle('hidden')
-      }).catch(err => console.error(err))
+    detailAmount.innerText = formatToIDR(selectedData.total)
+    detailDate.innerText = `${selectedData.time.hour} : ${selectedData.time.minute} ${selectedData.time.day}/${selectedData.time.month}/${selectedData.time.year}`
+    detailCashier.innerText = selectedData.user
+
+    let totalIncomee = 0
+
+    selectedData.details.map(value => {
+      const template = `
+      <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm border -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg border-gray-700 text-gray-200">
+      <div class="grid grid-cols-3 w-full text-center">
+              <span class="col-span-1">${value.productName}</span>
+              <span class="col-span-1">${value.qty}</span>
+              <span class="col-span-1">${formatToIDR(value.price)}</span>
+            </div>
+            </li>
+      `
+      modalListItem.innerHTML += template
+    });
+
+    const templateTotal = `
+    <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-semibold border -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg bg-slate-800 border-gray-700 text-gray-200">
+            <div class="grid grid-cols-3 w-full text-center">
+              <span class="col-span-1">Amount Paid</span>
+              <span class="col-span-1"></span>
+              <span class="col-span-1">${formatToIDR(selectedData.total)}</span>
+            </div>
+          </li>
+    `
+    modalListItem.innerHTML += templateTotal
+
+    modal.classList.toggle('hidden')
   }
 
   function toggleModal(modalId) {
@@ -63,74 +75,6 @@ if (!isset($TPL)) {
     if (modal != null)
       modal.classList.toggle('hidden')
   }
-
-  // function searchOnEnter(value) {
-
-  //   if (value.length > 0) {
-
-  //     const transactionContainer = document.getElementById('transaction-list');
-  //     if (transactionContainer) {
-  //       fetch('/api/orders?search=${value}', {
-  //           method: 'GET'
-  //         })
-  //         .then(response => response.json())
-  //         .then(result => {
-  //           let items = '';
-  //           result.data.forEach(content => {
-  //             const formattedTotal = new Intl.NumberFormat('id-ID', {
-  //               style: 'currency',
-  //               currency: 'IDR',
-  //               minimumFractionDigits: 0, // Minimum number of digits after the decimal point
-  //               maximumFractionDigits: 0, // Maximum number of digits after the decimal point
-  //             }).format(content.total);
-  //             items += `<tr class="bg-gray-800 border-gray-700">
-  //       <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white">
-  //       ${content._id}
-  //       </th>
-  //       <td class="px-6 py-4 text-white">
-  //       ${formattedTotal}
-  //       </td>
-  //       <td class="px-6 py-4 text-white">
-  //       ${content.details.length}
-  //       </td>
-  //       <td class="px-6 py-4 text-white">
-  //       ${content.time.day}-${content.time.month}-${content.time.year}
-  //       </td>
-  //       <td class="px-6 py-4 text-white">
-  //       ${content.user}
-  //       </td>
-  //       <td class="px-6 py-4 text-right">
-  //         <button type="button" class="py-2 px-3 flex items-center text-sm font-medium text-center focus:outline-none rounded-lg border focus:z-10 focus:ring-4 focus:ring-gray-700 bg-gray-800 text-blue-400 border-blue-600 hover:text-white hover:bg-blue-700" onclick="actionButtonPress(this, 'prev')" id="prev-${content._id}">
-  //           <svg class="w-4 h-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="20" fill="none" viewBox="0 0 18 20">
-  //             <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M12 2h4a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4m6 0v3H6V2m6 0a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1M5 5h8m-5 5h5m-8 0h.01M5 14h.01M8 14h5" />
-  //           </svg>
-  //           Details
-  //         </button>
-  //       </td>
-  //     </tr>`;
-  //           });
-  //           document.getElementById('container-spinner').remove();
-  //           transactionContainer.innerHTML += items;
-  //           console.log(items);
-  //         }).catch(error => console.error(error))
-  //     } else {
-  //       console.error('Product container not found!');
-  //     }
-  //   } else {
-  //     initPageData()
-  //   }
-  // }
-
-  // const search = document.getElementById('table-search')
-
-  // search.addEventListener('keypress', function(event) {
-  //   if (event.key === 'Enter' || event.keyCode === 13) {
-  //     const value = event.currentTarget.value;
-
-  //     searchOnEnter(value)
-  //     event.preventDefault();
-  //   }
-  // });
 </script>
 
 <div class="relative overflow-x-auto sm:rounded-lg">
@@ -226,7 +170,7 @@ if (!isset($TPL)) {
       <div class="mt-5 sm:mt-10">
         <h4 class="text-xs font-semibold uppercase text-gray-200">Summary</h4>
 
-        <ul class="mt-3 flex flex-col">
+        <ul class="mt-3 flex flex-col" id="modal-list-item">
           <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm border -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg border-gray-700 text-gray-200">
             <div class="flex items-center justify-between w-full">
               <span>Indomie</span>
@@ -278,7 +222,7 @@ if (!isset($TPL)) {
         ${content.user}
         </td>
         <td class="px-6 py-4 text-right">
-          <button type="button" class="py-2 px-3 flex items-center text-sm font-medium text-center focus:outline-none rounded-lg border focus:z-10 focus:ring-4 focus:ring-gray-700 bg-gray-800 text-blue-400 border-blue-600 hover:text-white hover:bg-blue-700" onclick="actionButtonPress(this, 'prev')" id="prev-${content._id}">
+          <button type="button" class="py-2 px-3 flex items-center text-sm font-medium text-center focus:outline-none rounded-lg border focus:z-10 focus:ring-4 focus:ring-gray-700 bg-gray-800 text-blue-400 border-blue-600 hover:text-white hover:bg-blue-700" onclick="actionButtonPress(this)" id="prev-${content._id}">
             <svg class="w-4 h-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="20" fill="none" viewBox="0 0 18 20">
               <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M12 2h4a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4m6 0v3H6V2m6 0a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1M5 5h8m-5 5h5m-8 0h.01M5 14h.01M8 14h5" />
             </svg>
@@ -287,8 +231,12 @@ if (!isset($TPL)) {
         </td>
       </tr>`;
           });
+
           document.getElementById('container-spinner').remove();
           transactionContainer.innerHTML += items;
+
+          dataContainer = result.data
+
         }).catch(error => console.error(error))
     } else {
       console.error('Product container not found!');

@@ -9,8 +9,11 @@ if (!isset($TPL)) {
     exit;
 }
 ?>
+
 <script type="text/javascript" src="src/lib/Functions/CookieUtils.js"></script>
 <script type="text/javascript" src="src/lib/Functions/PriceUtils.js"></script>
+<script src="src/lib/Functions/NavUtils.js"></script>
+
 <script>
     let dataBearer = [];
     let selectedID = null;
@@ -126,7 +129,6 @@ if (!isset($TPL)) {
         const selectedData = dataBearer.find(value => value._id.$oid === id);
 
         modalTitle.innerText = `${selectedData._id.$oid}`
-        console.log(selectedData)
 
         if (selectedData === undefined || selectedData === null) {
             alertBox.classList.toggle('hidden')
@@ -136,6 +138,16 @@ if (!isset($TPL)) {
             let arrStat = []
 
             selectedData.update.map(value => {
+                let idx = selectedData.update.indexOf(value)
+                let containedData = dataBearer.find(value => value._id.$oid === id)
+
+                const target = containedData.update[idx]
+                target.status = 'declined'
+                containedData.update[idx] = target
+
+                if (!new Object(value.old).hasOwnProperty('name')) value.status = 'declined'
+
+
                 const template = `
             <tr class="border-b border-gray-600 hover:bg-gray-900 cursor-pointer" onclick="expandUpdate('accor-upd-${value.productID.$oid}')" id="upd-${value.productID.$oid}" data-accordion-target="#accor-upd-${value.productID.$oid}" aria-expanded="false" aria-controls="accor-upd-${value.productID.$oid}">
                                     <td class="p-4 w-4">
@@ -145,15 +157,37 @@ if (!isset($TPL)) {
                                         </div>
                                     </td>
                                     <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap text-white">
+                                    ${
+                                        new Object(value.old).hasOwnProperty('name') ? 
+                                        `
                                         <div class="flex items-center mr-3">
                                             <img src="${value.old.imgUrl}" alt="iMac Front Image" class="h-8 h-8 mr-3 rounded-full">
                                             ${value.old.name}
                                         </div>
+                                        `
+                                        :
+                                        `
+                                        <div class="flex items-center mr-3">
+                                            DELETED
+                                        </div>
+                                        `
+                                    }
                                     </th>
                                     <td class="px-4 py-3">
+                                    ${
+                                        new Object(value.old).hasOwnProperty('name') ? 
+                                        `
                                         <span class="text-xs font-medium px-2 py-0.5 rounded bg-primary-900 text-primary-300">
                                             <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300" id="status">${value.status}</span>
                                         </span>
+                                        `
+                                        :
+                                        `
+                                        <span class="text-xs font-medium px-2 py-0.5 rounded bg-primary-900 text-primary-300">
+                                            <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300" id="status">declined</span>
+                                        </span>
+                                        `
+                                    }
                                     </td>
                                 </tr>
                                 <tr id="accor-upd-${value.productID.$oid}" class="transition-all ease-in duration-200 hidden" aria-labelledby="accor-upd-${value.productID.$oid}">
@@ -178,7 +212,7 @@ if (!isset($TPL)) {
                                                         Product name
                                                     </th>
                                                     <td class="px-6 py-4">
-                                                        ${value.old.name}
+                                                        ${new Object(value.old).hasOwnProperty('name') ? value.old.name : 'DELETED'}
                                                     </td>
                                                     <td class="px-6 py-4 bg-gray-800">
                                                     ${value.new.name}
@@ -189,7 +223,7 @@ if (!isset($TPL)) {
                                                         Price
                                                     </th>
                                                     <td class="px-6 py-4">
-                                                        ${value.old.price}
+                                                        ${new Object(value.old).hasOwnProperty('name') ? value.old.price : 'DELETED'}
                                                     </td>
                                                     <td class="px-6 py-4 bg-gray-800">
                                                         ${value.new.price}
@@ -200,7 +234,7 @@ if (!isset($TPL)) {
                                                         Stock
                                                     </th>
                                                     <td class="px-6 py-4">
-                                                        ${value.old.price}
+                                                        ${new Object(value.old).hasOwnProperty('name') ? value.old.price : 'DELETED'}
                                                     </td>
                                                     <td class="px-6 py-4 bg-gray-800">
                                                         ${value.new.price}
@@ -211,7 +245,7 @@ if (!isset($TPL)) {
                                                         Category
                                                     </th>
                                                     <td class="px-6 py-4">
-                                                        ${value.old.category}
+                                                        ${new Object(value.old).hasOwnProperty('name') ? value.old.category : 'DELETED'}
                                                     </td>
                                                     <td class="px-6 py-4 bg-gray-800">
                                                         ${value.new.category}
@@ -222,7 +256,7 @@ if (!isset($TPL)) {
                                                         Available
                                                     </th>
                                                     <td class="px-6 py-4">
-                                                        ${value.old.available}
+                                                        ${new Object(value.old).hasOwnProperty('name') ? value.old.available : 'DELETED'}
                                                     </td>
                                                     <td class="px-6 py-4 bg-gray-800">
                                                         ${value.new.available}
@@ -233,7 +267,7 @@ if (!isset($TPL)) {
                                                         Img
                                                     </th>
                                                     <td class="px-6 py-4">
-                                                        <img src="${value.old.imgUrl}" class="w-full rounded-lg" alt="">
+                                                        <img src="${new Object(value.old).hasOwnProperty('name') ? value.old.imgUrl : 'DELETED'}" class="w-full rounded-lg" alt="">
                                                     </td>
                                                     <td class="px-6 py-4 bg-gray-800">
                                                         <img src="${value.new.imgUrl}" class="w-full rounded-lg" alt="">
@@ -477,7 +511,6 @@ if (!isset($TPL)) {
     function sendData(requestData) {
         let alertBox = document.getElementById('box-alert');
 
-        console.log(requestData)
         let headersList = {
             "Accept": "*/*",
             "Authorization": `Bearer ${getCookie('Bearer')}`
@@ -490,8 +523,6 @@ if (!isset($TPL)) {
             })
             .then(response => response.json())
             .then(result => {
-                console.log(result)
-
                 if (new Object(result).hasOwnProperty('error')) {
                     alertBox.classList.toggle('hidden')
 
@@ -663,117 +694,6 @@ if (!isset($TPL)) {
                                 </tr>
                             </thead>
                             <tbody id="accordion-collapse-update" class="overflow-auto" data-accordion="open">
-                                <!-- <tr class="border-b border-gray-600 hover:bg-gray-900 cursor-pointer" id="upd-proc-1" data-accordion-target="#accor-upd-proc-1" aria-expanded="false" aria-controls="accor-upd-proc-1">
-                                    <td class="p-4 w-4">
-                                        <div class="flex items-center">
-                                            <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
-                                            <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                                        </div>
-                                    </td>
-                                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap text-white">
-                                        <div class="flex items-center mr-3">
-                                            <img src="https://cdn.discordapp.com/avatars/460429122431221771/799decc5388b211d9e827c8f45208537.webp?size=48" alt="iMac Front Image" class="h-8 h-8 mr-3 rounded-full">
-                                            Apple Pie
-                                        </div>
-                                    </th>
-                                    <td class="px-4 py-3">
-                                        <span class="text-xs font-medium px-2 py-0.5 rounded bg-primary-900 text-primary-300">
-                                            <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300" id="status">pending</span>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr id="accor-upd-proc-1" class="hidden" aria-labelledby="accor-upd-proc-1">
-                                    <td class="p-5 bg-gray-900 relative overflow-x-auto" colspan="3">
-                                        <table class="w-full text-sm text-left rtl:text-right text-gray-400">
-                                            <thead class="text-xs uppercase text-gray-400">
-                                                <tr>
-                                                    <th scope="col" class="px-6 py-3">
-
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Old Data
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3 bg-gray-800">
-                                                        New Data
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr class="border-b border-gray-700">
-                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
-                                                        Product name
-                                                    </th>
-                                                    <td class="px-6 py-4"> mie goreng
-                                                    </td>
-                                                    <td class="px-6 py-4 bg-gray-800"> mie ayam
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-b border-gray-700">
-                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
-                                                        Price
-                                                    </th>
-                                                    <td class="px-6 py-4">10000
-                                                    </td>
-                                                    <td class="px-6 py-4 bg-gray-800">12000
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-b border-gray-700">
-                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
-                                                        Stock
-                                                    </th>
-                                                    <td class="px-6 py-4">10
-                                                    </td>
-                                                    <td class="px-6 py-4 bg-gray-800">12
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-b border-gray-700">
-                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
-                                                        Category
-                                                    </th>
-                                                    <td class="px-6 py-4">Food
-                                                    </td>
-                                                    <td class="px-6 py-4 bg-gray-800">Food
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-b border-gray-700">
-                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
-                                                        Available
-                                                    </th>
-                                                    <td class="px-6 py-4">true
-                                                    </td>
-                                                    <td class="px-6 py-4 bg-gray-800">true
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-b border-gray-700">
-                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
-                                                        Img
-                                                    </th>
-                                                    <td class="px-6 py-4">
-                                                        <img src="https://www.kkisitb1.com/wp-content/uploads/2022/11/indomieaceh1.jpg" class="w-full rounded-lg" alt="">
-                                                    </td>
-                                                    <td class="px-6 py-4 bg-gray-800">
-                                                        <img src="https://www.kkisitb1.com/wp-content/uploads/2022/11/indomieaceh1.jpg" class="w-full rounded-lg" alt="">
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="block flex justify-end mt-3 gap-3">
-                                            <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="" id="">
-                                                <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                                                </svg>
-                                                Approved
-                                            </button>
-                                            <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="" id="">
-                                                <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
-                                                </svg>
-                                                Reject
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr> -->
-                                <!-- end template update -->
                             </tbody>
                         </table>
                     </div>
