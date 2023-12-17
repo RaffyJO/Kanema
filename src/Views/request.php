@@ -138,129 +138,130 @@ if (!isset($TPL)) {
             selectedData.update.map(value => {
                 const template = `
             <tr class="border-b border-gray-600 hover:bg-gray-900 cursor-pointer" onclick="expandUpdate('accor-upd-${value.productID.$oid}')" id="upd-${value.productID.$oid}" data-accordion-target="#accor-upd-${value.productID.$oid}" aria-expanded="false" aria-controls="accor-upd-${value.productID.$oid}">
-                                    <td class="p-4 w-4">
-                                        <div class="flex items-center">
-                                            <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
-                                            <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                                        </div>
-                                    </td>
-                                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap text-white">
-                                        <div class="flex items-center mr-3">
-                                            <img src="${value.old.imgUrl}" alt="iMac Front Image" class="h-8 h-8 mr-3 rounded-full">
-                                            ${value.old.name}
-                                        </div>
-                                    </th>
-                                    <td class="px-4 py-3">
-                                        <span class="text-xs font-medium px-2 py-0.5 rounded bg-primary-900 text-primary-300">
-                                            <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300" id="status">${value.status}</span>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr id="accor-upd-${value.productID.$oid}" class="transition-all ease-in duration-200 hidden" aria-labelledby="accor-upd-${value.productID.$oid}">
-                                    <td class="p-5 bg-gray-900 relative overflow-x-auto" colspan="3">
-                                        <table class="w-full text-sm text-left rtl:text-right text-gray-400">
-                                            <thead class="text-xs uppercase text-gray-400">
-                                                <tr>
-                                                    <th scope="col" class="px-6 py-3">
+                <td class="p-4 w-4">
+                    <div class="flex items-center">
+                        <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                    </div>
+                </td>
+                <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap text-white">
+                    <div class="flex items-center mr-3">
+                        <img src="${value.old.imgUrl}" alt="iMac Front Image" class="h-8 h-8 mr-3 rounded-full">
+                        ${value.old.name}
+                    </div>
+                </th>
+                <td class="px-4 py-3">
+                    <span class="text-xs font-medium px-2 py-0.5 rounded bg-primary-900 text-primary-300">
+                        <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300" id="status">${value.status}</span>
+                    </span>
+                </td>
+            </tr>
+            <tr id="accor-upd-${value.productID.$oid}" class="transition-all ease-in duration-200 hidden" aria-labelledby="accor-upd-${value.productID.$oid}">
+                <td class="p-5 bg-gray-900 relative overflow-x-auto" colspan="3">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-400">
+                        <thead class="text-xs uppercase text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
 
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Old Data
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3 bg-gray-800">
-                                                        New Data
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr class="border-b border-gray-700">
-                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
-                                                        Product name
-                                                    </th>
-                                                    <td class="px-6 py-4">
-                                                        ${value.old.name}
-                                                    </td>
-                                                    <td class="px-6 py-4 bg-gray-800">
-                                                    ${value.new.name}
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-b border-gray-700">
-                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
-                                                        Price
-                                                    </th>
-                                                    <td class="px-6 py-4">
-                                                        ${value.old.price}
-                                                    </td>
-                                                    <td class="px-6 py-4 bg-gray-800">
-                                                        ${value.new.price}
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-b border-gray-700">
-                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
-                                                        Stock
-                                                    </th>
-                                                    <td class="px-6 py-4">
-                                                        ${value.old.price}
-                                                    </td>
-                                                    <td class="px-6 py-4 bg-gray-800">
-                                                        ${value.new.price}
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-b border-gray-700">
-                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
-                                                        Category
-                                                    </th>
-                                                    <td class="px-6 py-4">
-                                                        ${value.old.category}
-                                                    </td>
-                                                    <td class="px-6 py-4 bg-gray-800">
-                                                        ${value.new.category}
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-b border-gray-700">
-                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
-                                                        Available
-                                                    </th>
-                                                    <td class="px-6 py-4">
-                                                        ${value.old.available}
-                                                    </td>
-                                                    <td class="px-6 py-4 bg-gray-800">
-                                                        ${value.new.available}
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-b border-gray-700">
-                                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
-                                                        Img
-                                                    </th>
-                                                    <td class="px-6 py-4">
-                                                        <img src="${value.old.imgUrl}" class="w-full rounded-lg" alt="">
-                                                    </td>
-                                                    <td class="px-6 py-4 bg-gray-800">
-                                                        <img src="${value.new.imgUrl}" class="w-full rounded-lg" alt="">
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="block flex justify-end mt-3 gap-3">
-                                        ${value.status === 'pending' ? `
-                                            <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="approveUpdate('${selectedData._id.$oid}','${selectedData.update.indexOf(value)}')" id="">
-                                                <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                                                </svg>
-                                                Approved
-                                            </button>
-                                            <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="declineUpdate('${selectedData._id.$oid}','${selectedData.update.indexOf(value)}')" id="">
-                                                <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
-                                                </svg>
-                                                Reject
-                                            </button>
-                                            `
-                                            :
-                                             ''}
-                                        </div>
-                                    </td>
-                                </tr>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Old Data
+                                </th>
+                                <th scope="col" class="px-6 py-3 bg-gray-800">
+                                    New Data
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-700">
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                    Product name
+                                </th>
+                                <td class="px-6 py-4">
+                                    ${value.old.name}
+                                </td>
+                                <td class="px-6 py-4 bg-gray-800">
+                                ${value.new.name}
+                                </td>
+                            </tr>
+                            <tr class="border-b border-gray-700">
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                    Price
+                                </th>
+                                <td class="px-6 py-4">
+                                    ${value.old.price}
+                                </td>
+                                <td class="px-6 py-4 bg-gray-800">
+                                    ${value.new.price}
+                                </td>
+                            </tr>
+                            <tr class="border-b border-gray-700">
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                    Stock
+                                </th>
+                                <td class="px-6 py-4">
+                                    ${value.old.price}
+                                </td>
+                                <td class="px-6 py-4 bg-gray-800">
+                                    ${value.new.price}
+                                </td>
+                            </tr>
+                            <tr class="border-b border-gray-700">
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                    Category
+                                </th>
+                                <td class="px-6 py-4">
+                                    ${value.old.category}
+                                </td>
+                                <td class="px-6 py-4 bg-gray-800">
+                                    ${value.new.category}
+                                </td>
+                            </tr>
+                            <tr class="border-b border-gray-700">
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                    Available
+                                </th>
+                                <td class="px-6 py-4">
+                                    ${value.old.available}
+                                </td>
+                                <td class="px-6 py-4 bg-gray-800">
+                                    ${value.new.available}
+                                </td>
+                            </tr>
+                            <tr class="border-b border-gray-700">
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white bg-gray-800 uppercase">
+                                    Img
+                                </th>
+                                <td class="px-6 py-4">
+                                    <img src="${value.old.imgUrl}" class="w-full rounded-lg" alt="">
+                                </td>
+                                <td class="px-6 py-4 bg-gray-800">
+                                    <img src="${value.new.imgUrl}" class="w-full rounded-lg" alt="">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="block flex justify-end mt-3 gap-3">
+                    ${value.status === 'pending' ? `
+                        <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="approveUpdate('${selectedData._id.$oid}','${selectedData.update.indexOf(value)}')" id="">
+                            <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                            </svg>
+                            Approved
+                        </button>
+                        <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="declineUpdate('${selectedData._id.$oid}','${selectedData.update.indexOf(value)}')" id="">
+                            <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                            </svg>
+                            Reject
+                        </button>
+                        `
+                        :
+                            ''}
+                    </div>
+                </td>
+            </tr>
+        </tr>
         `
 
                 tbodyUpdate.innerHTML += template;
@@ -275,55 +276,55 @@ if (!isset($TPL)) {
             selectedData.create.map(value => {
                 const template = `
             <tr class="border-b bg-gray-800 border-gray-700">
-                                                <td class="p-4 w-4">
-                                                    <div class="flex items-center">
-                                                        <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
-                                                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                                                    </div>
-                                                </td>
-                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-white">
-                                                    ${value.fields.name}
-                                                </th>
-                                                <td class="px-6 py-4">
-                                                ${value.fields.price}
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                ${value.fields.stock}
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                ${value.fields.category}
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                ${value.fields.available}
-                                                </td>
-                                                <td class="text-center">
-                                                    <img src="${value.fields.imgUrl}" class="h-12 w-auto rounded-full ms-3" alt="">
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300">${value.status}</span>
-                                                </td>
-                                                <td class="px-6 py-4 flex items-center">
-                                                ${
-                                                    value.status === 'pending' ? 
-                                                    `
-                                                    <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="approveCreate('${selectedData._id.$oid}','${selectedData.create.indexOf(value)}')" id="">
-                                                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                                                        </svg>
-                                                        Approved
-                                                    </button>
-                                                    <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="declineCreate('${selectedData._id.$oid}','${selectedData.create.indexOf(value)}')" id="">
-                                                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
-                                                        </svg>
-                                                        Reject
-                                                    </button>
-                                                    `
-                                                    :
-                                                    ''
-                                                }
-                                                </td>
-                                            </tr>
+                <td class="p-4 w-4">
+                    <div class="flex items-center">
+                        <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                    </div>
+                </td>
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-white">
+                    ${value.fields.name}
+                </th>
+                <td class="px-6 py-4">
+                ${value.fields.price}
+                </td>
+                <td class="px-6 py-4">
+                ${value.fields.stock}
+                </td>
+                <td class="px-6 py-4">
+                ${value.fields.category}
+                </td>
+                <td class="px-6 py-4">
+                ${value.fields.available}
+                </td>
+                <td class="text-center">
+                    <img src="${value.fields.imgUrl}" class="h-12 w-auto rounded-full ms-3" alt="">
+                </td>
+                <td class="px-6 py-4">
+                    <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300">${value.status}</span>
+                </td>
+                <td class="px-6 py-4 flex items-center">
+                ${
+                    value.status === 'pending' ? 
+                    `
+                    <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="approveCreate('${selectedData._id.$oid}','${selectedData.create.indexOf(value)}')" id="">
+                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                        </svg>
+                        Approved
+                    </button>
+                    <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="declineCreate('${selectedData._id.$oid}','${selectedData.create.indexOf(value)}')" id="">
+                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                        </svg>
+                        Reject
+                    </button>
+                    `
+                    :
+                    ''
+                }
+                </td>
+            </tr>
             `
 
                 tbodyCreate.innerHTML += template
@@ -338,39 +339,39 @@ if (!isset($TPL)) {
             selectedData.delete.map(value => {
                 const template = `
                 <tr class="border-b bg-gray-800 border-gray-700">
-                                                <td class="p-4">
-                                                    <div class="flex items-center">
-                                                        <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" class="w-4 h-4 text-primary-600 rounded  focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
-                                                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                                                    </div>
-                                                </td>
-                                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white flex items-center">
-                                                    ${value.productName}
-                                                </th>
-                                                <td class="px-6 py-4">
-                                                    <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300">${value.status}</span>
-                                                </td>
-                                                <td class="px-6 py-4 flex items-center">
-                                                ${
-                                                    value.status === 'pending' ?
-                                                    `
-                                                    <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="approveDelete('${selectedData._id.$oid}','${selectedData.delete.indexOf(value)}')" id="">
-                                                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                                                        </svg>
-                                                        Approved
-                                                    </button>
-                                                    <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="declineDelete('${selectedData._id.$oid}','${selectedData.delete.indexOf(value)}')" id="">
-                                                        <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
-                                                        </svg>
-                                                        Reject
-                                                    </button>
-                                                    `
-                                                    : ''
-                                                }
-                                                </td>
-                                            </tr>
+                    <td class="p-4">
+                        <div class="flex items-center">
+                            <input id="checkbox-table-search-1" type="checkbox" onclick="event.stopPropagation()" class="w-4 h-4 text-primary-600 rounded  focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                            <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                        </div>
+                    </td>
+                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white flex items-center">
+                        ${value.productName}
+                    </th>
+                    <td class="px-6 py-4">
+                        <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300">${value.status}</span>
+                    </td>
+                    <td class="px-6 py-4 flex items-center">
+                    ${
+                        value.status === 'pending' ?
+                        `
+                        <button type="button" class="py-2 px-3 flex items-center text-white text-sm font-medium text-center focus:outline-none rounded-lg border focus:ring-green-700 text-green-400 border-green-600 hover:text-white hover:bg-green-700 mr-3" onclick="approveDelete('${selectedData._id.$oid}','${selectedData.delete.indexOf(value)}')" id="">
+                            <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                            </svg>
+                            Approved
+                        </button>
+                        <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900" onclick="declineDelete('${selectedData._id.$oid}','${selectedData.delete.indexOf(value)}')" id="">
+                            <svg class="h-4 w-4 mr-2 -ml-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                            </svg>
+                            Reject
+                        </button>
+                        `
+                        : ''
+                    }
+                    </td>
+                </tr>
             `
 
                 tbodyDelete.innerHTML += template
@@ -495,17 +496,16 @@ if (!isset($TPL)) {
                 if (new Object(result).hasOwnProperty('error')) {
                     alertBox.classList.toggle('hidden')
 
-                    const template = `
-<div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 w-fit mt-2 mr-2" role="alert" id="instance-alert">
-    <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-    </svg>
-    <span class="sr-only">Error</span>
-    <div class="ms-3 text-sm font-medium">
-        ${result.error}
-    </div>
-</div>
-                    `
+                    const template =
+                        `<div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 w-fit mt-2 mr-2" role="alert" id="instance-alert">
+                            <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                            </svg>
+                            <span class="sr-only">Error</span>
+                            <div class="ms-3 text-sm font-medium">
+                                ${result.error}
+                            </div>
+                        </div>`
 
                     alertBox.innerHTML = template
 
@@ -519,15 +519,14 @@ if (!isset($TPL)) {
 
                 const succeedTemplate = `
                 <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400  w-fit mt-2 mr-2" role="alert" id="instance-success">
-  <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-  </svg>
-  <span class="sr-only">Info</span>
-  <div>
-   Success Updating Request
-  </div>
-  </div>
-  `
+                    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                    </svg>
+                    <span class="sr-only">Info</span>
+                    <div>
+                        Success Updating Request
+                    </div>
+                </div>`
 
                 alertBox.innerHTML = succeedTemplate
                 alertBox.classList.toggle('hidden')
@@ -591,8 +590,8 @@ if (!isset($TPL)) {
                     <th scope="col" class="px-4 py-3 text-center">Creator</th>
                     <!-- <th scope="col" class="px-4 py-3">Description</th> -->
                     <th scope="col" class="px-4 py-3 text-center">Date</th>
-                    <th scope="col" class="p-4 text-center">Action</th>
                     <th scope="col" class="p-4 text-center">Status</th>
+                    <th scope="col" class="p-4 text-center">Action</th>
                 </tr>
             </thead>
             <tbody id="req-list">
@@ -778,87 +777,79 @@ if (!isset($TPL)) {
                         </table>
                     </div>
                     <div class="hidden rounded-lg bg-gray-800" id="create" role="tabpanel" aria-labelledby="create-tab">
-                        <table class="w-full text-sm text-left text-gray-400 rounded-t-lg">
-                            <thead class="text-xs rounded-t-lg uppercase bg-gray-900 text-gray-400">
-                                <!-- start template create -->
-                                <div class="relative overflow-x-auto">
-                                    <table class="w-full text-sm text-left rtl:text-right text-gray-400">
-                                        <thead class="text-xs uppercase bg-gray-700 text-gray-400">
-                                            <tr>
-                                                <th scope="col" class="p-4">
-                                                    <div class="flex items-center">
-                                                        <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
-                                                        <label for="checkbox-all" class="sr-only">checkbox</label>
-                                                    </div>
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Product name
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Price
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Stock
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Category
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Available
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Img
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Status
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Action
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tbody-create">
+                        <!-- start template create -->
+                        <div class="relative overflow-x-auto">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-400">
+                                <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="p-4">
+                                            <div class="flex items-center">
+                                                <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                                                <label for="checkbox-all" class="sr-only">checkbox</label>
+                                            </div>
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Product name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Price
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Stock
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Category
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Available
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Img
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Status
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-create">
 
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <!-- end template create -->
                                 </tbody>
-                        </table>
+                            </table>
+                        </div>
+                        <!-- end template create -->
                     </div>
                     <div class="hidden rounded-lg bg-gray-800" id="delete" role="tabpanel" aria-labelledby="delete-tab">
-                        <table class="w-full text-sm text-left text-gray-400 rounded-t-lg">
-                            <thead class="text-xs rounded-t-lg uppercase bg-gray-900 text-gray-400">
-                                <!-- start template delete -->
-                                <div class="relative overflow-x-auto">
-                                    <table class="w-full text-sm text-left rtl:text-right text-gray-400">
-                                        <thead class="text-xs uppercase bg-gray-700 text-gray-400">
-                                            <tr>
-                                                <th scope="col" class="p-4 w-4">
-                                                    <div class="flex items-center">
-                                                        <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
-                                                        <label for="checkbox-all" class="sr-only">checkbox</label>
-                                                    </div>
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Product name
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Status
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Action
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tbody-delete">
+                        <!-- start template delete -->
+                        <div class="relative overflow-x-auto rounded-t-lg">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-400">
+                                <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="p-4 w-4">
+                                            <div class="flex items-center">
+                                                <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                                                <label for="checkbox-all" class="sr-only">checkbox</label>
+                                            </div>
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Product name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Status
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-delete">
 
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <!-- end template delete -->
                                 </tbody>
-                        </table>
+                            </table>
+                        </div>
+                        <!-- end template delete -->
                     </div>
                 </div>
             </div>
@@ -895,6 +886,11 @@ if (!isset($TPL)) {
                         ${value.creatorName}
                     </td>
                     <td class="px-4 py-3 text-white text-center">${new Date(value.created_at * 1000).toLocaleString()}</td>
+                    <td class="px-4 py-3">
+                        <span class="text-xs font-medium px-2 py-0.5 rounded bg-primary-900 text-primary-300 flex justify-center">
+                            <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300" id="status">${value.done ? 'DONE' : 'ON PROCESS'}</span>
+                        </span>
+                    </td>
                     <td class="px-4 py-3 text-white flex justify-center">
                         <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-sky-500 text-sky-500 hover:text-white hover:bg-sky-600 focus:ring-sky-900 transition-all ease-in duration-200" onclick="detailButtonPress(this)" id="${value._id.$oid.toString()}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5 mr-2 -ml-0.5" fill="currentColor">
@@ -903,11 +899,6 @@ if (!isset($TPL)) {
                             Detail
                         </button>
                     </td>
-                    <td class="px-4 py-3">
-                                        <span class="text-xs font-medium px-2 py-0.5 rounded bg-primary-900 text-primary-300 flex justify-center">
-                                            <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300" id="status">${value.done ? 'DONE' : 'ON PROCESS'}</span>
-                                        </span>
-                                    </td>
                 </tr>
                     `
                     reqContainer.innerHTML += template
