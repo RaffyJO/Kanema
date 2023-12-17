@@ -226,17 +226,52 @@ class RequestController implements Controller
         }
 
         $postData = json_decode(file_get_contents('php://input'), true);
-        $requestContent = array(
-            'user_id' => new ObjectId($validToken['id']->{'$oid'}),
-            'time' => time(),
-            'requests' => array(
-                "status" => "pending",
-                "type" => "update",
-                "itemID" => new ObjectId($postData['itemID']),
-                'fields' => $postData['fields'],
-            ),
-            'done' => false
-        );
+
+        $base64_image = $postData['imgFile'];
+        $requestContent = null;
+
+        if ($base64_image != null) {
+            // Remove the prefix from the base64 string
+            $base64_image = preg_replace('/^data:image\/\w+;base64,/', '', $base64_image);
+
+            // Decode the base64 string
+            $decoded_image = base64_decode($base64_image);
+
+            // Generate a unique filename or use the original filename if available
+            $filename = 'uploaded_image_' . uniqid() . '.png'; // Example filename
+
+            // Specify the path where the image will be stored
+            $filepath = 'src/lib/Assets/uploads/' . $filename;
+
+            // Write the decoded image data to the file
+            file_put_contents($filepath, $decoded_image);
+
+            $postData['fields']['imgUrl'] = $filepath;
+
+            $requestContent = array(
+                'user_id' => new ObjectId($validToken['id']->{'$oid'}),
+                'time' => time(),
+                'requests' => array(
+                    "status" => "pending",
+                    "type" => "update",
+                    "itemID" => new ObjectId($postData['itemID']),
+                    'fields' => $postData['fields'],
+                ),
+                'done' => false
+            );
+        } else {
+            $requestContent = array(
+                'user_id' => new ObjectId($validToken['id']->{'$oid'}),
+                'time' => time(),
+                'requests' => array(
+                    "status" => "pending",
+                    "type" => "update",
+                    "itemID" => new ObjectId($postData['itemID']),
+                    'fields' => $postData['fields'],
+                ),
+                'done' => false
+            );
+        }
 
         $data = $reqModel->create($requestContent);
 
