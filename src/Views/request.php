@@ -551,7 +551,8 @@ if (!isset($TPL)) {
 
 <div class="w-full bg-gray-800 relative shadow-md rounded-lg overflow-hidden col-span-2">
     <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-        <div class="w-full md:w-1/2">
+        <span class="text-xl uppercase font-bold text-white">Request</span>
+        <!-- <div class="w-full md:w-1/2">
             <form class="flex items-center">
                 <label for="simple-search" class="sr-only">Search</label>
                 <div class="relative w-3/5">
@@ -589,7 +590,7 @@ if (!isset($TPL)) {
                     </ul>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
     <div class="overflow-x-auto">
         <table class="w-full text-sm text-left text-gray-400">
@@ -778,6 +779,8 @@ if (!isset($TPL)) {
                 dataBearer = result.data;
 
                 result.data.map(value => {
+                    const statusClass = value.done ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300';
+                    const statusText = value.done ? 'DONE' : 'ON PROCESS';
                     const template = `
                     <tr class="border-b border-gray-700">
                     <td class="px-4 py-3 text-white text-center">
@@ -786,7 +789,7 @@ if (!isset($TPL)) {
                     <td class="px-4 py-3 text-white text-center">${new Date(value.created_at * 1000).toLocaleString()}</td>
                     <td class="px-4 py-3">
                         <span class="text-xs font-medium px-2 py-0.5 rounded bg-primary-900 text-primary-300 flex justify-center">
-                            <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300" id="status">${value.done ? 'DONE' : 'ON PROCESS'}</span>
+                            <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded ${statusClass}" id="status">${statusText}</span>
                         </span>
                     </td>
                     <td class="px-4 py-3 text-white flex justify-center">

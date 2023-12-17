@@ -23,7 +23,7 @@ $current_page = $_SERVER['REQUEST_URI'];
                     </svg>
                 </button>
                 <a href="#" class="flex ms-2 md:me-24">
-                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-white">Kanema</span>
+                    <img src="src/lib/Assets/Kanema.png" class="max-h-8 w-fit" alt="">
                 </a>
             </div>
             <!-- <form class="w-2/5">

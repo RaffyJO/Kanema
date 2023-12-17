@@ -12,7 +12,7 @@ if (!isset($TPL)) {
 
 <nav class="bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-600 p-4 text-center flex justify-center">
     <a href="#" class="">
-        <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">Kanema</span>
+        <img src="src/lib/Assets/Kanema.png" class="max-h-8 w-fit" alt="">
     </a>
 </nav>
 <div class="mt-16 p-4">

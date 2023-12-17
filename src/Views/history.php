@@ -83,7 +83,7 @@ if (!isset($TPL)) {
 <div class="relative overflow-x-auto sm:rounded-lg">
   <div class="p-4 bg-gray-800 flex justify-between items-center">
     <h1 class="text-xl uppercase font-semibold text-left rtl:text-right text-white bg-gray-800">Invoices</h1>
-    <div>
+    <!-- <div>
       <label for="table-search" class="sr-only">Search</label>
       <div class="relative mt-1">
         <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -93,7 +93,7 @@ if (!isset($TPL)) {
         </div>
         <input type="text" id="table-search" class="block pt-2 ps-10 text-sm border rounded-lg w-80 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Search for invoices">
       </div>
-    </div>
+    </div> -->
   </div>
   <table class="w-full text-sm text-left rtl:text-right text-gray-400">
     <thead class="text-xs uppercase bg-gray-700 text-gray-400">
@@ -114,7 +114,7 @@ if (!isset($TPL)) {
           Cashier
         </th>
         <th scope="col" class="px-6 py-3">
-          <span class="sr-only">Edit</span>
+          Action
         </th>
       </tr>
     </thead>
