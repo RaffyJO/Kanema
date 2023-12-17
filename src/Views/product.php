@@ -845,7 +845,7 @@ if (!isset($TPL)) {
 
 <div class="w-full bg-gray-800 relative shadow-md rounded-lg overflow-hidden">
     <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-        <div class="w-full w-full md:w-1/2">
+        <!-- <div class="w-full w-full md:w-1/2">
             <form class="flex items-center">
                 <label for="simple-search" class="sr-only">Search</label>
                 <div class="relative lg:w-3/5 w-full">
@@ -857,7 +857,8 @@ if (!isset($TPL)) {
                     <input type="text" id="simple-search" class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" placeholder="Search" required="">
                 </div>
             </form>
-        </div>
+        </div> -->
+        <span class="text-xl uppercase font-bold text-white">Product</span>
         <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
             <button type="button" id="createProductModalButton" onclick="actionButtonPress(this, 'crea')" class="flex items-center justify-center text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
                 <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -865,7 +866,7 @@ if (!isset($TPL)) {
                 </svg>
                 Add product
             </button>
-            <div class="flex items-center space-x-3 w-full md:w-auto">
+            <!-- <div class="flex items-center space-x-3 w-full md:w-auto">
                 <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown" class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-white focus:outline-none rounded-lg border border-gray-200 focus:z-10 focus:ring-gray-200 focus:ring-gray-700 bg-gray-800 border-gray-600 hover:text-white hover:bg-gray-700" type="button">
                     <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="h-4 w-4 mr-2 text-gray-400" viewbox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
@@ -888,7 +889,7 @@ if (!isset($TPL)) {
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     <div class="overflow-x-auto">
@@ -915,7 +916,7 @@ if (!isset($TPL)) {
             <span class="sr-only">Loading...</span>
         </div>
     </div>
-    <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
+    <!-- <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
         <span class="text-sm font-normal text-gray-400">
             Showing
             <span class="font-semibold text-white">1-10</span>
@@ -952,7 +953,7 @@ if (!isset($TPL)) {
                 </a>
             </li>
         </ul>
-    </nav>
+    </nav> -->
 </div>
 
 <!-- Universal Product Modal -->

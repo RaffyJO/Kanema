@@ -261,7 +261,8 @@ if (!isset($TPL)) {
 
 <div class="w-full bg-gray-800 relative shadow-md rounded-lg overflow-hidden">
   <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-    <div class="w-full md:w-1/2">
+    <span class="text-xl uppercase font-bold text-white">Inbox</span>
+    <!-- <div class="w-full md:w-1/2">
       <form class="flex items-center">
         <label for="simple-search" class="sr-only">Search</label>
         <div class="relative w-3/5">
@@ -299,7 +300,7 @@ if (!isset($TPL)) {
           </ul>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
   <div class="overflow-x-auto">
     <table class="w-full text-sm text-left text-gray-400">
@@ -496,11 +497,8 @@ if (!isset($TPL)) {
                     ${value.done ? 
                       `<span class="text-xs font-medium px-2 py-0.5 rounded flex justify-center">
                       <span class="text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded bg-green-900 text-green-300">
-              <svg class="w-[12px] h-[12px] mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-              </svg>
-              DONE
-            </span></span>`
+                        DONE
+                      </span></span>`
                       :
                       `<span class="text-xs font-medium px-2 py-0.5 rounded flex justify-center">
                                             <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300" id="status">
