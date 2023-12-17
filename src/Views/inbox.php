@@ -307,9 +307,9 @@ if (!isset($TPL)) {
         <tr>
           <th scope="col" class="px-4 py-4 text-center">ID</th>
           <th scope="col" class="px-4 py-3 text-center">Cashier</th>
-          <th scope="col" class="px-4 py-3 text-center"></th>
           <th scope="col" class="px-4 py-3 text-center">Date</th>
-          <th scope="col" class="p-4">Status</th>
+          <th scope="col" class="px-4 py-3 text-center">Status</th>
+          <th scope="col" class="px-4 py-3 text-center"></th>
         </tr>
       </thead>
       <tbody id="products-list">
@@ -386,83 +386,77 @@ if (!isset($TPL)) {
             </table>
           </div>
           <div class="hidden rounded-lg bg-gray-800" id="create" role="tabpanel" aria-labelledby="create-tab">
-            <table class="w-full text-sm text-left text-gray-400 rounded-t-lg">
-              <thead class="text-xs rounded-t-lg uppercase bg-gray-900 text-gray-400">
-                <!-- start template create -->
-                <div class="relative overflow-x-auto">
-                  <table class="w-full text-sm text-left rtl:text-right text-gray-400">
-                    <thead class="text-xs uppercase bg-gray-700 text-gray-400">
-                      <tr>
-                        <th scope="col" class="p-4">
-                          <div class="flex items-center">
-                            <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
-                            <label for="checkbox-all" class="sr-only">checkbox</label>
-                          </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                          Product name
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                          Price
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                          Stock
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                          Category
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                          Available
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                          Img
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                          Status
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody id="tbody-create">
+            <!-- start template create -->
+            <div class="relative overflow-x-auto">
+              <table class="w-full text-sm text-left rtl:text-right text-gray-400">
+                <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+                  <tr>
+                    <th scope="col" class="p-4">
+                      <div class="flex items-center">
+                        <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                        <label for="checkbox-all" class="sr-only">checkbox</label>
+                      </div>
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                      Product name
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                      Price
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                      Stock
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                      Category
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                      Available
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                      Img
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-create">
 
-                    </tbody>
-                  </table>
-                </div>
-                <!-- end template create -->
                 </tbody>
-            </table>
+              </table>
+            </div>
+            <!-- end template create -->
           </div>
           <div class="hidden rounded-lg bg-gray-800" id="delete" role="tabpanel" aria-labelledby="delete-tab">
             <table class="w-full text-sm text-left text-gray-400 rounded-t-lg">
-              <thead class="text-xs rounded-t-lg uppercase bg-gray-900 text-gray-400">
-                <!-- start template delete -->
-                <div class="relative overflow-x-auto">
-                  <table class="w-full text-sm text-left rtl:text-right text-gray-400">
-                    <thead class="text-xs uppercase bg-gray-700 text-gray-400">
-                      <tr>
-                        <th scope="col" class="p-4 w-4">
-                          <div class="flex items-center">
-                            <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
-                            <label for="checkbox-all" class="sr-only">checkbox</label>
-                          </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                          Product name
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                          Status
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                          Action
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody id="tbody-delete">
+              <!-- start template delete -->
+              <div class="relative overflow-x-auto">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-400">
+                  <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+                    <tr>
+                      <th scope="col" class="p-4 w-4">
+                        <div class="flex items-center">
+                          <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-primary-600 rounded focus:ring-primary-600 ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600">
+                          <label for="checkbox-all" class="sr-only">checkbox</label>
+                        </div>
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                        Product name
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                        Status
+                      </th>
+                      <th scope="col" class="px-6 py-3">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-delete">
 
-                    </tbody>
-                  </table>
-                </div>
-                <!-- end template delete -->
-                </tbody>
+                  </tbody>
+                </table>
+              </div>
+              <!-- end template delete -->
             </table>
           </div>
         </div>
@@ -499,6 +493,23 @@ if (!isset($TPL)) {
                         ${value.creatorName}
                     </td>
                     <td class="px-4 py-3 text-white text-center">${new Date(value.created_at * 1000).toLocaleString()}</td>
+                    <td class="px-4 py-3">
+                    ${value.done ? 
+                      `<span class="text-xs font-medium px-2 py-0.5 rounded flex justify-center">
+                      <span class="text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded bg-green-900 text-green-300">
+              <svg class="w-[12px] h-[12px] mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+              </svg>
+              DONE
+            </span></span>`
+                      :
+                      `<span class="text-xs font-medium px-2 py-0.5 rounded flex justify-center">
+                                            <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300" id="status">
+                                            ON PROCESS
+                                            </span>
+                                        </span>`
+                    }
+                                    </td>
                     <td class="px-4 py-3 text-white flex justify-center">
                         <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-sky-500 text-sky-500 hover:text-white hover:bg-sky-600 focus:ring-sky-900 transition-all ease-in duration-200" onclick="detailButtonPress(this)" id="${value._id.$oid.toString()}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5 mr-2 -ml-0.5" fill="currentColor">
@@ -507,22 +518,6 @@ if (!isset($TPL)) {
                             Detail
                         </button>
                     </td>
-                    <td class="px-4 py-3">
-                    ${value.done ? 
-                      `<span class="text-xs font-medium inline-flex items-center px-1.5 py-1 rounded-xl bg-green-100 text-green-800">
-              <svg class="w-[12px] h-[12px] mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-              </svg>
-              DONE
-            </span>`
-                      :
-                      `<span class="text-xs font-medium px-2 py-0.5 rounded bg-primary-900 text-primary-300 flex justify-center">
-                                            <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded bg-red-900 text-red-300" id="status">
-                                            ON PROCESS
-                                            </span>
-                                        </span>`
-                    }
-                                    </td>
                 </tr>
                     `
           reqContainer.innerHTML += template
