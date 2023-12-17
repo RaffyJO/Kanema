@@ -169,14 +169,7 @@ class MainController
             return;
         }
 
-        if ($requestUri === '/api/products') {
-            require_once('src/Controllers/Products.Controller.php');
-            $controller = new ProductsController($this->server);
-            $controller->routes();
-            return;
-        }
-
-        if (str_contains($requestUri, '/api/product') && count($queryParams) > 0 && array_key_exists('search', $queryParams)) {
+        if (str_contains($requestUri, '/api/product')) {
             require_once('src/Controllers/Products.Controller.php');
             $controller = new ProductsController($this->server);
             $controller->routes();
