@@ -403,9 +403,9 @@ if (!isset($TPL)) {
 
         // console.log(imgFile.files[0])
         const reader = new FileReader();
-        reader.readAsDataURL(imgFile.files[0])
 
         if (radio.value == 'file' && imgFile.value != '') {
+            reader.readAsDataURL(imgFile.files[0])
 
             reader.onloadend = () => {
                 if (formMode === 'upd') {

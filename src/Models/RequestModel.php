@@ -286,7 +286,7 @@ class RequestModel
         return $requestContent;
     }
 
-    public function create(array $payload, $imgUrl): array
+    public function create(array $payload): array
     {
         try {
             $db = new DB();
