@@ -3,6 +3,15 @@ if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 $current_page = $_SERVER['REQUEST_URI'];
 ?>
 
+<script src="src/lib/Functions/CookieUtils.js"></script>
+<script src="src/lib/Functions/NavUtils.js"></script>
+<script>
+    function signout() {
+        destroyBearer()
+        window.location.href = '/login'
+    }
+</script>
+
 <nav class="fixed top-0 z-50 w-full border-b border-gray-200 bg-gray-800">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
         <div class="flex items-center justify-between">
@@ -44,7 +53,7 @@ $current_page = $_SERVER['REQUEST_URI'];
                         </div>
                         <ul class="py-1" role="none">
                             <li>
-                                <a href="#" class="block px-4 py-2 text-sm text-white hover:bg-gray-100 text-gray-300 hover:bg-gray-600" role="menuitem">Sign out</a>
+                                <button class="block px-4 py-2 text-sm text-white hover:bg-gray-100 text-gray-300 hover:bg-gray-600 w-full" role="menuitem" onclick="signout()">Sign out</button>
                             </li>
                         </ul>
                     </div>
@@ -113,20 +122,15 @@ $current_page = $_SERVER['REQUEST_URI'];
         </ul>
     </div>
 </aside>
-<script src="src/lib/Functions/CookieUtils.js"></script>
-<script src="src/lib/Functions/NavUtils.js"></script>
 <!-- end sidebar -->
-
-<!-- <div class="p-4 sm:ml-64">
-        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg mt-14">
-        
-        </div>
-    </div> -->
 </div>
 
 <script>
     getUsername().then(result => {
-        console.table(result)
+        // console.log(window.location.href)
+        const url = document.URL
+        if (url.includes('/request') && result.role.toLowerCase() !== 'owner') window.location.href = '/404'
+
         const navUsername = document.getElementById('nav-username');
         const navRole = document.getElementById('nav-role');
 
@@ -141,5 +145,7 @@ $current_page = $_SERVER['REQUEST_URI'];
 
         navUsername.textContent = result.username
         navRole.textContent = result.role
+
+        if (result.role.toLowerCase() !== 'owner') document.getElementById('request').remove()
     }).catch(err => console.error(err))
 </script>
