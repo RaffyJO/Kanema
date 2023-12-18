@@ -190,7 +190,7 @@ if (!isset($TPL)) {
 
     function callProudct(id) {
         const modal = document.getElementById('readProductModal')
-        currentID = id
+        // currentID = id
 
         let headersList = {
             "Accept": "*/*",
@@ -245,8 +245,6 @@ if (!isset($TPL)) {
     function callProudctDelete(id) {
         const modal = document.getElementById('deleteModal')
 
-        currentID = id;
-
         let headersList = {
             "Accept": "*/*",
             "Authorization": `Bearer ${getCookie('Bearer')}`
@@ -266,6 +264,8 @@ if (!isset($TPL)) {
                     const itemName = document.getElementById('confirm-del');
 
                     itemName.innerText = value.name
+                    currentID = value._id;
+                    console.log(value)
                 });
 
 
@@ -324,66 +324,6 @@ if (!isset($TPL)) {
             }).catch(err => console.error(err))
     }
 </script>
-<!-- <form id="form-modal" onsubmit="submitUniversal()">
-                <div class="mb-3">
-                    <label for="product-name" class="block mb-2 text-sm font-medium text-white">Name</label>
-                    <input type="text" name="product-name" id="product-name" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Type product name" required="">
-                </div>
-                <div class="flex flex-col-reverse lg:flex-row flex-1 gap-3">
-                    <div class="flex justify-center items-center w-full mb-4 lg:w-1/2 flex-col">
-
-                        <label for="dropzone-file" class="flex flex-col justify-center items-center w-full h-64 rounded-lg border-2 border-dashed cursor-pointer hover:bg-bray-800 bg-gray-700 border-gray-600 hover:border-gray-500 bg-gray-600" id="dropzone-input">
-                            <div class="flex flex-col justify-center items-center pt-5 pb-6" id="text-preview">
-                                <svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                </svg>
-                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                    <span class="font-semibold">Click to upload</span>
-                                    or drag and drop
-                                </p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, or JPEG</p>
-                            </div>
-                            <div id="image-preview" class="hidden">
-                                <img id="preview-image" alt="Preview Image" class="max-w-full max-h-64">
-                            </div>
-                        </label>
-
-                        <label for="link-input" class="hidden w-full" id="link-input">
-                            <textarea type="text" name="link-image" id="link-image" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 w-full h-64" placeholder="Input link Image" required="" style="resize: none;"></textarea>
-                        </label>
-
-                        <div class="text-white mb-2" id="radio-image">
-                            <input type="radio" id="radio-drag-drop" name="upload-type" checked>
-                            <label for="radio-drag-drop">Drag and Drop</label>
-
-                            <input type="radio" id="radio-link" name="upload-type">
-                            <label for="radio-link">Link</label>
-                        </div>
-                    </div>
-                    <div class="flex flex-col flex-1 lg:w-1/2 gap-3">
-                        <div>
-                            <label for="product-price" class="block mb-2 text-sm font-medium text-gray-900 text-white">Price</label>
-                            <input type="number" name="product-price" id="product-price" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Price" required="">
-                        </div>
-                        <div>
-                            <label for="product-stock" class="block mb-2 text-sm font-medium text-gray-900 text-white">Stock</label>
-                            <input type="text" name="product-stock" id="product-stock" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Stock" required="">
-                        </div>
-                        <div><label for="product-category" class="block mb-2 text-sm font-medium text-gray-900 text-white">Category</label><select id="product-category" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
-                                <option selected="">Select category</option>
-                                <option value="food">Food</option>
-                                <option value="drink">Drink</option>
-                            </select></div>
-                    </div>
-                </div>
-                <div class="text-right" id="action-modal">
-                    <button type="submit" class="text-white inline-flex items-center focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800 flex justify-center items-center">
-                        <span id="icon-action-modal"></span>
-                        <span id="actionButtonModal">
-                        </span>
-                    </button>
-                </div>
-            </form> -->
 <script>
     function submitUniversal() {
         const name = document.getElementsByName('product-name');
@@ -463,7 +403,7 @@ if (!isset($TPL)) {
                   </svg>
                   <span class="sr-only">Info</span>
                   <div>
-                  Operation Success whit ID: ${result._id.$oid}
+                  Operation Success with ID: ${result._id.$oid}
                   </div>
                   </div>
                   `
@@ -536,7 +476,7 @@ if (!isset($TPL)) {
                               </svg>
                               <span class="sr-only">Info</span>
                               <div>
-                              Operation Success whit ID: ${result._id.$oid}
+                              Operation Success with ID: ${result._id.$oid}
                               </div>
                               </div>
                               `
@@ -611,7 +551,7 @@ if (!isset($TPL)) {
               </svg>
               <span class="sr-only">Info</span>
               <div>
-              Operation Success whit ID: ${result._id.$oid}
+              Operation Success with ID: ${result._id.$oid}
               </div>
               </div>
               `
@@ -684,7 +624,7 @@ if (!isset($TPL)) {
                           </svg>
                           <span class="sr-only">Info</span>
                           <div>
-                          Operation Success whit ID: ${result._id.$oid}
+                          Operation Success with ID: ${result._id.$oid}
                           </div>
                           </div>
                           `
@@ -781,7 +721,7 @@ if (!isset($TPL)) {
             "Authorization": `Bearer ${getCookie('Bearer')}`
         }
 
-        fetch(`/api/product`, {
+        fetch(`/api/request`, {
                 method: 'DELETE',
                 headers: headersList,
                 body: JSON.stringify({
@@ -840,6 +780,7 @@ if (!isset($TPL)) {
                     document.getElementById('instance-success').classList.toggle('hidden')
                 }, 5000);
             })
+        // console.log(currentID)
     }
 </script>
 

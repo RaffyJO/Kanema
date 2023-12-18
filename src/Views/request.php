@@ -15,6 +15,8 @@ if (!isset($TPL)) {
 <script src="src/lib/Functions/NavUtils.js"></script>
 
 <script>
+    let currentPage = 1;
+
     let dataBearer = [];
     let selectedID = null;
 
@@ -356,7 +358,8 @@ if (!isset($TPL)) {
                             <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
                         </div>
                     </td>
-                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white flex items-center">
+                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white flex items-center gap-5">
+                    <img src="${value.imgUrl}" class="h-12 w-auto rounded-full ms-3" alt="">
                         ${value.productName}
                     </th>
                     <td class="px-6 py-4">
@@ -547,6 +550,125 @@ if (!isset($TPL)) {
 
             })
     }
+
+    function nextData() {
+        currentPage++
+
+        let headersList = {
+            "Accept": "*/*",
+            "Authorization": `Bearer ${getCookie('Bearer')}`
+        }
+
+        fetch(`/api/request-n?page=${currentPage}`, {
+                method: 'GET',
+                headers: headersList
+            })
+            .then(response => response.json())
+            .then(result => {
+                dataBearer = result.data;
+
+                const nxtBtn = document.getElementById('button-next-page');
+                const prevBtn = document.getElementById('button-prev-page');
+
+                if (result.data.length < 10) {
+                    nxtBtn.disabled = true
+                }
+
+                const reqContainer = document.getElementById('req-list');
+                reqContainer.innerHTML = ''
+
+                prevBtn.disabled = false
+
+                result.data.map(value => {
+                    const statusClass = value.done ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300';
+                    const statusText = value.done ? 'DONE' : 'ON PROCESS';
+                    const template = `
+                    <tr class="border-b border-gray-700">
+                    <td class="px-4 py-3 text-white text-center">
+                        ${value.creatorName}
+                    </td>
+                    <td class="px-4 py-3 text-white text-center">${new Date(value.created_at * 1000).toLocaleString()}</td>
+                    <td class="px-4 py-3">
+                        <span class="text-xs font-medium px-2 py-0.5 rounded bg-primary-900 text-primary-300 flex justify-center">
+                            <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded ${statusClass}" id="status">${statusText}</span>
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-white flex justify-center">
+                        <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-sky-500 text-sky-500 hover:text-white hover:bg-sky-600 focus:ring-sky-900 transition-all ease-in duration-200" onclick="detailButtonPress(this)" id="${value._id.$oid.toString()}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5 mr-2 -ml-0.5" fill="currentColor">
+                                <path d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z"></path>
+                            </svg>
+                            Detail
+                        </button>
+                    </td>
+                </tr>
+                    `
+                    reqContainer.innerHTML += template
+                })
+            })
+    }
+
+    function prevData() {
+        if (currentPage == 1) {
+            document.getElementById('button-next-page').disabled = false;
+            document.getElementById('button-prev-page').disabled = true;
+        }
+
+        currentPage--
+
+        let headersList = {
+            "Accept": "*/*",
+            "Authorization": `Bearer ${getCookie('Bearer')}`
+        }
+
+        fetch(`/api/request-n?page=${currentPage}`, {
+                method: 'GET',
+                headers: headersList
+            })
+            .then(response => response.json())
+            .then(result => {
+                dataBearer = result.data;
+
+                const nxtBtn = document.getElementById('button-next-page');
+                const prevBtn = document.getElementById('button-prev-page');
+
+                const reqContainer = document.getElementById('req-list');
+                reqContainer.innerHTML = ''
+
+
+                result.data.map(value => {
+                    const statusClass = value.done ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300';
+                    const statusText = value.done ? 'DONE' : 'ON PROCESS';
+                    const template = `
+                    <tr class="border-b border-gray-700">
+                    <td class="px-4 py-3 text-white text-center">
+                        ${value.creatorName}
+                    </td>
+                    <td class="px-4 py-3 text-white text-center">${new Date(value.created_at * 1000).toLocaleString()}</td>
+                    <td class="px-4 py-3">
+                        <span class="text-xs font-medium px-2 py-0.5 rounded bg-primary-900 text-primary-300 flex justify-center">
+                            <span class="text-xs font-medium me-2 px-2.5 py-0.5 rounded ${statusClass}" id="status">${statusText}</span>
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-white flex justify-center">
+                        <button type="button" class="flex items-center hover:text-white border font-medium rounded-lg text-sm px-3 py-2 text-center border-sky-500 text-sky-500 hover:text-white hover:bg-sky-600 focus:ring-sky-900 transition-all ease-in duration-200" onclick="detailButtonPress(this)" id="${value._id.$oid.toString()}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5 mr-2 -ml-0.5" fill="currentColor">
+                                <path d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z"></path>
+                            </svg>
+                            Detail
+                        </button>
+                    </td>
+                </tr>
+                    `
+                    reqContainer.innerHTML += template
+
+                    if (currentPage == 1) {
+                        document.getElementById('button-next-page').disabled = false;
+                        document.getElementById('button-prev-page').disabled = true;
+                    }
+                })
+            })
+    }
 </script>
 
 <div class="w-full bg-gray-800 relative shadow-md rounded-lg overflow-hidden col-span-2">
@@ -608,6 +730,32 @@ if (!isset($TPL)) {
 
             </tbody>
         </table>
+        <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
+            <span class="text-sm font-normal text-gray-400">
+                <!-- Showing
+                <span class="font-semibold text-white">1-10</span>
+                of
+                <span class="font-semibold text-white">10</span> -->
+            </span>
+            <ul class="inline-flex items-stretch -space-x-px">
+                <li>
+                    <button type="button" id="button-prev-page" onclick="prevData()" disabled class="flex items-center justify-center h-full py-1.5 px-3 ml-0 rounded-l-lg border bg-gray-800 border-gray-700 disabled:bg-gray-900 text-gray-400 hover:bg-gray-700 hover:text-white">
+                        <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="">Previous</span>
+                    </button>
+                </li>
+                <li>
+                    <button type="button" id="button-next-page" onclick="nextData()" class="flex items-center justify-center h-full py-1.5 px-3 leading-tight rounded-r-lg border bg-gray-800 disabled:bg-gray-900 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white">
+                        <span class="">Next</span>
+                        <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
 <div id="detailRequest" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full" style="backdrop-filter: blur(10px);height: 100%">
@@ -770,7 +918,7 @@ if (!isset($TPL)) {
             "Authorization": `Bearer ${getCookie('Bearer')}`
         }
 
-        fetch('/api/requests', {
+        fetch('/api/request-n?page=1', {
                 method: 'GET',
                 headers: headersList
             })
@@ -803,6 +951,14 @@ if (!isset($TPL)) {
                 </tr>
                     `
                     reqContainer.innerHTML += template
+
+                    const nxtBtn = document.getElementById('button-next-page');
+                    const prevBtn = document.getElementById('button-prev-page');
+
+                    if (result.data.length < 10) {
+                        nxtBtn.disabled = true
+                        return;
+                    }
                 })
             })
     }

@@ -33,6 +33,11 @@ class RequestController implements Controller
             return;
         }
 
+        if ($this->server['REQUEST_METHOD'] === 'GET' && $requestUri === '/api/request-n') {
+            $this->GETNEXT();
+            return;
+        }
+
         if ($this->server['REQUEST_METHOD'] === 'PUT' && $requestUri === '/api/request-update') {
             $this->UPDATE();
             return;
@@ -82,6 +87,41 @@ class RequestController implements Controller
 
         $model = new RequestModel();
         $data = $model->get($queryParams['search']);
+
+        if (array_key_exists('error', $data)) {
+            http_response_code(400);
+            echo json_encode($data);
+            return;
+        } else {
+            http_response_code(200);
+            echo json_encode($data);
+            return;
+        }
+    }
+
+    function GETNEXT()
+    {
+        $urlQuery = parse_url($this->server['REQUEST_URI'], PHP_URL_QUERY);
+        $queryParams =  array();
+
+        parse_str($urlQuery, $queryParams);
+
+        $validation = new
+            ValidateHeaders();
+        $validToken = (array) json_decode($validation->validateData());
+
+        if (array_key_exists('error', $validToken)) {
+            echo json_encode($validation);
+            return;
+        }
+
+        if (!array_key_exists('page', $queryParams)) {
+            echo json_encode(array('error' => 'Parameter "search" is required'));
+            return;
+        }
+
+        $model = new RequestModel();
+        $data = $model->getAllNext($queryParams['page']);
 
         if (array_key_exists('error', $data)) {
             http_response_code(400);
@@ -195,7 +235,7 @@ class RequestController implements Controller
             'requests' => array(
                 "status" => "pending",
                 "type" => "delete",
-                "itemID" => new ObjectId($postData['itemID']),
+                "itemID" => new ObjectId($postData['id']),
             ),
             'done' => false
         );
@@ -285,18 +325,6 @@ class RequestController implements Controller
             return;
         }
     }
-    // {
-    //     "status": "declined",
-    //     "type": "create",
-    //     "field": {
-    //       "name": "Mie Kuah",
-    //       "price": 4000,
-    //       "category": "food",
-    //       "imgUrl": "https://www.nissin.com/en_jp/brands/images/export/japan/instant_noodles/02.jpg",
-    //       "available": false,
-    //       "stock": 123
-    //     }
-    //   }
     function POST()
     {
         $reqModel = new RequestModel();

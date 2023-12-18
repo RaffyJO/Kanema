@@ -23,7 +23,10 @@ class ProductsController implements Controller
         parse_str($urlQuery, $queryParams);
 
 
-        if ($this->server['REQUEST_METHOD'] === 'GET' && $this->server['REQUEST_URI'] === '/api/products') {
+        if (
+            $this->server['REQUEST_METHOD'] === 'GET'
+            && $this->server['REQUEST_URI'] === '/api/products'
+        ) {
             echo $this->products();
         }
 
