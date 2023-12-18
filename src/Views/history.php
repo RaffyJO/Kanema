@@ -27,6 +27,7 @@ if (!isset($TPL)) {
     const modal = document.getElementById('readProductModal')
     let actionButton = document.getElementById("actionButtonModal");
 
+    const idContainer = document.getElementById('id-bearer');
     const detailAmount = document.getElementById('detail-amount');
     const detailDate = document.getElementById('detail-date');
     const modalListItem = document.getElementById('modal-list-item');
@@ -39,6 +40,7 @@ if (!isset($TPL)) {
     detailAmount.innerText = formatToIDR(selectedData.total)
     detailDate.innerText = `${selectedData.time.hour} : ${selectedData.time.minute} ${selectedData.time.day}/${selectedData.time.month}/${selectedData.time.year}`
     detailCashier.innerText = selectedData.user
+    idContainer.innerText = id
 
     let totalQTY = 0
 
@@ -148,8 +150,8 @@ if (!isset($TPL)) {
     <!-- Body -->
     <div class="p-4 sm:p-4 overflow-y-auto">
       <div class="text-center">
-        <h3 class="text-lg font-semibold text-gray-200">
-
+        <h3 class="text-lg font-semibold text-sky-700">
+          <span>ID-</span><span id="id-bearer"></span>
         </h3>
       </div>
 

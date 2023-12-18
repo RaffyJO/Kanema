@@ -140,6 +140,39 @@ class RequestModel
         }
     }
 
+    public  function getAllNext(int $page): array
+    {
+        try {
+            $db = new DB();
+            $connection = $db->getConnection();
+            if ($connection == null) die(print_r("Connection is Null", true));
+
+            $collection = $connection->selectCollection('kanema', 'RequerstClenaedData');
+            $cursor = null;
+
+            $cursor = $collection->find([], ['limit' => 10, 'skip' => ($page * 10) - 10]);
+
+
+
+            if ($cursor) {
+                $data = array();
+
+                foreach ($cursor as $key) {
+                    array_push(
+                        $data,
+                        $key
+                    );
+                }
+
+                return array('data' => $data);
+            } else {
+                return array('error' => 'Something went wrong');
+            }
+        } catch (Exception $th) {
+            return array('error' => $th->getMessage());
+        }
+    }
+
     public  function update(ObjectId $id, array $payload): array
     {
         $productModel = new ProductModel();
