@@ -1215,7 +1215,7 @@ if (!isset($TPL)) {
                     <td class="px-4 py-3">
                         <span class="text-xs font-medium px-2 py-0.5 rounded ${badgeBgColor}" id="item-category">${content.category}</span>
                     </td>
-                    <td class="px-4 py-3 text-white" id="item-price">Rp.${content.price}</td>
+                    <td class="px-4 py-3 text-white" id="item-price">${formatToIDR(content.price)}</td>
                     <td class="px-4 py-3 text-white">
                         <span>${content.stock}</span>
                     </td>

@@ -54,7 +54,7 @@ if (!isset($TPL)) {
 
     const selectedData = dataBearer.find(value => value._id.$oid === id);
 
-    modalTitle.innerText = `${selectedData._id}`
+    modalTitle.innerText = `${selectedData._id.$oid}`
 
     if (selectedData === undefined || selectedData === null) {
       alertBox.classList.toggle('hidden')
