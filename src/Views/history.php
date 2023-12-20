@@ -84,7 +84,7 @@ if (!isset($TPL)) {
 
 <div class="relative overflow-x-auto sm:rounded-lg">
   <div class="p-4 bg-gray-800 flex justify-between items-center">
-    <h1 class="text-xl uppercase font-semibold text-left rtl:text-right text-white bg-gray-800">Invoices</h1>
+    <h1 class="text-xl uppercase font-bold text-left rtl:text-right text-white bg-gray-800">Invoices</h1>
     <!-- <div>
       <label for="table-search" class="sr-only">Search</label>
       <div class="relative mt-1">

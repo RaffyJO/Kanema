@@ -21,15 +21,15 @@ if (!isset($TPL)) {
         <form method="POST" class="mb-0 mt-6 space-y-4 flex flex-col justify-center items-center">
             <div class="bg-blue-100 px-4 pt-4 pb-12 sm:px-6 sm:pt-6 sm:pb-14 lg:px-8 lg:pt-8 lg:pb-16 rounded-lg shadow-lg w-1/2">
                 <div>
-                    <label for="email" class="font-bold text-neutral-700">Masukan Username</label>
+                    <label for="email" class="font-bold text-neutral-700">Input Username</label>
 
-                    <div class="relative">
+                    <div class="relative mb-2">
                         <input type="text" class="w-full rounded-lg border-gray-200 p-2 pe-12 text-sm shadow-sm" placeholder="Enter email" name="username" id="username" />
                     </div>
                 </div>
 
                 <div>
-                    <label for="password" class="font-bold text-neutral-700">Masukan Password</label>
+                    <label for="password" class="font-bold text-neutral-700">Input Password</label>
 
                     <div class="relative">
                         <input type="password" class="w-full rounded-lg border-gray-200 p-2 pe-12 text-sm shadow-sm" placeholder="Enter password" name="password" id="password" />
@@ -38,7 +38,7 @@ if (!isset($TPL)) {
             </div>
             <div class="-mt-8 flex flex-col items-center justify-center" style="margin-top:-18px !important">
                 <!-- <button type="submit" ></button> -->
-                <input type="submit" value="Masuk" class="text-white focus:ring-4 font-medium rounded-2xl text-sm px-12 py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
+                <input type="submit" value="LOGIN" class="text-white focus:ring-4 font-medium rounded-2xl text-sm px-12 py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
             </div>
         </form>
     </div>
