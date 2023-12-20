@@ -152,7 +152,7 @@ class OrderModel
             if ($connection == null) die(print_r('Connection is Null', true));
 
             $collection = $connection->selectCollection('kanema', 'TransactionJOIN');
-            $cursor = $collection->find([]);
+            $cursor = $collection->find([], ['sort' => ['timestamp' => -1]]);
 
             if ($cursor) {
                 $data = array();
