@@ -21,7 +21,7 @@ if (!isset($TPL)) {
     <div class="w-full rounded-lg shadow p-4 md:p-6 bg-gray-800">
         <div class="flex justify-between">
             <div>
-                <p class="text-base font-bold text-white">Jumlah Order</p>
+                <p class="text-base font-bold text-white">Jumlah Order Hari Ini</p>
                 <h5 class="leading-none text-3xl font-bold text-white pb-2" id="amount-transaction-today">0</h5>
             </div>
             <div class="flex items-center px-2.5 py-0.5 text-2xl font-semibold text-green-500 text-center" id="amount-transaction-today-precentage">
@@ -192,7 +192,7 @@ if (!isset($TPL)) {
 
                 result.data.map(value => {
                     value.details.map(item => {
-                        if (counter < 5) {
+                        if (counter < 5 && new Object(item).hasOwnProperty('productName')) {
                             templateList += `<li>${item.productName}</li>`
                             counter++
                         }
