@@ -1,5 +1,9 @@
 <?php
+
+use MongoDB\BSON\ObjectId;
+
 require_once('src/Controllers/Controller.php');
+require_once('src/Models/Product.Model.php');
 
 class ProductsController implements Controller
 {
@@ -19,7 +23,10 @@ class ProductsController implements Controller
         parse_str($urlQuery, $queryParams);
 
 
-        if ($this->server['REQUEST_METHOD'] === 'GET' && $this->server['REQUEST_URI'] === '/api/products') {
+        if (
+            $this->server['REQUEST_METHOD'] === 'GET'
+            && $this->server['REQUEST_URI'] === '/api/products'
+        ) {
             echo $this->products();
         }
 
@@ -27,26 +34,23 @@ class ProductsController implements Controller
             echo $this->GET();
         }
 
-        // if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        //     $postData = json_decode(file_get_contents('php://input'), true);
+        if ($this->server['REQUEST_METHOD'] === 'PUT') {
+            $this->PUT();
+            return;
+        }
 
-        //     if (isset($postData['name'])) {
-        //         $name = $postData['name'];
-        //         $encodedName = base64_encode($name);
+        if ($this->server['REQUEST_METHOD'] === 'DELETE') {
+            $this->DELETE();
+            return;
+        }
 
-        //         header('Location: index.html?encoded_name=' . urlencode($encodedName));
-        //         exit;
-        //     } else {
-        //         http_response_code(400);
-        //         echo json_encode(array('error' => 'Parameter "name" is missing.'));
-        //         exit;
-        //     }
-        // }
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->POST();
+        }
     }
 
     private function products()
     {
-        require_once('src/Models/Product.Model.php');
         $model = new ProductModel();
         $data = $model->getAll();
 
@@ -94,9 +98,53 @@ class ProductsController implements Controller
 
     function PUT()
     {
+        $validation = new ValidateHeaders();
+        $validToken = (array) json_decode($validation->validateData());
+
+        if (array_key_exists('error', $validToken)) {
+            echo json_encode($validation);
+            return;
+        }
+
+        $postData = json_decode(file_get_contents('php://input'), true);
+
+        $model = new ProductModel();
+        $data = $model->updateStock($postData['id'], $postData['stock']);
+
+        if (!$data) {
+            http_response_code(400);
+            echo json_encode(array('error' => 'Something went Wrond'));
+            return;
+        } else {
+            http_response_code(200);
+            echo json_encode(array('data' => 'Stock has been modified'));
+            return;
+        }
     }
 
     function DELETE()
     {
+        $validation = new ValidateHeaders();
+        $validToken = (array) json_decode($validation->validateData());
+
+        if (array_key_exists('error', $validToken)) {
+            echo json_encode($validation);
+            return;
+        }
+
+        $postData = json_decode(file_get_contents('php://input'), true);
+
+        $model = new ProductModel();
+        $data = $model->delete(new ObjectId($postData['id']));
+
+        if (!$data) {
+            http_response_code(400);
+            echo json_encode(array('error' => 'Something went Wrond'));
+            return;
+        } else {
+            http_response_code(200);
+            echo json_encode(array('data' => 'Stock has been modified'));
+            return;
+        }
     }
 }

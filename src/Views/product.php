@@ -13,6 +13,9 @@ if (!isset($TPL)) {
 <script type="text/javascript" src="src/lib/Functions/PriceUtils.js"></script>
 <script type="text/javascript" src="src/lib/Functions/CookieUtils.js"></script>
 <script>
+    let formMode = null;
+    let currentID = null;
+
     function previewButtonPress(element) {
         const rawId = element.getAttribute('id')
         const _id = rawId.replace('prev-', '')
@@ -43,6 +46,8 @@ if (!isset($TPL)) {
     }
 
     function actioncallProudct(id, indicator) {
+        formMode = indicator;
+
         let modal = document.getElementById('universalProductModal');
         let icon = '';
         let headersList = '';
@@ -50,6 +55,8 @@ if (!isset($TPL)) {
         let actionButton = document.getElementById("actionButtonModal");
         switch (indicator) {
             case 'upd':
+                currentID = id
+
                 titleModal.innerText = 'Edit Product'
                 icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
@@ -89,6 +96,13 @@ if (!isset($TPL)) {
                             itemStock.value = value.stock
                             prevtext.classList.add("hidden")
                             itemImage.src = value.imgUrl
+
+                            if (value.imgUrl.includes('http')) {
+                                document.getElementById('link-image').value = value.imgUrl
+                            } else {
+                                document.getElementById('dropzone-file').value = value.imgUrl
+                            }
+
                             prevImage.classList.remove("hidden")
                         });
 
@@ -176,6 +190,7 @@ if (!isset($TPL)) {
 
     function callProudct(id) {
         const modal = document.getElementById('readProductModal')
+        // currentID = id
 
         let headersList = {
             "Accept": "*/*",
@@ -216,6 +231,8 @@ if (!isset($TPL)) {
 
         if (modal != null)
             modal.classList.toggle('hidden')
+
+        if (modal.classList.contains('hidden')) currentID = null;
     }
 
     function deleteButtonPress(element) {
@@ -247,6 +264,8 @@ if (!isset($TPL)) {
                     const itemName = document.getElementById('confirm-del');
 
                     itemName.innerText = value.name
+                    currentID = value._id;
+                    console.log(value)
                 });
 
 
@@ -258,11 +277,14 @@ if (!isset($TPL)) {
         const rawId = element.getAttribute('id')
         const _id = rawId.replace('stoc-', '')
 
+        formMode = 'stoc'
+
         callProudctstock(_id)
     }
 
     function callProudctstock(id) {
         const modal = document.getElementById('stockProductModal')
+        currentID = id
 
         let headersList = {
             "Accept": "*/*",
@@ -293,19 +315,478 @@ if (!isset($TPL)) {
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 1v5h-5M2 19v-5h5m10-4a8 8 0 0 1-14.947 3.97M1 10a8 8 0 0 1 14.947-3.97"/>
                             </svg>`
                     textButton.innerText = 'Update Stock'
-                    console.log(textButton.innerText);
-                    console.log(iconButton);
-                    console.log(textButton);
+                    // console.log(textButton.innerText);
+                    // console.log(iconButton);
+                    // console.log(textButton);
                 });
 
                 modal.classList.toggle('hidden')
             }).catch(err => console.error(err))
     }
 </script>
+<script>
+    function submitUniversal() {
+        const name = document.getElementsByName('product-name');
+        const linkImg = document.getElementsByName('link-image');
+        const imgFile = document.getElementById('dropzone-file');
+        const price = document.getElementsByName('product-price');
+        const stock = document.getElementsByName('product-stock');
+        const radio = document.querySelector('input[name="upload-type"]:checked');
+        const category = document.getElementById('product-category');
+
+        let alertBox = document.getElementById('box-alert');
+
+        let headersList = {
+            "Accept": "*/*",
+            "Authorization": `Bearer ${getCookie('Bearer')}`
+        }
+
+        // console.log(imgFile.files[0])
+        const reader = new FileReader();
+
+        if (radio.value == 'file' && imgFile.value != '') {
+            reader.readAsDataURL(imgFile.files[0])
+
+            reader.onloadend = () => {
+                if (formMode === 'upd') {
+                    const fields = {
+                        "itemID": currentID,
+                        "imgFile": reader.result,
+                        "fields": {
+                            "name": name[0].value,
+                            "price": Number.parseInt(price[0].value),
+                            "category": category.value,
+                            "available": true,
+                            "imgUrl": radio.value == 'file' && imgFile.value != '' ? imgFile.value.replace(/.*[\/\\]/, '') : linkImg[0].value,
+                            "stock": Number.parseInt(stock[0].value)
+                        }
+                    }
+
+                    fetch(`/api/request-update`, {
+                            method: 'PUT',
+                            headers: headersList,
+                            body: JSON.stringify(fields)
+                        })
+                        .then(response => response.json())
+                        .then(result => {
+                            toggleModal('universalProductModal')
+                            if (new Object(result).hasOwnProperty('error')) {
+                                alertBox.classList.toggle('hidden')
+
+                                const template = `
+                <div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 w-fit mt-2 mr-2" role="alert" id="instance-alert">
+                    <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                    </svg>
+                    <span class="sr-only">Error</span>
+                    <div class="ms-3 text-sm font-medium">
+                        ${result.error}
+                    </div>
+                </div>
+                                    `
+
+                                alertBox.innerHTML = template
+                                if (radio.value == 'file' && imgFile[0].value != '') imgFile[0].value
+
+                                setTimeout(() => {
+                                    alertBox.classList.toggle('hidden')
+                                    document.getElementById('instance-alert').classList.toggle('hidden')
+                                }, 5000);
+
+                                return;
+                            }
+
+                            const succeedTemplate = `
+                                <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400  w-fit mt-2 mr-2" role="alert" id="instance-success">
+                  <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                  </svg>
+                  <span class="sr-only">Info</span>
+                  <div>
+                  Operation Success with ID: ${result._id.$oid}
+                  </div>
+                  </div>
+                  `
+
+                            alertBox.innerHTML = succeedTemplate
+                            alertBox.classList.toggle('hidden')
+
+                            setTimeout(() => {
+                                alertBox.classList.toggle('hidden')
+                                document.getElementById('instance-success').classList.toggle('hidden')
+                            }, 5000);
+
+                        })
+                    currentID = null
+                }
+
+                if (formMode === 'crea') {
+                    const fields = {
+                        "imgFile": reader.result,
+                        field: {
+                            name: name[0].value,
+                            price: Number.parseInt(price[0].value),
+                            category: category.value,
+                            imgUrl: radio.value == 'file' && imgFile.value != '' ? imgFile.value.replace(/.*[\/\\]/, '') : linkImg[0].value,
+                            available: true,
+                            stock: Number.parseInt(stock[0].value),
+                            is_deleted: false,
+                        }
+                    }
+
+                    fetch(`/api/request`, {
+                            method: 'POST',
+                            headers: headersList,
+                            body: JSON.stringify(fields)
+                        })
+                        .then(response => response.json())
+                        .then(result => {
+                            console.log(result)
+                            toggleModal('universalProductModal')
+
+                            if (new Object(result).hasOwnProperty('error')) {
+                                alertBox.classList.toggle('hidden')
+
+                                const template = `
+                            <div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 w-fit mt-2 mr-2" role="alert" id="instance-alert">
+                                <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                                </svg>
+                                <span class="sr-only">Error</span>
+                                <div class="ms-3 text-sm font-medium">
+                                    ${result.error}
+                                </div>
+                            </div>
+                                                `
+
+                                alertBox.innerHTML = template
+
+                                setTimeout(() => {
+                                    alertBox.classList.toggle('hidden')
+                                    document.getElementById('instance-alert').classList.toggle('hidden')
+                                }, 5000);
+
+                                return;
+                            }
+
+                            const succeedTemplate = `
+                                            <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400  w-fit mt-2 mr-2" role="alert" id="instance-success">
+                              <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                              </svg>
+                              <span class="sr-only">Info</span>
+                              <div>
+                              Operation Success with ID: ${result._id.$oid}
+                              </div>
+                              </div>
+                              `
+
+                            alertBox.innerHTML = succeedTemplate
+                            alertBox.classList.toggle('hidden')
+
+                            setTimeout(() => {
+                                alertBox.classList.toggle('hidden')
+                                document.getElementById('instance-success').classList.toggle('hidden')
+                            }, 5000);
+                        })
+
+                }
+            }
+
+        } else {
+
+
+            if (formMode === 'upd') {
+                const fields = {
+                    "itemID": currentID,
+                    "imgFile": null,
+                    "fields": {
+                        "name": name[0].value,
+                        "price": Number.parseInt(price[0].value),
+                        "category": category.value,
+                        "available": true,
+                        "imgUrl": radio.value == 'file' && imgFile.value != '' ? imgFile.value.replace(/.*[\/\\]/, '') : linkImg[0].value,
+                        "stock": Number.parseInt(stock[0].value)
+                    }
+                }
+
+                fetch(`/api/request-update`, {
+                        method: 'PUT',
+                        headers: headersList,
+                        body: JSON.stringify(fields)
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        toggleModal('universalProductModal')
+                        if (new Object(result).hasOwnProperty('error')) {
+                            alertBox.classList.toggle('hidden')
+
+                            const template = `
+            <div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 w-fit mt-2 mr-2" role="alert" id="instance-alert">
+                <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                </svg>
+                <span class="sr-only">Error</span>
+                <div class="ms-3 text-sm font-medium">
+                    ${result.error}
+                </div>
+            </div>
+                                `
+
+                            alertBox.innerHTML = template
+                            if (radio.value == 'file' && imgFile[0].value != '') imgFile[0].value
+
+                            setTimeout(() => {
+                                alertBox.classList.toggle('hidden')
+                                document.getElementById('instance-alert').classList.toggle('hidden')
+                            }, 5000);
+
+                            return;
+                        }
+
+                        const succeedTemplate = `
+                            <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400  w-fit mt-2 mr-2" role="alert" id="instance-success">
+              <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+              </svg>
+              <span class="sr-only">Info</span>
+              <div>
+              Operation Success with ID: ${result._id.$oid}
+              </div>
+              </div>
+              `
+
+                        alertBox.innerHTML = succeedTemplate
+                        alertBox.classList.toggle('hidden')
+
+                        setTimeout(() => {
+                            alertBox.classList.toggle('hidden')
+                            document.getElementById('instance-success').classList.toggle('hidden')
+                        }, 5000);
+
+                    })
+                currentID = null
+            }
+
+            if (formMode === 'crea') {
+                const fields = {
+                    "imgFile": null,
+                    field: {
+                        name: name[0].value,
+                        price: Number.parseInt(price[0].value),
+                        category: category.value,
+                        imgUrl: radio.value == 'file' && imgFile.value != '' ? imgFile.value.replace(/.*[\/\\]/, '') : linkImg[0].value,
+                        available: true,
+                        stock: Number.parseInt(stock[0].value),
+                        is_deleted: false,
+                    }
+                }
+
+                fetch(`/api/request`, {
+                        method: 'POST',
+                        headers: headersList,
+                        body: JSON.stringify(fields)
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        console.log(result)
+                        toggleModal('universalProductModal')
+
+                        if (new Object(result).hasOwnProperty('error')) {
+                            alertBox.classList.toggle('hidden')
+
+                            const template = `
+                        <div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 w-fit mt-2 mr-2" role="alert" id="instance-alert">
+                            <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                            </svg>
+                            <span class="sr-only">Error</span>
+                            <div class="ms-3 text-sm font-medium">
+                                ${result.error}
+                            </div>
+                        </div>
+                                            `
+
+                            alertBox.innerHTML = template
+
+                            setTimeout(() => {
+                                alertBox.classList.toggle('hidden')
+                                document.getElementById('instance-alert').classList.toggle('hidden')
+                            }, 5000);
+
+                            return;
+                        }
+
+                        const succeedTemplate = `
+                                        <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400  w-fit mt-2 mr-2" role="alert" id="instance-success">
+                          <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                          </svg>
+                          <span class="sr-only">Info</span>
+                          <div>
+                          Operation Success with ID: ${result._id.$oid}
+                          </div>
+                          </div>
+                          `
+
+                        alertBox.innerHTML = succeedTemplate
+                        alertBox.classList.toggle('hidden')
+
+                        setTimeout(() => {
+                            alertBox.classList.toggle('hidden')
+                            document.getElementById('instance-success').classList.toggle('hidden')
+                        }, 5000);
+                    })
+            }
+        }
+    }
+
+    function submitStock() {
+        const inputStock = document.getElementById('edit-product-stock')
+        let alertBox = document.getElementById('box-alert');
+
+        let headersList = {
+            "Accept": "*/*",
+            "Authorization": `Bearer ${getCookie('Bearer')}`
+        }
+
+        fetch(`/api/product`, {
+                method: 'PUT',
+                headers: headersList,
+                body: JSON.stringify({
+                    id: currentID,
+                    stock: Number.parseInt(inputStock.value)
+                })
+            })
+            .then(response => response.json())
+            .then(result => {
+                toggleModal('stockProductModal')
+
+                currentID = null
+                formMode = null
+
+                if (new Object(result).hasOwnProperty('error')) {
+                    alertBox.classList.toggle('hidden')
+
+                    const template = `
+                        <div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 w-fit mt-2 mr-2" role="alert" id="instance-alert">
+                            <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                            </svg>
+                            <span class="sr-only">Error</span>
+                            <div class="ms-3 text-sm font-medium">
+                                ${result.error}
+                            </div>
+                        </div>
+                                            `
+
+                    alertBox.innerHTML = template
+
+                    setTimeout(() => {
+                        alertBox.classList.toggle('hidden')
+                        document.getElementById('instance-alert').classList.toggle('hidden')
+                    }, 5000);
+
+                    return;
+                }
+
+                const succeedTemplate = `
+                                        <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400  w-fit mt-2 mr-2" role="alert" id="instance-success">
+                          <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                          </svg>
+                          <span class="sr-only">Info</span>
+                          <div>
+                          Stock Changed
+                          </div>
+                          </div>
+                          `
+
+                alertBox.innerHTML = succeedTemplate
+                alertBox.classList.toggle('hidden')
+
+                setTimeout(() => {
+                    alertBox.classList.toggle('hidden')
+                    document.getElementById('instance-success').classList.toggle('hidden')
+                }, 5000);
+            })
+    }
+
+    function submitDelete() {
+        const inputStock = document.getElementById('edit-product-stock')
+        let alertBox = document.getElementById('box-alert');
+
+        let headersList = {
+            "Accept": "*/*",
+            "Authorization": `Bearer ${getCookie('Bearer')}`
+        }
+
+        fetch(`/api/request`, {
+                method: 'DELETE',
+                headers: headersList,
+                body: JSON.stringify({
+                    id: currentID
+                })
+            })
+            .then(response => response.json())
+            .then(result => {
+                toggleModal('deleteModal')
+
+                currentID = null
+                formMode = null
+
+                if (new Object(result).hasOwnProperty('error')) {
+                    alertBox.classList.toggle('hidden')
+
+                    const template = `
+                        <div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 w-fit mt-2 mr-2" role="alert" id="instance-alert">
+                            <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                            </svg>
+                            <span class="sr-only">Error</span>
+                            <div class="ms-3 text-sm font-medium">
+                                ${result.error}
+                            </div>
+                        </div>
+                                            `
+
+                    alertBox.innerHTML = template
+
+                    setTimeout(() => {
+                        alertBox.classList.toggle('hidden')
+                        document.getElementById('instance-alert').classList.toggle('hidden')
+                    }, 5000);
+
+                    return;
+                }
+
+                const succeedTemplate = `
+                                        <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400  w-fit mt-2 mr-2" role="alert" id="instance-success">
+                          <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                          </svg>
+                          <span class="sr-only">Info</span>
+                          <div>
+                          Item has been deleted
+                          </div>
+                          </div>
+                          `
+
+                alertBox.innerHTML = succeedTemplate
+                alertBox.classList.toggle('hidden')
+
+                setTimeout(() => {
+                    alertBox.classList.toggle('hidden')
+                    document.getElementById('instance-success').classList.toggle('hidden')
+                }, 5000);
+            })
+        // console.log(currentID)
+    }
+</script>
 
 <div class="w-full bg-gray-800 relative shadow-md rounded-lg overflow-hidden">
     <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-        <div class="w-full w-full md:w-1/2">
+        <!-- <div class="w-full w-full md:w-1/2">
             <form class="flex items-center">
                 <label for="simple-search" class="sr-only">Search</label>
                 <div class="relative lg:w-3/5 w-full">
@@ -317,7 +798,8 @@ if (!isset($TPL)) {
                     <input type="text" id="simple-search" class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2 bg-gray-700 border-gray-600 placeholder-gray-400 text-white" placeholder="Search" required="">
                 </div>
             </form>
-        </div>
+        </div> -->
+        <span class="text-xl uppercase font-bold text-white">Product</span>
         <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
             <button type="button" id="createProductModalButton" onclick="actionButtonPress(this, 'crea')" class="flex items-center justify-center text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
                 <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -325,7 +807,7 @@ if (!isset($TPL)) {
                 </svg>
                 Add product
             </button>
-            <div class="flex items-center space-x-3 w-full md:w-auto">
+            <!-- <div class="flex items-center space-x-3 w-full md:w-auto">
                 <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown" class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-white focus:outline-none rounded-lg border border-gray-200 focus:z-10 focus:ring-gray-200 focus:ring-gray-700 bg-gray-800 border-gray-600 hover:text-white hover:bg-gray-700" type="button">
                     <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="h-4 w-4 mr-2 text-gray-400" viewbox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
@@ -348,7 +830,7 @@ if (!isset($TPL)) {
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     <div class="overflow-x-auto">
@@ -375,7 +857,7 @@ if (!isset($TPL)) {
             <span class="sr-only">Loading...</span>
         </div>
     </div>
-    <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
+    <!-- <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
         <span class="text-sm font-normal text-gray-400">
             Showing
             <span class="font-semibold text-white">1-10</span>
@@ -412,7 +894,7 @@ if (!isset($TPL)) {
                 </a>
             </li>
         </ul>
-    </nav>
+    </nav> -->
 </div>
 
 <!-- Universal Product Modal -->
@@ -431,7 +913,7 @@ if (!isset($TPL)) {
                 </button>
             </div>
             <!-- Modal body -->
-            <form action="#" id="form-modal">
+            <form id="form-modal">
                 <div class="mb-3">
                     <label for="product-name" class="block mb-2 text-sm font-medium text-white">Name</label>
                     <input type="text" name="product-name" id="product-name" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Type product name" required="">
@@ -460,10 +942,10 @@ if (!isset($TPL)) {
                         </label>
 
                         <div class="text-white mb-2" id="radio-image">
-                            <input type="radio" id="radio-drag-drop" name="upload-type" checked>
+                            <input type="radio" id="radio-drag-drop" name="upload-type" value="file" checked>
                             <label for="radio-drag-drop">Drag and Drop</label>
 
-                            <input type="radio" id="radio-link" name="upload-type">
+                            <input type="radio" id="radio-link" name="upload-type" value="link">
                             <label for="radio-link">Link</label>
                         </div>
                     </div>
@@ -484,7 +966,7 @@ if (!isset($TPL)) {
                     </div>
                 </div>
                 <div class="text-right" id="action-modal">
-                    <button type="submit" class="text-white inline-flex items-center focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800 flex justify-center items-center">
+                    <button type="button" onclick="submitUniversal()" class="text-white inline-flex items-center focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800 flex justify-center items-center">
                         <span id="icon-action-modal"></span>
                         <span id="actionButtonModal">
                         </span>
@@ -515,7 +997,7 @@ if (!isset($TPL)) {
                 <label for="number-input" class="block mb-2 text-sm font-medium text-white">Input new <span id="product-name-stock" class="font-bold"></span> Stock</label>
                 <input type="number" id="edit-product-stock" class="border text-sm rounded-lg focus:border-blue-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 mb-3" placeholder="90210" required>
                 <div class="text-right" id="action-modal">
-                    <button type="submit" class="text-white inline-flex items-center focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800 flex justify-center items-center">
+                    <button type="button" onclick="submitStock()" class="text-white inline-flex items-center focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800 flex justify-center items-center">
                         <span id="icon-action-modal-stock"></span>
                         <span id="actionButtonModal-stock">
                         </span>
@@ -542,21 +1024,21 @@ if (!isset($TPL)) {
                 </button>
             </div>
             <!-- Modal body -->
-            <form action="#">
+            <form onsubmit="submitCreate()">
                 <div class="grid gap-4 mb-4 sm:grid-cols-2">
                     <div>
                         <label for="name" class="block mb-2 text-sm font-medium text-white">Name</label>
-                        <input type="text" name="name" id="name" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Type product name" required="">
+                        <input type="text" name="name" id="name-create" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Type product name" required="">
                     </div>
                     <div>
                         <label for="price" class="block mb-2 text-sm font-medium text-gray-900 text-white">Price</label>
-                        <input type="number" name="price" id="price" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Price" required="">
+                        <input type="number" name="price" id="price-create" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Price" required="">
                     </div>
                     <div>
                         <label for="stock" class="block mb-2 text-sm font-medium text-gray-900 text-white">Stock</label>
-                        <input type="text" name="stock" id="stock" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Stock" required="">
+                        <input type="text" name="stock" id="stock-create" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Stock" required="">
                     </div>
-                    <div><label for="category" class="block mb-2 text-sm font-medium text-gray-900 text-white">Category</label><select id="category" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
+                    <div><label for="category" class="block mb-2 text-sm font-medium text-gray-900 text-white">Category</label><select id="category-create" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
                             <option selected="">Select category</option>
                             <option value="food">Food</option>
                             <option value="drink">Drink</option>
@@ -574,7 +1056,7 @@ if (!isset($TPL)) {
                             </p>
                             <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG or JPG</p>
                         </div>
-                        <input id="dropzone-file" type="file" class="hidden">
+                        <input id="dropzone-file-create" type="file" class="hidden">
                     </label>
                 </div>
                 <button type="submit" class="text-white inline-flex items-center focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
@@ -604,7 +1086,7 @@ if (!isset($TPL)) {
                 </button>
             </div>
             <!-- Modal body -->
-            <form action="#">
+            <form>
                 <div class="grid gap-4 mb-4 sm:grid-cols-2">
                     <div>
                         <label for="name" class="block mb-2 text-sm font-medium text-white">Name</label>
@@ -620,8 +1102,8 @@ if (!isset($TPL)) {
                     </div>
                     <div>
                         <label for="category" class="block mb-2 text-sm font-medium text-gray-900 text-white">Category</label>
-                        <select id="category" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" id="upd-product-category">
-                            <option selected="">Select category</option>
+                        <select id="category" name="category" class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" id="upd-product-category" required>
+                            <option selected>Select category</option>
                             <option value="food">Food</option>
                             <option value="drink">Drink</option>
                         </select>
@@ -639,7 +1121,7 @@ if (!isset($TPL)) {
                             </p>
                             <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG or JPG</p>
                         </div>
-                        <input id="dropzone-file" type="file" class="hidden">
+                        <input id="dropzone-file" type="file" class="hidden" name="img" required>
                     </label>
                 </div>
                 <button type="submit" class="text-white inline-flex items-center focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
@@ -704,8 +1186,8 @@ if (!isset($TPL)) {
             </svg>
             <p class="mb-4 text-gray-300">Are you sure you want to delete <span id="confirm-del" class="font-bold"></span>?</p>
             <div class="flex justify-center items-center space-x-4">
-                <button type="button" class="py-2 px-3 text-sm font-medium rounded-lg border focus:ring-4 focus:outline-none  focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600">No, cancel</button>
-                <button type="submit" class="py-2 px-3 text-sm font-medium text-center text-white rounded-lg focus:ring-4 focus:outline-none bg-red-500 hover:bg-red-600 focus:ring-red-900">Yes, I'm sure</button>
+                <button type="button" onclick="toggleModal('deleteModal')" class="py-2 px-3 text-sm font-medium rounded-lg border focus:ring-4 focus:outline-none  focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600">No, cancel</button>
+                <button type="button" onclick="submitDelete()" class="py-2 px-3 text-sm font-medium text-center text-white rounded-lg focus:ring-4 focus:outline-none bg-red-500 hover:bg-red-600 focus:ring-red-900">Yes, I'm sure</button>
             </div>
         </div>
     </div>
@@ -848,7 +1330,7 @@ if (!isset($TPL)) {
                 previewImage.src = e.target.result;
                 imagePreview.classList.remove("hidden");
                 textPreview.classList.add("hidden");
-                console.log("gambar masuk");
+                // console.log("gambar masuk");
             };
 
             reader.readAsDataURL(file);

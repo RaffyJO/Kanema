@@ -12,18 +12,14 @@ if (!isset($TPL)) {
 
 <div class="bg-cover h-screen absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-fixed -z-50 opacity-5" style="background-image: url('src/lib/Assets/bg-login.png');">
 </div>
-<div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 h-screen">
+<div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 lg:py-0 h-screen flex justify-center items-center">
     <div class="absolute top-0 right-0 w-full h-fit hidden flex justify-end z-[100]" id="box-alert">
     </div>
-    <div class="mx-auto max-w-lg mt-8">
-        <h1 class="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">Kanema</h1>
+    <div class="w-full flex flex-col justify-center align-center">
+        <img src="/src/lib/Assets/Kanema.png" class="max-h-16 w-fit mx-auto mb-3" alt="">
 
-        <p class="mx-auto mt-4 max-w-md text-center text-gray-500">
-            Kantin Polinema
-        </p>
-
-        <form method="POST" class="mb-0 mt-6 space-y-4">
-            <div class="bg-blue-100 px-4 pt-4 pb-12 sm:px-6 sm:pt-6 sm:pb-14 lg:px-8 lg:pt-8 lg:pb-16 rounded-lg shadow-lg">
+        <form method="POST" class="mb-0 mt-6 space-y-4 flex flex-col justify-center items-center">
+            <div class="bg-blue-100 px-4 pt-4 pb-12 sm:px-6 sm:pt-6 sm:pb-14 lg:px-8 lg:pt-8 lg:pb-16 rounded-lg shadow-lg w-1/2">
                 <div>
                     <label for="email" class="font-bold text-neutral-700">Masukan Username</label>
 
@@ -42,7 +38,7 @@ if (!isset($TPL)) {
             </div>
             <div class="-mt-8 flex flex-col items-center justify-center" style="margin-top:-18px !important">
                 <!-- <button type="submit" ></button> -->
-                <input type="submit" value="Masuk" class="text-white bg-blue-900 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-2xl text-sm px-12 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                <input type="submit" value="Masuk" class="text-white focus:ring-4 font-medium rounded-2xl text-sm px-12 py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
             </div>
         </form>
     </div>

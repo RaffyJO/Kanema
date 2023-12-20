@@ -52,14 +52,53 @@ class RequestModel
             if ($cursor) {
                 $data = array();
 
-                foreach ($cursor as $key) {
+                foreach ($cursor as $key => $value) {
                     array_push(
                         $data,
-                        $key
+                        array($key => $value)
                     );
                 }
 
                 return array('data' => $data);
+            } else {
+                return array('error' => 'Something went wrong');
+            }
+        } catch (Exception $th) {
+            return array('error' => $th->getMessage());
+        }
+    }
+
+    public  function findOneRaw(string $orderID): array
+    {
+        try {
+            $db = new DB();
+            $connection = $db->getConnection();
+            if ($connection == null) die(print_r("Connection is Null", true));
+
+            $collection = $connection->selectCollection('kanema', 'Request');
+            $cursor = null;
+
+            $cursor = $collection->findOne(['_id' => new ObjectId($orderID)]);
+
+            if ($cursor) {
+                // $data = array();
+
+                // var_dump();
+                // foreach ($cursor as $key => $value) {
+                //     if ($key === 'requests') {
+                //         array_push(
+                //             $data,
+                //             array($key => array($value))
+                //         );
+                //     } else {
+                //         array_push(
+                //             $data,
+                //             array($key => $value)
+                //         );
+                //     }
+                // }
+
+                return array('data' => $cursor);
             } else {
                 return array('error' => 'Something went wrong');
             }
@@ -101,6 +140,39 @@ class RequestModel
         }
     }
 
+    public  function getAllNext(int $page): array
+    {
+        try {
+            $db = new DB();
+            $connection = $db->getConnection();
+            if ($connection == null) die(print_r("Connection is Null", true));
+
+            $collection = $connection->selectCollection('kanema', 'RequerstClenaedData');
+            $cursor = null;
+
+            $cursor = $collection->find([], ['limit' => 10, 'skip' => ($page * 10) - 10]);
+
+
+
+            if ($cursor) {
+                $data = array();
+
+                foreach ($cursor as $key) {
+                    array_push(
+                        $data,
+                        $key
+                    );
+                }
+
+                return array('data' => $data);
+            } else {
+                return array('error' => 'Something went wrong');
+            }
+        } catch (Exception $th) {
+            return array('error' => $th->getMessage());
+        }
+    }
+
     public  function update(ObjectId $id, array $payload): array
     {
         $productModel = new ProductModel();
@@ -114,10 +186,11 @@ class RequestModel
             $cursor = null;
 
             $strID = $id->__toString();
-            $requestData = $this->getRAW($strID)['data'][0];
+            $requestData = $this->findOneRaw($strID)['data'];
             unset($requestData['_id']);
 
             $updatedData = $this->changeProperties($payload, $requestData);
+            // return array('status' => 'success', '_id' => $updatedData);
 
             $cursor = $collection->updateOne(['_id' => $id], ['$set' => $updatedData]);
 
@@ -133,8 +206,10 @@ class RequestModel
                 $updateCounter = 0;
                 if (count($payload['update']) > 0) {
                     foreach ($payload['update'] as $key => $value) {
+                        var_dump($value);
                         if ($value['status'] === 'approved') {
-                            $updateStatus = $productModel->updateItem($strID, $value);
+                            $updIDStr = ((array)$value['productID'])['$oid'];
+                            $updateStatus = $productModel->updateItem($updIDStr, $value['new']);
 
                             if (!$updateStatus) {
                                 $updateState = false;
@@ -147,15 +222,14 @@ class RequestModel
 
                 if (!$updateState) return array('error' => 'Something went wrong on update');
                 if ($updateCounter < count($payload['update']) && count($payload['update']) != 0) $updateIsDone = false;
-                echo 'UP';
-                var_dump($updateCounter < count($payload['update']) && count($payload['update']) != 0);
 
                 $fieldToIn = array();
                 $createCounter = 0;
                 if (count($payload['create']) > 0) {
                     foreach ($payload['create'] as $key => $value) {
-                        if ($value['status'] === 'approved')
+                        if ($value['status'] === 'approved') {
                             array_push($fieldToIn, $value['fields']);
+                        }
 
                         if ($value['status'] !== 'pending')  $createCounter++;
                     }
@@ -171,9 +245,6 @@ class RequestModel
 
                 if (!$createState) return array('error' => 'Something went wrong on create');
                 if ($createCounter < count($payload['create']) && count($payload['create']) != 0) $createIsDone = false;
-                echo 'CR';
-                var_dump($createCounter);
-                var_dump($createCounter < count($payload['create']) && count($payload['create']) != 0);
 
                 $deleteCounter = 0;
                 if (count($payload['delete']) > 0) {
@@ -194,15 +265,6 @@ class RequestModel
 
                 if (!$deleteState) return array('error' => 'Something went wrong on delete');
                 if ($deleteCounter < count($payload['delete']) && count($payload['delete']) != 0) $deleteIsDone = false;
-                echo 'DEL';
-                var_dump($deleteCounter < count($payload['delete']) && count($payload['delete']) != 0);
-
-                echo 'C';
-                var_dump($createIsDone);
-                echo 'U';
-                var_dump($updateIsDone);
-                echo 'D';
-                var_dump($deleteIsDone);
 
                 if ($createIsDone && $updateIsDone && $deleteIsDone) {
                     $doneState = $collection->updateOne(['_id' => $id], ['$set' => ['done' => true]]);
@@ -218,9 +280,6 @@ class RequestModel
                     }
                 }
             }
-            // else {
-            //     return array('error' => 'Something went wrong');
-            // }
             return array('error' => 'Something went wrong');
         } catch (Exception $th) {
             return array('error' => $th->getMessage());
@@ -229,40 +288,55 @@ class RequestModel
 
     private function changeProperties(array $payload, $currentData)
     {
-        $valueRequest = array();
-        // var_dump($payload);
-        // echo json_encode($currentData['requests']);
+        $requestContent = (array)$currentData;
 
         foreach ($currentData['requests'] as $key => $value) {
-            $requestContent = (array)$value;
-
-            if ($value->type === 'update') {
+            if ($key == 'type' && $value == 'update') {
                 foreach ($payload['update'] as $Pkey => $Pvalue) {
-                    if (((array)$Pvalue['productID'])['$oid'] === ((array)$value->itemID)['oid']) {
-                        $requestContent['status'] = $Pvalue['status'];
+                    // var_dump(((array)$Pvalue['productID'])['$oid']);
+                    // var_dump(((array)$currentData['requests']->itemID)['oid']);
+                    if (((array)$Pvalue['productID'])['$oid'] == ((array)$currentData['requests']->itemID)['oid']) {
+                        $requestContent['requests']->status = $Pvalue['status'];
                     }
                 }
             }
 
-            if ($value->type === 'create') {
+            if ($key == 'type' && $value == 'create') {
                 foreach ($payload['create'] as $Pkey => $Pvalue) {
-                    if ($Pvalue['fields'] === ((array)$value->field)) {
-                        $requestContent['status'] = $Pvalue['status'];
+                    if ($Pvalue['fields'] == ((array)$currentData['requests']->field)) {
+                        $requestContent['requests']->status = $Pvalue['status'];
                     }
                 }
             }
 
-            if ($value->type === 'delete') {
+            if ($key == 'type' && $value == 'delete') {
                 foreach ($payload['delete'] as $Pkey => $Pvalue) {
-                    if (((array)$Pvalue['productID'])['$oid'] === ((array)$value->itemID)['oid']) {
-                        $requestContent['status'] = $Pvalue['status'];
+                    if (((array)$Pvalue['productID'])['$oid'] == ((array)$currentData['requests']->itemID)['oid']) {
+                        $requestContent['requests']->status = $Pvalue['status'];
                     }
                 }
             }
-            array_push($valueRequest, $requestContent);
         }
 
-        $currentData['requests'] = $valueRequest;
-        return $currentData;
+        return $requestContent;
+    }
+
+    public function create(array $payload): array
+    {
+        try {
+            $db = new DB();
+            $connection = $db->getConnection();
+            if ($connection == null) die(print_r("Connection is Null", true));
+
+            $collection = $connection->selectCollection('kanema', 'Request');
+            $cursor = $collection->insertOne($payload);
+
+            if ($cursor->isAcknowledged() === true) {
+                return array('status' => 'success', '_id' => $cursor->getInsertedId());
+            }
+            return array('error' => 'Something went wrong');
+        } catch (Exception $th) {
+            return array('error' => $th->getMessage());
+        }
     }
 }

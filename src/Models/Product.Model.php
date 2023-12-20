@@ -24,9 +24,9 @@ class ProductModel
             $isValidObjectId = MongoUtils::isValidObjectId($itemName);
 
             if ($isValidObjectId)
-                $cursor = $collection->find(['_id' => new ObjectId($itemName)]);
+                $cursor = $collection->find(['_id' => new ObjectId($itemName), 'is_deleted' => false]);
             else
-                $cursor = $collection->find(['name' => new MongoDB\BSON\Regex("$itemName", "i")]);
+                $cursor = $collection->find(['name' => new MongoDB\BSON\Regex("$itemName", "i"), 'is_deleted' => false]);
 
 
 
@@ -63,9 +63,9 @@ class ProductModel
             $isValidObjectId = MongoUtils::isValidObjectId($itemName);
 
             if ($isValidObjectId)
-                $cursor = $collection->findOne(['_id' => new ObjectId($itemName)]);
+                $cursor = $collection->findOne(['_id' => new ObjectId($itemName), 'is_deleted' => false]);
             else
-                $cursor = $collection->findOne(['name' => new MongoDB\BSON\Regex("$itemName", "i")]);
+                $cursor = $collection->findOne(['name' => new MongoDB\BSON\Regex("$itemName", "i"), 'is_deleted' => false]);
 
             if ($cursor) {
                 return array('data' => array('_id' => strval($cursor->_id), 'name' => $cursor->name, 'price' => $cursor->price, 'category' => $cursor->category, 'imgUrl' => $cursor->imgUrl, 'stock' => $cursor->stock, 'available' => $cursor->available));
@@ -78,6 +78,37 @@ class ProductModel
     }
 
     public function getAll(): array
+    {
+        try {
+            $db = new DB();
+            $connection = $db->getConnection();
+            if ($connection == null) die(print_r("Connection is Null", true));
+
+            $collection = $connection->selectCollection('kanema', 'Product');
+            $cursor = $collection->find(['is_deleted' => false]);
+
+
+            if ($cursor) {
+                $data = array();
+
+                foreach ($cursor as $key) {
+                    array_push(
+                        $data,
+                        array('_id' => strval($key->_id), 'name' => $key->name, 'price' => $key->price, 'category' => $key->category, 'imgUrl' => $key->imgUrl, 'stock' => $key->stock, 'available' => $key->available)
+
+                    );
+                }
+
+                return array('data' => $data);
+            } else {
+                return array('error' => 'Something went wrong');
+            }
+        } catch (Exception $th) {
+            return array('error' => $th);
+        }
+    }
+
+    public function getAllHistory(): array
     {
         try {
             $db = new DB();
@@ -118,6 +149,29 @@ class ProductModel
 
             $collection = $connection->selectCollection('kanema', 'Product');
             $updateResult = $collection->updateOne(['_id' => new ObjectId($itemID)], ['$set' => $itemPayload]);
+
+
+            if ($updateResult->isAcknowledged() === true) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception $th) {
+            printf($th->getMessage());
+            return false;
+        }
+    }
+
+    public function updateStock(string $itemID, int $stock): bool
+    {
+        try {
+            $db = new DB();
+            $connection = $db->getConnection();
+
+            if ($connection == null) die(print_r("Connection is Null", true));
+
+            $collection = $connection->selectCollection('kanema', 'Product');
+            $updateResult = $collection->updateOne(['_id' => new ObjectId($itemID)], ['$set' => ['stock' => $stock]]);
 
 
             if ($updateResult->getMatchedCount() === 1) {
@@ -167,10 +221,10 @@ class ProductModel
             if (count($target['data']) < 1) return false;
 
             $collection = $connection->selectCollection('kanema', 'Product');
-            $deleteResult = $collection->deleteOne(['_id' => $id]);
+            $deleteResult = $collection->updateOne(['_id' => $id], ['$set' => ['is_deleted' => true]]);
 
 
-            if ($deleteResult->getDeletedCount() > 0) {
+            if ($deleteResult->isAcknowledged() === true) {
                 return true;
             } else {
                 return false;
