@@ -25,7 +25,17 @@ cd Kanema
 ```bash
 composer install
 ```
-4. lalu jalan perintah berikut untuk menjalankan projek ini
+4. Lalu jalan perintah berikut untuk menjalankan projek ini
 ```bash
 php -S 0.0.0.0:8000
 ```
+5. Lalu buka di browser dengan link berikut
+```
+127.0.0.1:8000/login
+```
+
+Berikut username dan password cashier
+
+username : ```cashier-san```
+
+password : ```daxa```
